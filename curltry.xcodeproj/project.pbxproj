@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6F31AE71216242680008332E /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F31AE70216242680008332E /* libcurl.tbd */; };
 		6FF4C267215A6BCA002D89F7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF4C266215A6BCA002D89F7 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +24,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6F31AE70216242680008332E /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
 		6FF4C263215A6BCA002D89F7 /* curltry */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = curltry; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FF4C266215A6BCA002D89F7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -32,17 +34,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F31AE71216242680008332E /* libcurl.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6F31AE6F216242680008332E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6F31AE70216242680008332E /* libcurl.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6FF4C25A215A6BCA002D89F7 = {
 			isa = PBXGroup;
 			children = (
 				6FF4C265215A6BCA002D89F7 /* curltry */,
 				6FF4C264215A6BCA002D89F7 /* Products */,
+				6F31AE6F216242680008332E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
