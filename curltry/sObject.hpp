@@ -23,6 +23,7 @@ private:
     std::vector<sAttribute> attributeList {};
 public:
     sObject (const std::string objname)  : name {objname} {}
+    const std::string& getName() {return name;};
     void addAttribute(sAttribute a) {attributeList.push_back({a});}
     void print() const;
 };
