@@ -16,10 +16,18 @@
    ((std::string*)userp)->append((char*)contents, size * nmemb);
     return size * nmemb;
 }
-/*
+//
+//
+//
+std::string getToken(const std::string buffer) {
+    size_t beginindex = buffer.find("access_token") + 15;
+    size_t endindex = buffer.find('"', beginindex);
 
-*/
-
+    return buffer.substr(beginindex,endindex-beginindex);
+}
+//
+//
+//
 int main(int argc, const char * argv[]) {
     // insert code here...
     CURL *curl;
@@ -38,6 +46,37 @@ int main(int argc, const char * argv[]) {
         curl_easy_cleanup(curl);
     }
     
-        std::cout << readBuffer << std::endl;
+    std::string token = getToken(readBuffer);
+    
+    std::cout << "token:" << token << std::endl;
+
+    // get account
+    readBuffer.clear();
+    curl = curl_easy_init();
+    
+    if(curl) {
+//        curl_easy_setopt(curl, CURLOPT_URL, "https://vbrlight-dev-ed.my.salesforce.com/services/data/v43.0/sobjects/account/0015800000fp2WF");
+        curl_easy_setopt(curl, CURLOPT_URL, "https://vbrlight-dev-ed.my.salesforce.com/services/data/v43.0/sobjects/Account/describe");
+
+        struct curl_slist *chunk = NULL;
+        
+        chunk = curl_slist_append(chunk, ("Authorization: Bearer " + token).c_str());
+        res = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
+        if(res != CURLE_OK)
+            fprintf(stderr, "curl_easy_setopt() failed: %s\n",
+                    curl_easy_strerror(res));
+
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        res = curl_easy_perform(curl);
+        if(res != CURLE_OK)
+            fprintf(stderr, "curl_easy_perform() failed: %s\n",
+                    curl_easy_strerror(res));
+
+        curl_easy_cleanup(curl);
+    }
+    
+    std::cout << readBuffer << std::endl;
+
     return 0;
 }
