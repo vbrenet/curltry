@@ -19,13 +19,39 @@
 //
 //
 //
-std::string getToken(const std::string buffer) {
+std::string extractToken(const std::string buffer) {
     size_t beginindex = buffer.find("access_token") + 15;
     size_t endindex = buffer.find('"', beginindex);
 
     return buffer.substr(beginindex,endindex-beginindex);
 }
 //
+//
+//
+bool getToken(std::string& token, const std::string clientId, const std::string clientSecret, const std::string userName, const std::string password) {
+    CURL *curl;
+    CURLcode res;
+    std::string readBuffer;
+    std::string urlParameters { "grant_type=password&client_id=3MVG98_Psg5cppyaViFlqbC.qo_drqk_L1ZWJnB4UB.NmykHpAvz.3wxbx23DBjgnccMNsZVfBF8UgvovtfYh&client_secret=8703187062703750250&username=vbrlight@brenet.com&password=Petrosian0"};
+    
+    curl = curl_easy_init();
+    
+    if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, "https://vbrlight-dev-ed.my.salesforce.com/services/oauth2/token");
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS,urlParameters.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        res = curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+    }
+    else
+        return false;
+    
+    token = extractToken(readBuffer);
+
+    return true;
+
+}
 //
 //
 int main(int argc, const char * argv[]) {
@@ -46,7 +72,7 @@ int main(int argc, const char * argv[]) {
         curl_easy_cleanup(curl);
     }
     
-    std::string token = getToken(readBuffer);
+    std::string token = extractToken(readBuffer);
     
     std::cout << "token:" << token << std::endl;
 
