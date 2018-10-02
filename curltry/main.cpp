@@ -49,10 +49,17 @@ bool getToken(std::string& token, const std::string orgurl, const std::string cl
         return false;
     
     if (res != CURLE_OK) {
-        std::cerr << "getToken : curl_easy_perform error " << curl_easy_strerror(res) << std::endl;
+        std::cerr << "getToken : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
         return false;
     }
     
+    long http_code = 0;
+    curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
+    if (http_code != 200) {
+        std::cerr << "getToken : http error: " << http_code << std::endl;
+        return false;
+    }
+
     token = extractToken(readBuffer);
 
     return true;
@@ -65,22 +72,12 @@ int main(int argc, const char * argv[]) {
     CURL *curl;
     CURLcode res;
     std::string readBuffer;
-    std::string urlParameters { "grant_type=password&client_id=3MVG98_Psg5cppyaViFlqbC.qo_drqk_L1ZWJnB4UB.NmykHpAvz.3wxbx23DBjgnccMNsZVfBF8UgvovtfYh&client_secret=8703187062703750250&username=vbrlight@brenet.com&password=Petrosian0"};
+    std::string token;
 
-    curl = curl_easy_init();
-    
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, "https://vbrlight-dev-ed.my.salesforce.com/services/oauth2/token");
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS,urlParameters.c_str());
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-        res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-    }
-    
-    std::string token = extractToken(readBuffer);
-    
-    std::cout << "token:" << token << std::endl;
+    if (getToken(token, "vbrlight-dev-ed.my.salesforce.com", "3MVG98_Psg5cppyaViFlqbC.qo_drqk_L1ZWJnB4UB.NmykHpAvz.3wxbx23DBjgnccMNsZVfBF8UgvovtfYh", "8703187062703750250", "vbrlight@brenet.com", "Petrosian0"))
+        std::cout << "token:" << token << std::endl;
+    else
+        return -1;
 
     // get account
     readBuffer.clear();
