@@ -18,10 +18,13 @@ class SalesforceSession {
 private:
     static std::string connectedAppToken;
     static std::string domain;
+    
+    static std::string extractToken(const std::string buffer);
+
 public:
-    static bool openSession(const std::string domain, const std::string client_id, const std::string client_secret, const std::string username, const std::string password);
+    static bool openSession(const std::string , const std::string , const std::string , const std::string , const std::string );
     // accessors
-    static const std::string& getConnectedAppToken() {return connectedAppToken;}
-    static const std::string& getDomain() {return domain;}
+   static const std::string& getConnectedAppToken() {return connectedAppToken;}
+   static const std::string& getDomain() {return domain;}
 
 };

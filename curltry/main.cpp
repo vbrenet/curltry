@@ -10,22 +10,15 @@
 #include <string>
 #include <curl/curl.h>
 #include "sObject.hpp"
+#include "SalesforceSession.hpp"
 
 
- size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
+size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
    ((std::string*)userp)->append((char*)contents, size * nmemb);
     return size * nmemb;
 }
 //
-//
-//
-std::string extractToken(const std::string buffer) {
-    size_t beginindex = buffer.find("access_token") + 15;
-    size_t endindex = buffer.find('"', beginindex);
-
-    return buffer.substr(beginindex,endindex-beginindex);
-}
 //
 bool getDescribeAttributesBuffer(const std::string& token, const std::string orgurl, const std::string objName, std::string& buffer){
     CURL *curl;
@@ -73,43 +66,6 @@ void describeSObject(const std::string& token, const std::string& orgurl, sObjec
     // parse each attribute in the buffer
 }
 //
-bool getToken(std::string& token, const std::string orgurl, const std::string clientId, const std::string clientSecret, const std::string userName, const std::string password) {
-    CURL *curl;
-    CURLcode res;
-    std::string readBuffer;
-    
-    std::string urlParameters = "grant_type=password&client_id=" + clientId + "&client_secret=" + clientSecret + "&username=" + userName + "&password=" + password;
-    
-    curl = curl_easy_init();
-    
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, ("https://" + orgurl + "/services/oauth2/token").c_str());
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS,urlParameters.c_str());
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-        res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-    }
-    else
-        return false;
-    
-    if (res != CURLE_OK) {
-        std::cerr << "getToken : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
-        return false;
-    }
-    
-    long http_code = 0;
-    curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
-    if (http_code != 200) {
-        std::cerr << "getToken : http error: " << http_code << std::endl;
-        return false;
-    }
-
-    token = extractToken(readBuffer);
-
-    return true;
-
-}
 //
 //
 int main(int argc, const char * argv[]) {
@@ -119,8 +75,8 @@ int main(int argc, const char * argv[]) {
     std::string readBuffer;
     std::string token;
 
-    if (getToken(token, "vbrlight-dev-ed.my.salesforce.com", "3MVG98_Psg5cppyaViFlqbC.qo_drqk_L1ZWJnB4UB.NmykHpAvz.3wxbx23DBjgnccMNsZVfBF8UgvovtfYh", "8703187062703750250", "vbrlight@brenet.com", "Petrosian0"))
-        std::cout << "token:" << token << std::endl;
+    if (SalesforceSession::openSession("vbrlight-dev-ed.my.salesforce.com", "3MVG98_Psg5cppyaViFlqbC.qo_drqk_L1ZWJnB4UB.NmykHpAvz.3wxbx23DBjgnccMNsZVfBF8UgvovtfYh", "8703187062703750250", "vbrlight@brenet.com", "Petrosian0"))
+        std::cout << "token:" << SalesforceSession::getConnectedAppToken() << std::endl;
     else
         return -1;
 
@@ -129,7 +85,6 @@ int main(int argc, const char * argv[]) {
     curl = curl_easy_init();
     
     if(curl) {
-//        curl_easy_setopt(curl, CURLOPT_URL, "https://vbrlight-dev-ed.my.salesforce.com/services/data/v43.0/sobjects/account/0015800000fp2WF");
         curl_easy_setopt(curl, CURLOPT_URL, "https://vbrlight-dev-ed.my.salesforce.com/services/data/v43.0/sobjects/Account/describe");
 
         struct curl_slist *chunk = NULL;
