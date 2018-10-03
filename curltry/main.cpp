@@ -20,7 +20,7 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 }
 //
 //
-bool getDescribeAttributesBuffer(const std::string& token, const std::string orgurl, const std::string objName, std::string& buffer){
+bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer){
     CURL *curl;
     CURLcode res;
     std::string readBuffer;
@@ -29,11 +29,11 @@ bool getDescribeAttributesBuffer(const std::string& token, const std::string org
     curl = curl_easy_init();
     
     if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, ("https://" + orgurl + "/services/data/v43.0/sobjects/" + objName + "/describe").c_str());
+        curl_easy_setopt(curl, CURLOPT_URL, ("https://" + SalesforceSession::getDomain() + "/services/data/v43.0/sobjects/" + objName + "/describe").c_str());
         
         struct curl_slist *chunk = NULL;
         
-        chunk = curl_slist_append(chunk, ("Authorization: Bearer " + token).c_str());
+        chunk = curl_slist_append(chunk, ("Authorization: Bearer " + SalesforceSession::getConnectedAppToken()).c_str());
         res = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
         if(res != CURLE_OK)
             fprintf(stderr, "curl_easy_setopt() failed: %s\n",
@@ -48,7 +48,6 @@ bool getDescribeAttributesBuffer(const std::string& token, const std::string org
         
         curl_easy_cleanup(curl);
         
-        // search attribute list in readBuffer (substr) and put it in buffer
         buffer = readBuffer;
     }
     else
@@ -57,55 +56,48 @@ bool getDescribeAttributesBuffer(const std::string& token, const std::string org
     return true;
 }
 //
-void describeSObject(const std::string& token, const std::string& orgurl, sObject& obj) {
+void describeSObject( sObject& obj) {
     std::string rawAttributeList;
+    
     // launch describe request (produce a buffer)
-    if (!getDescribeAttributesBuffer(token, orgurl, obj.getName(), rawAttributeList))
+    if (!getDescribeAttributesBuffer(obj.getName(), rawAttributeList))
         return;
     
     // parse each attribute in the buffer
+    size_t beginFields = rawAttributeList.find("\"fields\":");
+    if (beginFields != std::string::npos) {
+        // chercher       "name":"curren__c","nameField":
+        bool terminated {false};
+        size_t offset = beginFields;
+        do {
+            size_t beginName = rawAttributeList.find("\"name\":",offset);
+            if (beginName != std::string::npos) {
+                size_t endName = rawAttributeList.find(",\"nameField\":",beginName);
+                if (endName != std::string::npos) {
+                    obj.addAttribute({rawAttributeList.substr(beginName+7+1,endName-beginName-7-2)});
+                    offset = endName+13;
+                } else {
+                    terminated = true;
+                }
+            } else
+                terminated = true;
+            } while (terminated == false);
+        }
 }
 //
 //
 //
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    CURL *curl;
-    CURLcode res;
     std::string readBuffer;
     std::string token;
 
-    if (SalesforceSession::openSession("vbrlight-dev-ed.my.salesforce.com", "3MVG98_Psg5cppyaViFlqbC.qo_drqk_L1ZWJnB4UB.NmykHpAvz.3wxbx23DBjgnccMNsZVfBF8UgvovtfYh", "8703187062703750250", "vbrlight@brenet.com", "Petrosian0"))
-        std::cout << "token:" << SalesforceSession::getConnectedAppToken() << std::endl;
-    else
+    if (!SalesforceSession::openSession("vbrlight-dev-ed.my.salesforce.com", "3MVG98_Psg5cppyaViFlqbC.qo_drqk_L1ZWJnB4UB.NmykHpAvz.3wxbx23DBjgnccMNsZVfBF8UgvovtfYh", "8703187062703750250", "vbrlight@brenet.com", "Petrosian0"))
         return -1;
 
-    // get account
-    readBuffer.clear();
-    curl = curl_easy_init();
+    // get account attributes and print them
+    sObject account {"Account"};
+    describeSObject (account);
+    account.print();
     
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, "https://vbrlight-dev-ed.my.salesforce.com/services/data/v43.0/sobjects/Account/describe");
-
-        struct curl_slist *chunk = NULL;
-        
-        chunk = curl_slist_append(chunk, ("Authorization: Bearer " + token).c_str());
-        res = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
-        if(res != CURLE_OK)
-            fprintf(stderr, "curl_easy_setopt() failed: %s\n",
-                    curl_easy_strerror(res));
-
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-        res = curl_easy_perform(curl);
-        if(res != CURLE_OK)
-            fprintf(stderr, "curl_easy_perform() failed: %s\n",
-                    curl_easy_strerror(res));
-
-        curl_easy_cleanup(curl);
-    }
-    
-    std::cout << readBuffer << std::endl;
-
     return 0;
 }
