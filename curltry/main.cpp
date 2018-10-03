@@ -95,7 +95,7 @@ int main(int argc, const char * argv[]) {
         return -1;
 
     // get account attributes and print them
-    sObject account {"Account"};
+    sObject account {"Opportunity"};
     describeSObject (account);
     account.print();
     
