@@ -11,6 +11,7 @@
 #include <curl/curl.h>
 #include "sObject.hpp"
 #include "SalesforceSession.hpp"
+#include "bulkSession.hpp"
 
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
@@ -86,18 +87,28 @@ void describeSObject( sObject& obj) {
 }
 //
 //
-//
-int main(int argc, const char * argv[]) {
-    std::string readBuffer;
-    std::string token;
-
+void runRestSession() {
     if (!SalesforceSession::openSession("vbrlight-dev-ed.my.salesforce.com", "3MVG98_Psg5cppyaViFlqbC.qo_drqk_L1ZWJnB4UB.NmykHpAvz.3wxbx23DBjgnccMNsZVfBF8UgvovtfYh", "8703187062703750250", "vbrlight@brenet.com", "Petrosian0"))
-        return -1;
-
+        return ;
+    
     // get account attributes and print them
     sObject account {"Opportunity"};
     describeSObject (account);
     account.print();
+}
+//
+//
+void runBulkSession() {
+    if (bulkSession::openBulkSession(false, "vbrlight@brenet.com", "Petrosian0"))
+        std::cout << "openBulkSession successfull" << std::endl;
+    else
+        std::cerr << "openBulkSession error" << std::endl;
+
+}
+//
+int main(int argc, const char * argv[]) {
+
+    runBulkSession();
     
     return 0;
 }
