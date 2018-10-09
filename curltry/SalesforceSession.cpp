@@ -15,15 +15,18 @@ std::string SalesforceSession::connectedAppToken;
 std::string SalesforceSession::domain;
 
 extern size_t WriteCallback(void *, size_t , size_t , void *);
-
+//
+//  extract token to be used to authenticate further calls
+//
 std::string SalesforceSession::extractToken(const std::string buffer) {
     size_t beginindex = buffer.find("access_token") + 15;
     size_t endindex = buffer.find('"', beginindex);
     
     return buffer.substr(beginindex,endindex-beginindex);
 }
-
-
+//
+//  open connected app session
+//
 bool SalesforceSession::openSession(const std::string thedomain, const std::string client_id, const std::string client_secret, const std::string username, const std::string password) {
     CURL *curl;
     CURLcode res;
