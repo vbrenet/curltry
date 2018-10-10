@@ -20,6 +20,9 @@ private:
     static std::string sessionId;   // returned at login
     static std::string serverUrl;   // returned at login
 public:
+    static bool firstTime;
+    static std::string body;
+
     static bool openBulkSession(bool isSandbox, const std::string username, const std::string password);
     //
     //  accessors

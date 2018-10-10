@@ -12,37 +12,28 @@
 
 extern size_t WriteCallback(void *, size_t , size_t , void *);
 //
-
-struct WriteThis {
-    const char *readptr;
-    size_t sizeleft;
-};
-
+//
+bool bulkSession::firstTime {true};
+std::string bulkSession::body;
+//
+//
 static size_t read_callback(void *dest, size_t size, size_t nmemb, void *userp)
 {
-    struct WriteThis *wt = (struct WriteThis *)userp;
-    size_t buffer_size = size*nmemb;
-    
-    if(wt->sizeleft) {
-        /* copy as much as possible from the source to the destination */
-        size_t copy_this_much = wt->sizeleft;
-        if(copy_this_much > buffer_size)
-            copy_this_much = buffer_size;
-        memcpy(dest, wt->readptr, copy_this_much);
-        
-        wt->readptr += copy_this_much;
-        wt->sizeleft -= copy_this_much;
-        return copy_this_much; /* we copied this many bytes */
+    char *thedest = (char *)dest;
+    if (bulkSession::firstTime) {
+        bulkSession::firstTime = false;
+        for (auto i=0; i < bulkSession::body.size(); i++)
+            thedest[i] = bulkSession::body[i];
+        return bulkSession::body.size();
     }
-    
-    return 0; /* no more data left to deliver */
+    return 0;
 }
 //
 //
 //  open a bulk session with Salesforce
 //
 bool bulkSession::openBulkSession(bool isSandbox, const std::string username, const std::string password) {
-    bool result {false};
+    bool result {true};
     
     std::stringstream ssurl;
     ssurl << "https://" << ((isSandbox) ? "test." : "login.") << "salesforce.com/services/Soap/u/39.0";
@@ -60,15 +51,12 @@ bool bulkSession::openBulkSession(bool isSandbox, const std::string username, co
     <<  "</env:Body>\n"
     <<  "</env:Envelope>\n";
     
+    body = ssbody.str();
     
     CURL *curl;
     CURLcode res;
     std::string readBuffer;
 
-    struct WriteThis wt;
-    
-    wt.readptr = ssbody.str().c_str();
-    wt.sizeleft = strlen(ssbody.str().c_str());
     
     curl = curl_easy_init();
     
@@ -84,21 +72,21 @@ bool bulkSession::openBulkSession(bool isSandbox, const std::string username, co
         
         // set header
         struct curl_slist *list = NULL;
-        list = curl_slist_append(list, "Content-Type: text/xml; charset=UTF-8");
         list = curl_slist_append(list, "SOAPAction: login");
+        list = curl_slist_append(list, "Content-Type: text/xml; charset=UTF-8");
+
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-        //curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
         /* Now specify we want to POST data */
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
-        //curl_easy_setopt(curl, CURLOPT_POSTFIELDS, ssbody.str().c_str());
+
         /* we want to use our own read function */
         curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
         
         /* pointer to pass to our read function */
-        curl_easy_setopt(curl, CURLOPT_READDATA, &wt);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (long)wt.sizeleft);
+        curl_easy_setopt(curl, CURLOPT_READDATA, ssbody.str().c_str());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(ssbody.str().c_str()));
         
         res = curl_easy_perform(curl);
         curl_slist_free_all(list); /* free the list  */
