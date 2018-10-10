@@ -21,6 +21,17 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 }
 //
 //
+std::string extractXmlToken(const std::string& inputbuffer, const std::string& token) {
+    std::string endtoken = token;
+    endtoken.insert(1,1,'/');
+    
+    size_t beginpos = inputbuffer.find(token);
+    size_t endpos = inputbuffer.find(endtoken);
+    
+    return inputbuffer.substr(beginpos+token.size(),endpos-beginpos-token.size());
+}
+//
+//
 bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer){
     CURL *curl;
     CURLcode res;

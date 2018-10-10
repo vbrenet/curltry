@@ -19,6 +19,7 @@ class bulkSession {
 private:
     static std::string sessionId;   // returned at login
     static std::string serverUrl;   // returned at login
+    static void processResponse(const std::string&);
 public:
     static bool firstTime;
     static std::string body;
@@ -28,4 +29,5 @@ public:
     //  accessors
     static std::string &getSessionId() {return sessionId;}
     static std::string &getServerUrl() {return serverUrl;}
+    
 };

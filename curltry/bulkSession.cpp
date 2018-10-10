@@ -11,6 +11,10 @@
 #include <sstream>
 
 extern size_t WriteCallback(void *, size_t , size_t , void *);
+extern std::string extractXmlToken(const std::string& inputbuffer, const std::string& token);
+std::string bulkSession::sessionId;
+std::string bulkSession::serverUrl;
+
 //
 //
 bool bulkSession::firstTime {true};
@@ -29,6 +33,20 @@ static size_t read_callback(void *dest, size_t size, size_t nmemb, void *userp)
     return 0;
 }
 //
+//
+void bulkSession::processResponse(const std::string& response) {
+    std::string serverUrlToken = extractXmlToken(response, "<serverUrl>");
+    // received : https://vbrlight-dev-ed.my.salesforce.com/services/Soap/u/39.0/00D58000000ZzE0
+    // target : https://vbrlight-dev-ed.my.salesforce.com/services/async/39.0
+    size_t lastslash = serverUrlToken.find_last_of('/');
+    serverUrlToken.erase(lastslash);
+    lastslash = serverUrlToken.find_last_of('/');
+    std::string version = serverUrlToken.substr(lastslash+1);
+    size_t soap = serverUrlToken.find("/Soap");
+    serverUrl = serverUrlToken.substr(0,soap) + "/async/" + version;
+    sessionId = extractXmlToken(response, "<sessionId>");
+}
+
 //
 //  open a bulk session with Salesforce
 //
@@ -63,9 +81,9 @@ bool bulkSession::openBulkSession(bool isSandbox, const std::string username, co
     if(curl) {
         curl_easy_setopt(curl, CURLOPT_URL, ssurl.str().c_str());
         
-        std::cout << "URL: " << ssurl.str() << std::endl;
-        std::cout << "BODY size: " << strlen(ssbody.str().c_str());
-        std::cout << "\nBODY: \n" << ssbody.str() << std::endl;
+        //std::cout << "URL: " << ssurl.str() << std::endl;
+        //std::cout << "BODY size: " << strlen(ssbody.str().c_str());
+        //std::cout << "\nBODY: \n" << ssbody.str() << std::endl;
 
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
@@ -108,8 +126,12 @@ bool bulkSession::openBulkSession(bool isSandbox, const std::string username, co
         return false;
     }
     
+    //std::cout << "Received buffer: " << readBuffer << std::endl;
 
+    processResponse(readBuffer);
     
-    
+    std::cout <<  "sessionid: " << sessionId << std::endl;
+    std::cout <<  "serverurl: " << serverUrl << std::endl;
+
     return result;
 }
