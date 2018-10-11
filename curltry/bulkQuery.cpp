@@ -60,7 +60,7 @@ bool bulkQuery::createJob(const std::string objectName, int chunksize) {
         
         // set header
         struct curl_slist *list = NULL;
-        list = curl_slist_append(list, "Content-Type: text/xml; charset=UTF-8");
+        list = curl_slist_append(list, "Content-Type: text/csv; charset=UTF-8");
         list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
         if (chunksize > 0) {
             list = curl_slist_append(list, ("Sforce-Enable-PKChunking: chunksize=" + std::to_string(chunksize)).c_str());
@@ -95,7 +95,7 @@ bool bulkQuery::createJob(const std::string objectName, int chunksize) {
     
     long http_code = 0;
     curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
-    if (http_code != 200) {
+    if (http_code >= 400) {
         std::cerr << "bulkQuery::createJob : http error: " << http_code << std::endl;
         return false;
     }
@@ -127,7 +127,7 @@ bool bulkQuery::addQuery(const std::string& query){
         
         // set header
         struct curl_slist *list = NULL;
-        list = curl_slist_append(list, "Content-Type: text/xml; charset=UTF-8");
+        list = curl_slist_append(list, "Content-Type: text/csv; charset=UTF-8");
         list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
         
@@ -159,7 +159,7 @@ bool bulkQuery::addQuery(const std::string& query){
     
     long http_code = 0;
     curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
-    if (http_code != 200) {
+    if (http_code >= 400) {
         std::cerr << "bulkQuery::addQuery : http error: " << http_code << std::endl;
         return false;
     }

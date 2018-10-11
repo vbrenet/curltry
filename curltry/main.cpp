@@ -9,9 +9,10 @@
 #include <iostream>
 #include <string>
 #include <curl/curl.h>
-#include "sObject.hpp"
 #include "SalesforceSession.hpp"
 #include "bulkSession.hpp"
+#include "orchestrator.hpp"
+#include "sessionCredentials.hpp"
 
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
@@ -117,9 +118,32 @@ void runBulkSession() {
 
 }
 //
+//
+void runOrchestration() {
+    // credentials creation
+    sessionCredentials credentials {false,
+                                    "vbrlight-dev-ed.my.salesforce.com",
+                                    "3MVG98_Psg5cppyaViFlqbC.qo_drqk_L1ZWJnB4UB.NmykHpAvz.3wxbx23DBjgnccMNsZVfBF8UgvovtfYh",
+                                    "8703187062703750250",
+                                    "vbrlight@brenet.com",
+                                    "Petrosian0"};
+    //
+    orchestrator theOrchestrator {"Account", credentials};
+    //
+    if (!theOrchestrator.getObjectInfo()) {
+       std::cerr << "theOrchestrator.getObjectInfo failure" << std::endl;
+    } else {
+        if (!theOrchestrator.execute(0)) {
+            std::cerr << "theOrchestrator.execute(0) failure" << std::endl;
+        }
+    }
+}
+//
 int main(int argc, const char * argv[]) {
 
-    runBulkSession();
+ //   runBulkSession();
+    
+    runOrchestration();
     
     return 0;
 }

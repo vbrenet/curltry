@@ -8,6 +8,8 @@
 
 #include "orchestrator.hpp"
 #include "SalesforceSession.hpp"
+#include "bulkSession.hpp"
+#include "bulkQuery.hpp"
 //
 extern bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer);
 
@@ -58,11 +60,17 @@ bool orchestrator::getObjectInfo() {
 //
 bool orchestrator::execute(int chunksize) {
     // open bulk session bulkSession::openBulkSession
+    if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password))
+        return false;
     
     // bulkQuery::createJob(const std::string objectName, int chunksize)
-    
+    if (!bulkQuery::createJob(theObject.getName(), 0))
+        return false;
+
     // bulkQuery::addQuery(const std::string& query)
-    
+    if (!bulkQuery::addQuery("Select id,name from account"))
+        return false;
+
     // bulkQuery::waitCompletion()
     
     // while moreResult, bulkQuery::getResult(std::string& result);

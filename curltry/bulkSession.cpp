@@ -121,7 +121,7 @@ bool bulkSession::openBulkSession(bool isSandbox, const std::string username, co
     
     long http_code = 0;
     curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
-    if (http_code != 200) {
+    if (http_code >= 400) {
         std::cerr << "openBulkSession : http error: " << http_code << std::endl;
         return false;
     }
