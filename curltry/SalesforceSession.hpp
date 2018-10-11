@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <string>
+#include "sessionCredentials.hpp"
 
 #endif /* SalesforceSession_hpp */
 
@@ -23,6 +24,8 @@ private:
 
 public:
     static bool openSession(const std::string , const std::string , const std::string , const std::string , const std::string );
+    static bool openSession(const sessionCredentials&);
+
     // accessors
    static const std::string& getConnectedAppToken() {return connectedAppToken;}
    static const std::string& getDomain() {return domain;}

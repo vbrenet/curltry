@@ -65,3 +65,13 @@ bool SalesforceSession::openSession(const std::string thedomain, const std::stri
     
     return true;
 }
+//
+//  open connected app session
+//
+bool SalesforceSession::openSession(const sessionCredentials &credentials) {
+    return openSession(credentials.domain,
+                       credentials.clientId,
+                       credentials.clientSecret,
+                       credentials.username,
+                       credentials.password);
+}

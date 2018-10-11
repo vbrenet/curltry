@@ -12,14 +12,18 @@
 #include <stdio.h>
 #include <string>
 #include "sObject.hpp"
+#include "sessionCredentials.hpp"
 
 class orchestrator {
 private:
-    sObject theObject;
+    sObject theObject ;
+    sessionCredentials credentials;
+    
+    bool describeObject();
 public:
-    orchestrator(std::string sObjectName);
+    orchestrator(const std::string sObjectName, const sessionCredentials& c): theObject {sObjectName}, credentials{c} {}
     bool getObjectInfo();
-    bool execute(int chunsize);
+    bool execute(int chunksize);
     bool getResult(std::string& result);
 };
 
