@@ -10,9 +10,10 @@
 #include "bulkQuery.hpp"
 #include "bulkSession.hpp"
 //
-bool bulkQuery::firstTime;
+bool bulkQuery::firstTime = true;
 std::string bulkQuery::body;
 std::string bulkQuery::jobId;
+std::string bulkQuery::mainBatchId;
 //
 //
 extern size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
@@ -52,7 +53,7 @@ bool bulkQuery::createJob(const std::string objectName, int chunksize) {
     curl = curl_easy_init();
     
     if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, bulkSession::getServerUrl().c_str());
+        curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job").c_str());
         
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
@@ -70,6 +71,7 @@ bool bulkQuery::createJob(const std::string objectName, int chunksize) {
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
         
         /* we want to use our own read function */
+        firstTime = true;
         curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
         
         /* pointer to pass to our read function */
@@ -104,3 +106,68 @@ bool bulkQuery::createJob(const std::string objectName, int chunksize) {
 
     return true;
 }
+//
+//
+//
+bool bulkQuery::addQuery(const std::string& query){
+    
+    body = query;
+    
+    CURL *curl;
+    CURLcode res;
+    std::string readBuffer;
+    
+    curl = curl_easy_init();
+    
+    if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch").c_str());
+        
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        
+        // set header
+        struct curl_slist *list = NULL;
+        list = curl_slist_append(list, "Content-Type: text/xml; charset=UTF-8");
+        list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
+        
+        /* Now specify we want to POST data */
+        curl_easy_setopt(curl, CURLOPT_POST, 1L);
+        
+        /* we want to use our own read function */
+        firstTime = true;
+        curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
+        
+        /* pointer to pass to our read function */
+        curl_easy_setopt(curl, CURLOPT_READDATA, body.c_str());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(body.c_str()));
+        
+        res = curl_easy_perform(curl);
+        curl_slist_free_all(list); /* free the list  */
+        
+        curl_easy_cleanup(curl);
+    }
+    else {
+        std::cerr << "bulkQuery::addQuery : curl_easy_init failure" << std::endl;
+        return false;
+    }
+    
+    if (res != CURLE_OK) {
+        std::cerr << "bulkQuery::addQuery : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
+        return false;
+    }
+    
+    long http_code = 0;
+    curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
+    if (http_code != 200) {
+        std::cerr << "bulkQuery::addQuery : http error: " << http_code << std::endl;
+        return false;
+    }
+    
+    //std::cout << "Received buffer: " << readBuffer << std::endl;
+    
+    mainBatchId = extractXmlToken(readBuffer, "<id>");
+    
+    return true;
+}
+
