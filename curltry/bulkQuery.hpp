@@ -14,7 +14,12 @@
 
 class bulkQuery {
 private:
-    
+    static bool firstTime;
+    static std::string body;
+    static std::string jobId;
+
+    static size_t read_callback(void *dest, size_t size, size_t nmemb, void *userp);
+
 public:
     static bool createJob(const std::string objectName, int chunksize);
     static bool addQuery(const std::string& query);

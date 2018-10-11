@@ -12,6 +12,7 @@
 bool orchestrator::getObjectInfo() {
     // open REST session
     // get describe object
+    return true;
 };
 //
 //
@@ -25,5 +26,5 @@ bool orchestrator::execute(int chunksize) {
     // bulkQuery::waitCompletion()
     
     // while moreResult, bulkQuery::getResult(std::string& result);
-
+    return true;
 };
