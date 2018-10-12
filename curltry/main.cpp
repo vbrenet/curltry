@@ -133,7 +133,7 @@ void runOrchestration() {
     if (!theOrchestrator.getObjectInfo()) {
        std::cerr << "theOrchestrator.getObjectInfo failure" << std::endl;
     } else {
-        if (!theOrchestrator.execute(0)) {
+        if (!theOrchestrator.execute(10)) {
             std::cerr << "theOrchestrator.execute(0) failure" << std::endl;
         }
     }

@@ -54,17 +54,22 @@ bool orchestrator::getObjectInfo() {
     if (!describeObject())
         return false;
     
+    //theObject.print();
+    
     return true;
 };
 //
 //
 bool orchestrator::execute(int chunksize) {
+    
+    pkChunkingEnabled = (chunksize > 0);
+    
     // open bulk session bulkSession::openBulkSession
     if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password))
         return false;
     
     // bulkQuery::createJob(const std::string objectName, int chunksize)
-    if (!bulkQuery::createJob(theObject.getName(), 0))
+    if (!bulkQuery::createJob(theObject.getName(), chunksize))
         return false;
 
     // bulkQuery::addQuery(const std::string& query)
@@ -72,6 +77,9 @@ bool orchestrator::execute(int chunksize) {
         return false;
 
     // bulkQuery::waitCompletion()
+    if (!bulkQuery::waitCompletion(pkChunkingEnabled))
+        return false;
+
     
     // while moreResult, bulkQuery::getResult(std::string& result);
     return true;
