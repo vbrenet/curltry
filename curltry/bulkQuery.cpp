@@ -13,15 +13,17 @@
 #include "bulkSession.hpp"
 //
 bool bulkQuery::firstTime = true;
+bool bulkQuery::pkchunking = false;
 std::string bulkQuery::body;
 std::string bulkQuery::jobId;
 std::string bulkQuery::mainBatchId;
 jobStatusInfo bulkQuery::jobInfo;
-
+std::map<std::string,batchInfo> bulkQuery::batches {};
 //
 //
 extern size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
 extern std::string extractXmlToken(const std::string& inputbuffer, const std::string& token);
+extern std::string extractXmlToken(const std::string& inputbuffer, size_t pos, const std::string& token);
 //
 //
 //
@@ -58,6 +60,8 @@ size_t bulkQuery::read_callback(void *dest, size_t size, size_t nmemb, void *use
 //
 //
 bool bulkQuery::createJob(const std::string objectName, int chunksize) {
+    
+    pkchunking = (chunksize > 0);
     
     std::stringstream ssbody;
     ssbody <<   "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"
@@ -197,7 +201,7 @@ bool bulkQuery::addQuery(const std::string& query){
 //
 //
 //
-bool bulkQuery::waitCompletion(bool isPKChunking) {
+bool bulkQuery::waitCompletion() {
     
     bool terminated {false};
     
@@ -209,17 +213,35 @@ bool bulkQuery::waitCompletion(bool isPKChunking) {
         
         int processed = jobInfo.numberBatchesTotal - jobInfo.numberBatchesQueued - jobInfo.numberBatchesInProgress;
         
-        if (isPKChunking)
-            terminated = ((jobInfo.numberBatchesTotal - processed) == 1);
+        if (pkchunking)
+            terminated = ((jobInfo.numberBatchesTotal != 1) && (jobInfo.numberBatchesQueued == 0) && (jobInfo.numberBatchesInProgress == 0));
         else
             terminated = ((jobInfo.numberBatchesTotal - processed) == 0);
         
-        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     };
     
     return true;
 }
 //
+//
+void bulkQuery::extractBatchesInfo (const std::string& input) {
+    bool terminated {false};
+    size_t curr = 0;
+    while (!terminated) {
+        // positionnement sur next batch info
+        size_t next = input.find("<batchInfo>", curr);
+        if (next == std::string::npos)
+            terminated = true;
+        else {
+            curr = next + 11;
+            std::string batchId = extractXmlToken(input, next, "<id>");
+            std::string status = extractXmlToken(input, next, "<state>");
+            if (batchId.compare(mainBatchId) != 0)
+                batches.insert(std::pair<std::string,batchInfo>{batchId,{status,false}});
+        }
+    }
+}
 //
 //
 void bulkQuery::extractJobStatusInfo (const std::string& input, jobStatusInfo& target) {
@@ -284,4 +306,62 @@ bool bulkQuery::getJobStatus() {
     
     return true;
 }
+//
+//
+bool bulkQuery::getBatchesInfo() {
+    CURL *curl;
+    CURLcode res;
+    std::string readBuffer;
+    
+    curl = curl_easy_init();
+    
+    if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch").c_str());
+        
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        
+        // set header
+        struct curl_slist *list = NULL;
+        list = curl_slist_append(list, "Content-Type: text/csv; charset=UTF-8");
+        list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
+        
+        res = curl_easy_perform(curl);
+        curl_slist_free_all(list); /* free the list  */
+        
+        curl_easy_cleanup(curl);
+    }
+    else {
+        std::cerr << "bulkQuery::getBatchesInfo : curl_easy_init failure" << std::endl;
+        return false;
+    }
+    
+    if (res != CURLE_OK) {
+        std::cerr << "bulkQuery::getBatchesInfo : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
+        return false;
+    }
+    
+    long http_code = 0;
+    curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
+    if (http_code >= 400) {
+        std::cerr << "bulkQuery::getBatchesInfo : http error: " << http_code << std::endl;
+        return false;
+    }
 
+    extractBatchesInfo(readBuffer);
+    
+    return true;
+}
+//
+bool bulkQuery::getResult(std::string& result) {
+    if (batches.size() == 0)
+        if (!getBatchesInfo())
+            return false;
+    // print info
+    for (auto it= batches.begin(); it != batches.end(); ++it)
+        std::cout << it->first << " => " << it->second.status << std::endl;
+    
+    
+    return true;
+}

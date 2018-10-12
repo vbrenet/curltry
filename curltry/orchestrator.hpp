@@ -18,7 +18,6 @@ class orchestrator {
 private:
     sObject theObject ;
     sessionCredentials credentials;
-    bool pkChunkingEnabled {false};
     
     bool describeObject();
 public:

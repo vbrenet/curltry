@@ -61,9 +61,7 @@ bool orchestrator::getObjectInfo() {
 //
 //
 bool orchestrator::execute(int chunksize) {
-    
-    pkChunkingEnabled = (chunksize > 0);
-    
+        
     // open bulk session bulkSession::openBulkSession
     if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password))
         return false;
@@ -77,10 +75,13 @@ bool orchestrator::execute(int chunksize) {
         return false;
 
     // bulkQuery::waitCompletion()
-    if (!bulkQuery::waitCompletion(pkChunkingEnabled))
+    if (!bulkQuery::waitCompletion())
         return false;
 
-    
+    std::string result;
+    if (!bulkQuery::getResult(result))
+        return false;
+
     // while moreResult, bulkQuery::getResult(std::string& result);
     return true;
 };
