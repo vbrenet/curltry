@@ -145,7 +145,7 @@ void runOrchestration() {
        std::cerr << "theOrchestrator.getObjectInfo failure" << std::endl;
     } else {
         if (!theOrchestrator.execute(10)) {
-            std::cerr << "theOrchestrator.execute(0) failure" << std::endl;
+            std::cerr << "theOrchestrator.execute(10) failure" << std::endl;
         }
     }
 }

@@ -77,11 +77,15 @@ bool orchestrator::execute(int chunksize) {
     // bulkQuery::waitCompletion()
     if (!bulkQuery::waitCompletion())
         return false;
-
+    
     std::string result;
-    if (!bulkQuery::getResult(result))
-        return false;
+    bool moreResult {false};
+    do {
+        moreResult = bulkQuery::getResult(result);
+        // treat result
+    } while (moreResult);
 
-    // while moreResult, bulkQuery::getResult(std::string& result);
+    // close the job
+    
     return true;
 };
