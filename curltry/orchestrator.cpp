@@ -91,6 +91,8 @@ bool orchestrator::execute(int chunksize) {
     } while (moreResult);
 
     // close the job
-    
+    if (!bulkQuery::closeJob())
+        return false;
+
     return true;
 };

@@ -66,6 +66,7 @@ public:
     static bool addQuery(const std::string& query); // second step : create a query batch
     static bool waitCompletion();                   // third step : wait for completion of batches
     static bool getResult(std::string& result);     // fourth step : get data result
+    static bool closeJob();                         // fifth step : close the job
 };
 
 #endif /* bulkQuery_hpp */
