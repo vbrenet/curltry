@@ -37,6 +37,7 @@ struct jobStatusInfo {
 struct batchInfo {
     std::string status; // info provided by Salesforce (e.g. "completed")
     bool isRead;        // true if results (read data) have already been provided by bulkQuery class
+    std::string resultId; // result id used to retrieve actual result of the batch
     batchInfo(std::string s, bool b) : status{s}, isRead{b} {}
 };
 //
@@ -54,6 +55,7 @@ private:
     
     static size_t read_callback(void *dest, size_t size, size_t nmemb, void *userp); // callback called by libcurl to send data in POST requests
     static bool getJobStatus(); // get job status, using bulk API resource
+    static bool getBatchResultId(const std::string& batchid, std::string& resultid); // get result id of a given batch
     static void extractJobStatusInfo (const std::string&, jobStatusInfo&);  // helper method to extract job info
     static bool getBatchesInfo();   // populate the batches map by all batch ids and status, using bulk API resource
     static void extractBatchesInfo(const std::string&); // helper method to extract batch info
