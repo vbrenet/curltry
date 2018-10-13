@@ -84,8 +84,10 @@ bool orchestrator::execute(int chunksize) {
         moreResult = bulkQuery::getResult(result);
         
         // treat result
-        std::cout << "***result :" << std::endl;
-        std::cout << result << std::endl;
+        if (moreResult) {
+            std::cout << "***result :" << std::endl;
+            std::cout << result << std::endl;
+        }
     } while (moreResult);
 
     // close the job
