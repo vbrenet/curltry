@@ -55,6 +55,10 @@ bool orchestrator::getObjectInfo() {
         return false;
     
     //theObject.print();
+    std::string thequery = theObject.makeAllAttributeQuery();
+    
+    std::cout << "the query:" << std::endl;
+    std::cout << thequery << std::endl;
     
     return true;
 };
@@ -71,7 +75,7 @@ bool orchestrator::execute(int chunksize) {
         return false;
 
     // bulkQuery::addQuery(const std::string& query)
-    if (!bulkQuery::addQuery("Select id,name from account"))
+    if (!bulkQuery::addQuery(theObject.makeAllAttributeQuery()))
         return false;
 
     // bulkQuery::waitCompletion()

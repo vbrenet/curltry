@@ -25,5 +25,6 @@ public:
     sObject (const std::string objname)  : name {objname} {}
     const std::string& getName() {return name;};
     void addAttribute(sAttribute a) {attributeList.push_back({a});}
+    std::string makeAllAttributeQuery();
     void print() const;
 };
