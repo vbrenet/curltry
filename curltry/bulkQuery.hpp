@@ -49,7 +49,8 @@ private:
     static std::string body;    // buffer containing POST request bodies
     static std::string jobId;   // jobID of the bulkQuery session
     static std::string mainBatchId; // main batch id of the bulkQuery session, never completed in case of PK chunking
-    static jobStatusInfo jobInfo;   // job info provided by the bulk API, related to the session's job
+    static jobStatusInfo jobInfo;   // job info provided at the begining by the bulk API, related to the session's job
+    static jobStatusInfo closedJobInfo;   // job info provided at the closing by the bulk API, related to the session's job
     static std::map<std::string,batchInfo> batches; // map of ids and batch info of each batch related to the job
     static bool pkchunking;     // true if we are in PK chunking mode
     

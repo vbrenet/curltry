@@ -18,6 +18,7 @@ std::string bulkQuery::body;
 std::string bulkQuery::jobId;
 std::string bulkQuery::mainBatchId;
 jobStatusInfo bulkQuery::jobInfo;
+jobStatusInfo bulkQuery::closedJobInfo;
 std::map<std::string,batchInfo> bulkQuery::batches {};
 //
 //
@@ -223,13 +224,15 @@ bool bulkQuery::waitCompletion() {
         std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     };
     
-    if (batches.size() == 0)
-        if (!getBatchesInfo())
-            return false;
-    
-    // print info
-    for (auto it= batches.begin(); it != batches.end(); ++it)
-        std::cout << it->first << " => " << it->second.status << std::endl;
+    if (pkchunking) {
+        if (batches.size() == 0)
+            if (!getBatchesInfo())
+                return false;
+        
+        // print info
+        for (auto it= batches.begin(); it != batches.end(); ++it)
+            std::cout << it->first << " => " << it->second.status << std::endl;
+    }
     
     return true;
 }
@@ -453,22 +456,33 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
 
 //
 bool bulkQuery::getResult(std::string& result) {
-    
     bool moreResult {false};
-    for (auto it=batches.begin(); it!=batches.end(); ++it) {
-        if (!it->second.isRead) {
-            // call read batch
-            if (!getBatchResultId(it->first, it->second.resultId))
-                return false;
-            // getBatchResult(batch id, batch result id, result)
-            if (!getBatchResult(it->first, it->second.resultId, result))
-                return false;
-            // set isread to true
-            it->second.isRead = true;
-            moreResult = true;
-            break;
+
+    if (pkchunking) {
+        for (auto it=batches.begin(); it!=batches.end(); ++it) {
+            if (!it->second.isRead) {
+                // call read batch
+                if (!getBatchResultId(it->first, it->second.resultId))
+                    return false;
+                // getBatchResult(batch id, batch result id, result)
+                if (!getBatchResult(it->first, it->second.resultId, result))
+                    return false;
+                // set isread to true
+                it->second.isRead = true;
+                moreResult = true;
+                break;
+            }
         }
     }
+    else {
+        std::string resultId {};
+        if (!getBatchResultId(mainBatchId, resultId))
+            return false;
+        // getBatchResult(batch id, batch result id, result)
+        if (!getBatchResult(mainBatchId, resultId, result))
+            return false;
+    }
+    
     return moreResult;
 }
 //
@@ -534,7 +548,10 @@ bool bulkQuery::closeJob() {
         return false;
     }
     
-    std::cout << "Received buffer: " << readBuffer << std::endl;
+    extractJobStatusInfo(readBuffer, closedJobInfo);
+
+    std::cout << "Final job status : " << std::endl;
+    closedJobInfo.print();
     
     return true;
 
