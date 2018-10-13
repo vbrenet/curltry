@@ -362,22 +362,28 @@ bool bulkQuery::getBatchResultId(const std::string& batchid, std::string& result
     std::string readBuffer;
     
     curl = curl_easy_init();
-    
+    //https://instance.salesforce.com/services/async/39.0/job/jobId/batch/batchId/result
     if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid).c_str());
+        std::cout << bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result" << std::endl;
+        curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result").c_str());
         
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
         
         // set header
         struct curl_slist *list = NULL;
-        list = curl_slist_append(list, "Content-Type: text/csv; charset=UTF-8");
+        //list = curl_slist_append(list, "Content-Type: text/csv; charset=UTF-8");
         list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
-        
+
         res = curl_easy_perform(curl);
         curl_slist_free_all(list); /* free the list  */
         
+        if (res != CURLE_OK) {
+            std::cerr << "bulkQuery::getBatchResultId : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
+            return false;
+        }
+
         curl_easy_cleanup(curl);
     }
     else {
@@ -385,20 +391,7 @@ bool bulkQuery::getBatchResultId(const std::string& batchid, std::string& result
         return false;
     }
     
-    if (res != CURLE_OK) {
-        std::cerr << "bulkQuery::getBatchResultId : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
-        return false;
-    }
-    
-    long http_code = 0;
-    curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
-    if (http_code >= 400) {
-        std::cerr << "bulkQuery::getBatchResultId : http error: " << http_code << std::endl;
-        return false;
-    }
-    
-
-    resultid = extractXmlToken(readBuffer, "result");
+    resultid = extractXmlToken(readBuffer, "<result>");
 
     return true;
 
@@ -428,26 +421,19 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
         res = curl_easy_perform(curl);
         curl_slist_free_all(list); /* free the list  */
         
+        if (res != CURLE_OK) {
+            std::cerr << "bulkQuery::getBatchResultId : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
+            return false;
+            }
         curl_easy_cleanup(curl);
+
     }
+        
     else {
         std::cerr << "bulkQuery::getBatchResultId : curl_easy_init failure" << std::endl;
         return false;
     }
-    
-    if (res != CURLE_OK) {
-        std::cerr << "bulkQuery::getBatchResultId : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
-        return false;
-    }
-    
-    long http_code = 0;
-    curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
-    if (http_code >= 400) {
-        std::cerr << "bulkQuery::getBatchResultId : http error: " << http_code << std::endl;
-        return false;
-    }
-    
-    
+
     result = readBuffer;
     
     return true;

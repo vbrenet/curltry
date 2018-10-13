@@ -5,7 +5,7 @@
 //  Created by Vincent Brenet on 11/10/2018.
 //  Copyright © 2018 Vincent Brenet. All rights reserved.
 //
-
+#include <iostream>
 #include "orchestrator.hpp"
 #include "SalesforceSession.hpp"
 #include "bulkSession.hpp"
@@ -82,7 +82,10 @@ bool orchestrator::execute(int chunksize) {
     bool moreResult {false};
     do {
         moreResult = bulkQuery::getResult(result);
+        
         // treat result
+        std::cout << "***result :" << std::endl;
+        std::cout << result << std::endl;
     } while (moreResult);
 
     // close the job
