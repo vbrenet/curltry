@@ -109,6 +109,13 @@ bool bulkQuery::createJob(const std::string objectName, int chunksize) {
         res = curl_easy_perform(curl);
         curl_slist_free_all(list); /* free the list  */
         
+        long http_code = 0;
+        curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
+        if (http_code >= 400) {
+            std::cerr << "bulkQuery::createJob : http error: " << http_code << std::endl;
+            return false;
+        }
+        
         curl_easy_cleanup(curl);
     }
     else {
@@ -121,12 +128,6 @@ bool bulkQuery::createJob(const std::string objectName, int chunksize) {
         return false;
     }
     
-    long http_code = 0;
-    curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
-    if (http_code >= 400) {
-        std::cerr << "bulkQuery::createJob : http error: " << http_code << std::endl;
-        return false;
-    }
     
     //std::cout << "Received buffer: " << readBuffer << std::endl;
     
@@ -173,6 +174,13 @@ bool bulkQuery::addQuery(const std::string& query){
         res = curl_easy_perform(curl);
         curl_slist_free_all(list); /* free the list  */
         
+        long http_code = 0;
+        curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
+        if (http_code >= 400) {
+            std::cerr << "bulkQuery::addQuery : http error: " << http_code << std::endl;
+            return false;
+        }
+
         curl_easy_cleanup(curl);
     }
     else {
@@ -185,12 +193,6 @@ bool bulkQuery::addQuery(const std::string& query){
         return false;
     }
     
-    long http_code = 0;
-    curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
-    if (http_code >= 400) {
-        std::cerr << "bulkQuery::addQuery : http error: " << http_code << std::endl;
-        return false;
-    }
     
     //std::cout << "Received buffer: " << readBuffer << std::endl;
     
@@ -220,6 +222,14 @@ bool bulkQuery::waitCompletion() {
         
         std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     };
+    
+    if (batches.size() == 0)
+        if (!getBatchesInfo())
+            return false;
+    
+    // print info
+    for (auto it= batches.begin(); it != batches.end(); ++it)
+        std::cout << it->first << " => " << it->second.status << std::endl;
     
     return true;
 }
@@ -283,6 +293,13 @@ bool bulkQuery::getJobStatus() {
         res = curl_easy_perform(curl);
         curl_slist_free_all(list); /* free the list  */
         
+        long http_code = 0;
+        curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
+        if (http_code >= 400) {
+            std::cerr << "bulkQuery::getJobStatus : http error: " << http_code << std::endl;
+            return false;
+        }
+
         curl_easy_cleanup(curl);
     }
     else {
@@ -292,13 +309,6 @@ bool bulkQuery::getJobStatus() {
     
     if (res != CURLE_OK) {
         std::cerr << "bulkQuery::getJobStatus : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
-        return false;
-    }
-    
-    long http_code = 0;
-    curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
-    if (http_code >= 400) {
-        std::cerr << "bulkQuery::getJobStatus : http error: " << http_code << std::endl;
         return false;
     }
 
@@ -330,6 +340,13 @@ bool bulkQuery::getBatchesInfo() {
         res = curl_easy_perform(curl);
         curl_slist_free_all(list); /* free the list  */
         
+        long http_code = 0;
+        curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
+        if (http_code >= 400) {
+            std::cerr << "bulkQuery::getBatchesInfo : http error: " << http_code << std::endl;
+            return false;
+        }
+
         curl_easy_cleanup(curl);
     }
     else {
@@ -342,12 +359,6 @@ bool bulkQuery::getBatchesInfo() {
         return false;
     }
     
-    long http_code = 0;
-    curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
-    if (http_code >= 400) {
-        std::cerr << "bulkQuery::getBatchesInfo : http error: " << http_code << std::endl;
-        return false;
-    }
 
     extractBatchesInfo(readBuffer);
     
@@ -442,16 +453,8 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
 
 //
 bool bulkQuery::getResult(std::string& result) {
-    if (batches.size() == 0)
-        if (!getBatchesInfo())
-            return false;
     
-    // print info
-    for (auto it= batches.begin(); it != batches.end(); ++it)
-        std::cout << it->first << " => " << it->second.status << std::endl;
-    
-    // take a batch, if not already done, get result
-    bool noMoreResult {true};
+    bool moreResult {false};
     for (auto it=batches.begin(); it!=batches.end(); ++it) {
         if (!it->second.isRead) {
             // call read batch
@@ -462,9 +465,9 @@ bool bulkQuery::getResult(std::string& result) {
                 return false;
             // set isread to true
             it->second.isRead = true;
-            noMoreResult = false;
+            moreResult = true;
             break;
         }
     }
-    return noMoreResult;
+    return moreResult;
 }
