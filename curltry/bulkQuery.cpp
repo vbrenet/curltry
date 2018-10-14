@@ -25,9 +25,12 @@ std::map<std::string,batchInfo> bulkQuery::batches {};
 extern size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
 extern std::string extractXmlToken(const std::string& inputbuffer, const std::string& token);
 extern std::string extractXmlToken(const std::string& inputbuffer, size_t pos, const std::string& token);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+//  jobStatusInfo::print
+//      print a jobStatusInfo instance content on the standard output
 //
-//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void jobStatusInfo::print() const {
     std::cout << "***jobStatusInfo:" << std::endl;
     std::cout << "status: " <<  status <<std::endl;
@@ -44,8 +47,12 @@ void jobStatusInfo::print() const {
     std::cout << "apexProcessingTime: " <<  apexProcessingTime <<std::endl;
     std::cout << "totalProcessingTime: " <<  totalProcessingTime <<std::endl;
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+//  bulkQuery::read_callback
+//      callback used by libcurl to fill POST bodies
 //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 size_t bulkQuery::read_callback(void *dest, size_t size, size_t nmemb, void *userp)
 {
     char *thedest = (char *)dest;
@@ -57,9 +64,13 @@ size_t bulkQuery::read_callback(void *dest, size_t size, size_t nmemb, void *use
     }
     return 0;
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+//  bulkQuery::createJob - create a new bulk API job
+//      objectName : name of sObject to be queried (e.g. "account")
+//      chunksize : size of chunks - if >0, PKChunking is used, otherwise no
 //
-//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool bulkQuery::createJob(const std::string objectName, int chunksize) {
     
     pkchunking = (chunksize > 0);
@@ -129,16 +140,18 @@ bool bulkQuery::createJob(const std::string objectName, int chunksize) {
         return false;
     }
     
-    
     //std::cout << "Received buffer: " << readBuffer << std::endl;
     
     jobId = extractXmlToken(readBuffer, "<id>");
 
     return true;
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+//  bulkQuery::addQuery - set the query clause of the existing job
+//      query : the query clause, which must respect bulk API limitations
 //
-//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool bulkQuery::addQuery(const std::string& query){
     
     body = query;
@@ -201,9 +214,11 @@ bool bulkQuery::addQuery(const std::string& query){
     
     return true;
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+//  bulkQuery::waitCompletion - wait completion of all batches of the job, AND THEN get batches info, chiefly batch ids
 //
-//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool bulkQuery::waitCompletion() {
     
     bool terminated {false};
@@ -236,8 +251,12 @@ bool bulkQuery::waitCompletion() {
     
     return true;
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
+//  bulkQuery::extractBatchesInfo - populate the batches map with batch info provided by the bulk API
+//      input : buffer containing batches info
 //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void bulkQuery::extractBatchesInfo (const std::string& input) {
     bool terminated {false};
     size_t curr = 0;
