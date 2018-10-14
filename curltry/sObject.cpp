@@ -19,7 +19,7 @@ std::string sObject::makeAllAttributeQuery() {
     
     std::cout <<  "makeAllAttributeQuery: attributeList.size = " <<attributeList.size()<< std::endl;
     
-    query = "Select ";
+    query = "Select ID,";
     
     for (auto i=0; i < attributeList.size(); i++) {
         if (attributeList[i].getName().find("__c") == std::string::npos)
@@ -33,4 +33,35 @@ std::string sObject::makeAllAttributeQuery() {
     query += " from " + getName();
     
     return query;
+}
+//
+void sObject::computeAttributes(const std::string &record, int recnumber) {
+    for (sAttribute a : attributeList) {
+        size_t beginAttr = record.find(a.getName());
+        if (beginAttr != std::string::npos) {
+            if (record[beginAttr+a.getName().size()] == '>')
+                std::cout << "attribute " << a.getName() << " filled in rec " << recnumber << std::endl;
+        }
+    }
+}
+//
+void sObject::listrecords(const std::string &xmlresult) {
+    size_t cursor = 0;
+    int nbrec {0};
+    bool terminated {false};
+    
+    while (!terminated) {
+        size_t nextRecord = xmlresult.find("<records xsi:type=\"sObject\">", cursor);
+        terminated = (nextRecord == std::string::npos);
+        if (!terminated) {
+            nbrec++;
+            size_t endOfRecord = xmlresult.find("</records>", nextRecord);
+            std::string currentRecord = xmlresult.substr(nextRecord, endOfRecord-nextRecord);
+            computeAttributes(currentRecord, nbrec);
+            //std::cout << "record " << nbrec << " : " << currentRecord << std::endl;
+            cursor = nextRecord + 30;
+        }
+    }
+
+    std::cout << "Total number of records: " << nbrec << std::endl;
 }

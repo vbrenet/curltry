@@ -89,8 +89,9 @@ bool orchestrator::execute(int chunksize) {
         
         // treat result
         if (moreResult || (chunksize == 0)) {
-            std::cout << "***result :" << std::endl;
-            std::cout << result << std::endl;
+            theObject.listrecords(result);
+            //std::cout << "***result :" << std::endl;
+            //std::cout << result << std::endl;
         }
     } while (moreResult);
 

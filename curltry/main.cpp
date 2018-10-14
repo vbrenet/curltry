@@ -139,7 +139,7 @@ void runOrchestration() {
                                     "vbrlight@brenet.com",
                                     "Petrosian0"};
     //
-    orchestrator theOrchestrator {"Account", credentials};
+    orchestrator theOrchestrator {"Opportunity", credentials};
     //
     if (!theOrchestrator.getObjectInfo()) {
        std::cerr << "theOrchestrator.getObjectInfo failure" << std::endl;

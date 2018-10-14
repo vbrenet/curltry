@@ -21,10 +21,13 @@ class sObject{
 private:
     std::string name;
     std::vector<sAttribute> attributeList {};
+    void computeAttributes(const std::string &record, int);
+
 public:
     sObject (const std::string objname)  : name {objname} {}
     const std::string& getName() {return name;};
     void addAttribute(sAttribute a) {attributeList.push_back({a});}
     std::string makeAllAttributeQuery();
     void print() const;
+    void listrecords(const std::string &xmlresult);
 };
