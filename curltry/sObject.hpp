@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <map>
+
 #include "sAttribute.hpp"
 
 
@@ -21,6 +23,7 @@ class sObject{
 private:
     std::string name;
     std::vector<sAttribute> attributeList {};
+    std::map<std::string,int> attributeCounters {};
     void computeAttributes(const std::string &record, int);
 
 public:
@@ -29,5 +32,6 @@ public:
     void addAttribute(sAttribute a) {attributeList.push_back({a});}
     std::string makeAllAttributeQuery();
     void print() const;
-    void listrecords(const std::string &xmlresult);
+    void computerecords(const std::string &xmlresult);
+    void printAttributeCounters();
 };

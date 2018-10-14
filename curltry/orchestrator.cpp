@@ -89,7 +89,7 @@ bool orchestrator::execute(int chunksize) {
         
         // treat result
         if (moreResult || (chunksize == 0)) {
-            theObject.listrecords(result);
+            theObject.computerecords(result);
             //std::cout << "***result :" << std::endl;
             //std::cout << result << std::endl;
         }
@@ -99,5 +99,7 @@ bool orchestrator::execute(int chunksize) {
     if (!bulkQuery::closeJob())
         return false;
 
+    theObject.printAttributeCounters();
+    
     return true;
 };
