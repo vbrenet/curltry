@@ -22,33 +22,17 @@ std::string sObject::makeAllAttributeQuery() {
     query = "Select ";
     
     for (auto i=0; i < attributeList.size(); i++) {
-        if (attributeList[i].getName().find("ingAddress") != std::string::npos) {   // compound addresses
-            std::cout << "not retained:" << attributeList[i].getName() << std::endl;
-            continue;
-        }
-        if (attributeList[i].getName().find("OtherAddress") != std::string::npos) {   // compound addresses
-            std::cout << "not retained:" << attributeList[i].getName() << std::endl;
-            continue;
-        }
 
+        if (attributeList[i].isExcluded()) {
+            std::cout << "excluded :" << attributeList[i].getName() << std::endl;
+            continue;
+
+        }
+        
         if (attributeList[i].getName().find("ChannelProgram") != std::string::npos) {   // account
             std::cout << "not retained:" << attributeList[i].getName() << std::endl;
             continue;
         }
-        if (attributeList[i].getName().find("HasCommentsUnreadByOwner") != std::string::npos) { // case
-            std::cout << "not retained:" << attributeList[i].getName() << std::endl;
-            continue;
-        }
-        if (attributeList[i].getName().find("HasSelfServiceComments") != std::string::npos) { // case
-            std::cout << "not retained:" << attributeList[i].getName() << std::endl;
-            continue;
-        }
-
-        if (attributeList[i].getName().find("Location__c") != std::string::npos) { // contact : geoloc
-            std::cout << "not retained:" << attributeList[i].getName() << std::endl;
-            continue;
-        }
-
 
         attributeCounters.insert(std::pair<std::string,int>({attributeList[i].getName(),0}));
         query += attributeList[i].getName();
