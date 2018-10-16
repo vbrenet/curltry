@@ -21,8 +21,7 @@ bool orchestrator::describeObject() {
     if (!getDescribeAttributesBuffer(theObject.getName(), rawAttributeList))
         return false;
     
-    std::cout << "raw describe object:\n" << rawAttributeList << std::endl;
-    // "type":"address" : les filtrer car pas compatible bulk; "type":"location"
+    //std::cout << "raw describe object:\n" << rawAttributeList << std::endl;
     
     // parse each attribute in the buffer
     size_t beginFields = rawAttributeList.find("\"fields\":");
