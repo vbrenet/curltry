@@ -35,7 +35,11 @@ std::string sObject::makeAllAttributeQuery() {
             std::cout << "not retained:" << attributeList[i].getName() << std::endl;
             continue;
         }
-        if (attributeList[i].getName().find("Comments") != std::string::npos) { // case
+        if (attributeList[i].getName().find("HasCommentsUnreadByOwner") != std::string::npos) { // case
+            std::cout << "not retained:" << attributeList[i].getName() << std::endl;
+            continue;
+        }
+        if (attributeList[i].getName().find("HasSelfServiceComments") != std::string::npos) { // case
             std::cout << "not retained:" << attributeList[i].getName() << std::endl;
             continue;
         }

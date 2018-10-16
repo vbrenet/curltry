@@ -18,7 +18,10 @@
 class sAttribute {
 private:
     std::string name;
+    bool excluded {false};
 public:
-    sAttribute (const std::string attr) : name {attr} {}
+    sAttribute (const std::string attr, bool excl) : name {attr}, excluded{excl} {}
     const std::string &getName() const {return name;};
+    bool isExcluded() const {return excluded;};
+    //void setExcluded(bool excl) {excluded=excl;}
 };

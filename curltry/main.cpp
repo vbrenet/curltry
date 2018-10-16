@@ -80,45 +80,6 @@ bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer)
     return true;
 }
 //
-void describeSObject( sObject& obj) {
-    std::string rawAttributeList;
-    
-    // launch describe request (produce a buffer)
-    if (!getDescribeAttributesBuffer(obj.getName(), rawAttributeList))
-        return;
-    
-    // parse each attribute in the buffer
-    size_t beginFields = rawAttributeList.find("\"fields\":");
-    if (beginFields != std::string::npos) {
-        // chercher       "name":"curren__c","nameField":
-        bool terminated {false};
-        size_t offset = beginFields;
-        do {
-            size_t beginName = rawAttributeList.find("\"name\":",offset);
-            if (beginName != std::string::npos) {
-                size_t endName = rawAttributeList.find(",\"nameField\":",beginName);
-                if (endName != std::string::npos) {
-                    obj.addAttribute({rawAttributeList.substr(beginName+7+1,endName-beginName-7-2)});
-                    offset = endName+13;
-                } else {
-                    terminated = true;
-                }
-            } else
-                terminated = true;
-            } while (terminated == false);
-        }
-}
-//
-//
-void runRestSession() {
-    if (!SalesforceSession::openSession("vbrlight-dev-ed.my.salesforce.com", "3MVG98_Psg5cppyaViFlqbC.qo_drqk_L1ZWJnB4UB.NmykHpAvz.3wxbx23DBjgnccMNsZVfBF8UgvovtfYh", "8703187062703750250", "vbrlight@brenet.com", "Petrosian0"))
-        return ;
-    
-    // get account attributes and print them
-    sObject account {"Opportunity"};
-    describeSObject (account);
-    account.print();
-}
 //
 //
 void runBulkSession() {

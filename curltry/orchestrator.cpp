@@ -21,6 +21,9 @@ bool orchestrator::describeObject() {
     if (!getDescribeAttributesBuffer(theObject.getName(), rawAttributeList))
         return false;
     
+    std::cout << "raw describe object:\n" << rawAttributeList << std::endl;
+    // "type":"address" : les filtrer car pas compatible bulk; "type":"location"
+    
     // parse each attribute in the buffer
     size_t beginFields = rawAttributeList.find("\"fields\":");
     if (beginFields != std::string::npos) {
@@ -30,14 +33,27 @@ bool orchestrator::describeObject() {
         do {
             size_t beginName = rawAttributeList.find("\"name\":",offset);
             if (beginName != std::string::npos) {
+                bool excluded {false};
                 size_t endName = rawAttributeList.find(",\"nameField\":",beginName);
                 if (endName != std::string::npos) {
-                    theObject.addAttribute({rawAttributeList.substr(beginName+7+1,endName-beginName-7-2)});
                     offset = endName+13;
-                } else {
+                    // search type
+                    size_t beginType = rawAttributeList.find("\"type\":",offset);
+                    if (beginType != std::string::npos) {
+                        size_t endType = rawAttributeList.find(",\"unique\":",beginType);
+                        if (endType != std::string::npos) {
+                            std::string attributeType = rawAttributeList.substr(beginType+7+1,endType-beginType-7-2);
+                            if ((attributeType.compare("address") == 0) || (attributeType.compare("location") ==0))
+                                excluded = true;
+                        }   // end endType found
+                    }   // end beginType found
+                    theObject.addAttribute({rawAttributeList.substr(beginName+7+1,endName-beginName-7-2),excluded});
+                } // end endName fournd
+                else {
                     terminated = true;
                 }
-            } else
+            } // end beginName found
+            else
                 terminated = true;
         } while (terminated == false);
     }
