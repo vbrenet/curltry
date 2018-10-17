@@ -7,6 +7,7 @@
 //
 
 #include "config.hpp"
+#include <iostream>
 #include <fstream>
 //
 //
@@ -26,13 +27,22 @@ const std::vector<config::tokenDesc> config::tokenDescriptions = {
     {config::token::SOBJECT, "_object_:"},
 };
 //
+void config::printMap() {
+    std::cout << "excludedAttributesByObj :" << std::endl;
+    for (auto it = excludedAttributesByObj.begin(); it != excludedAttributesByObj.end(); it++) {
+        std::cout << "object : " << it->first << std::endl;
+        for (auto itv = it->second.begin(); itv != it->second.end(); itv++)
+            std::cout << *itv << " " ;
+        std::cout << std::endl;
+    }
+}
 //
 void config::updateExcludedAttributes(const std::string& line) {
     size_t firstColon = line.find_first_of(':');
     if (firstColon != std::string::npos) {
-        size_t secondColon = line.find_first_of(':',firstColon);
+        size_t secondColon = line.find_first_of(':',firstColon+1);
         if (secondColon != std::string::npos) {
-            std::string sObject = line.substr(firstColon+1,secondColon-firstColon);
+            std::string sObject = line.substr(firstColon+1,secondColon-firstColon-1);
             std::string attribute = line.substr(secondColon+1);
             auto it =excludedAttributesByObj.find(sObject);
             if (it != excludedAttributesByObj.end()) {
@@ -78,6 +88,7 @@ void config::processLine(const std::string& line) {
             password = value;
             break;
         case token::SOBJECT:
+            updateExcludedAttributes(line);
             break;
         default:
             break;

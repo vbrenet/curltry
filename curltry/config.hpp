@@ -47,5 +47,6 @@ public:
     static std::string& getUsername() {return username;};
     static std::string& getPassword() {return password;};
     //
+    static void printMap();
 };
 #endif /* config_hpp */

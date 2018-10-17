@@ -90,6 +90,7 @@ void testConfig() {
     std::cout << "clientsecret : " << config::getClientSecret() << std::endl;
     std::cout << "username : " << config::getUsername() << std::endl;
     std::cout << "password : " << config::getPassword() << std::endl;
+    config::printMap();
 }
 //
 //
