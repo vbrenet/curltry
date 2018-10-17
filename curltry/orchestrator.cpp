@@ -10,12 +10,16 @@
 #include "SalesforceSession.hpp"
 #include "bulkSession.hpp"
 #include "bulkQuery.hpp"
+#include "config.hpp"
 //
 extern bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer);
 
 //
+//
 bool orchestrator::describeObject() {
     std::string rawAttributeList;
+    std::vector<std::string> excludedAttributes {};
+    config::getExcludedAttributes(theObject.getName(), excludedAttributes);
     
     // launch describe request (produce a buffer)
     if (!getDescribeAttributesBuffer(theObject.getName(), rawAttributeList))
@@ -46,6 +50,14 @@ bool orchestrator::describeObject() {
                                 excluded = true;
                         }   // end endType found
                     }   // end beginType found
+                    // also check if the attribute is excluded in the configuration
+                    std::string theAttribute = rawAttributeList.substr(beginName+7+1,endName-beginName-7-2);
+                    for (auto itv=excludedAttributes.begin(); itv != excludedAttributes.end(); itv++) {
+                        if (theAttribute.compare(*itv) == 0) {
+                            excluded = true;
+                            break;
+                        }
+                    }
                     theObject.addAttribute({rawAttributeList.substr(beginName+7+1,endName-beginName-7-2),excluded});
                 } // end endName fournd
                 else {

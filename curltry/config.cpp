@@ -27,6 +27,8 @@ const std::vector<config::tokenDesc> config::tokenDescriptions = {
     {config::token::SOBJECT, "_object_:"},
 };
 //
+//  for test purpose
+//
 void config::printMap() {
     std::cout << "excludedAttributesByObj :" << std::endl;
     for (auto it = excludedAttributesByObj.begin(); it != excludedAttributesByObj.end(); it++) {
@@ -103,3 +105,15 @@ void config::getConfig(const std::string filename) {
         processLine(currentLine);
     }
 }
+//
+//
+bool config::getExcludedAttributes(const std::string object, std::vector<std::string>& target) {
+    auto it = excludedAttributesByObj.find(object);
+    if (it == excludedAttributesByObj.end())
+        return false;
+    else {
+        target = it->second;
+        return true;
+    }
+}
+

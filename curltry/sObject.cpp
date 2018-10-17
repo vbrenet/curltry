@@ -16,27 +16,24 @@ void sObject::print() const {
 //
 std::string sObject::makeAllAttributeQuery() {
     std::string query {};
+    std::vector<std::string> actualList {};
+    
+    for (auto it = attributeList.begin(); it != attributeList.end(); it++)
+        if (!it->isExcluded())
+            actualList.push_back(it->getName());
+        else
+            std::cout << "excluded : " << it->getName() << std::endl;
     
     std::cout <<  "makeAllAttributeQuery: attributeList.size = " <<attributeList.size()<< std::endl;
-    
+    std::cout <<  "makeAllAttributeQuery: actualList = " <<actualList.size()<< std::endl;
+
     query = "Select ";
     
-    for (auto i=0; i < attributeList.size(); i++) {
-
-        if (attributeList[i].isExcluded()) {
-            std::cout << "excluded :" << attributeList[i].getName() << std::endl;
-            continue;
-
-        }
+    for (auto i=0; i < actualList.size(); i++) {
         
-        if (attributeList[i].getName().find("ChannelProgram") != std::string::npos) {   // account
-            std::cout << "not retained:" << attributeList[i].getName() << std::endl;
-            continue;
-        }
-
-        attributeCounters.insert(std::pair<std::string,int>({attributeList[i].getName(),0}));
-        query += attributeList[i].getName();
-        if (i != (attributeList.size() -1))
+        attributeCounters.insert(std::pair<std::string,int>({actualList[i],0}));
+        query += actualList[i];
+        if (i != (actualList.size() -1))
             query += ",";
     }
     

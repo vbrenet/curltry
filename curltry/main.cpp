@@ -105,14 +105,24 @@ void runBulkSession() {
 //
 void runOrchestration() {
     // credentials creation
+    /*
     sessionCredentials credentials {false,
                                     "vbrlight-dev-ed.my.salesforce.com",
                                     "3MVG98_Psg5cppyaViFlqbC.qo_drqk_L1ZWJnB4UB.NmykHpAvz.3wxbx23DBjgnccMNsZVfBF8UgvovtfYh",
                                     "8703187062703750250",
                                     "vbrlight@brenet.com",
                                     "Petrosian0"};
+     */
+    // credentials creation
+    sessionCredentials credentials {false,
+        config::getDomain(),
+        config::getClientId(),
+        config::getClientSecret(),
+        config::getUsername(),
+        config::getPassword()};
+
     //
-    orchestrator theOrchestrator {"Account", credentials};
+    orchestrator theOrchestrator {"User", credentials};
     //
     if (!theOrchestrator.getObjectInfo()) {
        std::cerr << "theOrchestrator.getObjectInfo failure" << std::endl;
@@ -125,9 +135,11 @@ void runOrchestration() {
 //
 int main(int argc, const char * argv[]) {
 
- //   runBulkSession();
+//   runBulkSession();
+//  testConfig();
+    config::getConfig("/Users/vbrenet/Documents/Pocs/curltry/config");
+
+    runOrchestration();
     
-    //runOrchestration();
-    testConfig();
     return 0;
 }
