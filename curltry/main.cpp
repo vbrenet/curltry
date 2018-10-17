@@ -13,6 +13,7 @@
 #include "bulkSession.hpp"
 #include "orchestrator.hpp"
 #include "sessionCredentials.hpp"
+#include "config.hpp"
 
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
@@ -81,6 +82,16 @@ bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer)
 }
 //
 //
+void testConfig() {
+ //
+    config::getConfig("/Users/vbrenet/Documents/Pocs/curltry/config");
+    std::cout << "domain : " << config::getDomain() << std::endl;
+    std::cout << "clientid : " << config::getClientId() << std::endl;
+    std::cout << "clientsecret : " << config::getClientSecret() << std::endl;
+    std::cout << "username : " << config::getUsername() << std::endl;
+    std::cout << "password : " << config::getPassword() << std::endl;
+}
+//
 //
 void runBulkSession() {
     if (bulkSession::openBulkSession(false, "vbrlight@brenet.com", "Petrosian0"))
@@ -115,7 +126,7 @@ int main(int argc, const char * argv[]) {
 
  //   runBulkSession();
     
-    runOrchestration();
-    
+    //runOrchestration();
+    testConfig();
     return 0;
 }

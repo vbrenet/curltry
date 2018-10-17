@@ -26,6 +26,7 @@ private:
 //
     static std::map<std::string,std::vector<std::string>> excludedAttributesByObj;
     
+    static void updateExcludedAttributes(const std::string&);
     static token getTokenValue(const std::string&, std::string&);
     static void processLine(const std::string&);
 public:
@@ -38,12 +39,13 @@ public:
     static void getConfig(const std::string filename);
     //
     //  config accessors
+    //
     static bool getExcludedAttributes(const std::string object, std::vector<std::string>&);
-    static std::string getClientId() {return clientid;};
-    static std::string getClientSecret() {return clientsecret;};
-    static std::string getDomain() {return domain;};
-    static std::string getUsername() {return username;};
-    static std::string getPassword() {return password;};
+    static std::string& getClientId() {return clientid;};
+    static std::string& getClientSecret() {return clientsecret;};
+    static std::string& getDomain() {return domain;};
+    static std::string& getUsername() {return username;};
+    static std::string& getPassword() {return password;};
     //
 };
 #endif /* config_hpp */

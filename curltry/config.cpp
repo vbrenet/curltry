@@ -15,6 +15,7 @@ std::string config::clientsecret;    // REST connected app secret
 std::string config::domain;
 std::string config::username;
 std::string config::password;
+std::map<std::string,std::vector<std::string>> config::excludedAttributesByObj;
 
 const std::vector<config::tokenDesc> config::tokenDescriptions = {
     {config::token::DOMAIN, "_domain_:"},
@@ -24,7 +25,26 @@ const std::vector<config::tokenDesc> config::tokenDescriptions = {
     {config::token::PASSWORD, "_password_:"},
     {config::token::SOBJECT, "_object_:"},
 };
-
+//
+//
+void config::updateExcludedAttributes(const std::string& line) {
+    size_t firstColon = line.find_first_of(':');
+    if (firstColon != std::string::npos) {
+        size_t secondColon = line.find_first_of(':',firstColon);
+        if (secondColon != std::string::npos) {
+            std::string sObject = line.substr(firstColon+1,secondColon-firstColon);
+            std::string attribute = line.substr(secondColon+1);
+            auto it =excludedAttributesByObj.find(sObject);
+            if (it != excludedAttributesByObj.end()) {
+                it->second.push_back(attribute);
+            } else {
+                std::vector<std::string> v {attribute};
+                excludedAttributesByObj.insert(std::pair<std::string,std::vector<std::string>>({sObject},{v}));
+            }
+        }
+    }
+}
+//
 //
 config::token config::getTokenValue(const std::string& line, std::string& value) {
     for (auto it = tokenDescriptions.begin(); it != tokenDescriptions.end(); it++) {
@@ -63,7 +83,6 @@ void config::processLine(const std::string& line) {
             break;
     }
 }
-
 //
 void config::getConfig(const std::string filename) {
     std::ifstream configFile {filename};
@@ -72,5 +91,4 @@ void config::getConfig(const std::string filename) {
     while (getline(configFile,currentLine)) {
         processLine(currentLine);
     }
-
 }
