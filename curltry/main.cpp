@@ -114,12 +114,12 @@ void runOrchestration() {
         config::getPassword()};
 
     //
-    orchestrator theOrchestrator {"Campaign", credentials};
+    orchestrator theOrchestrator {"Opportunity", credentials};
     //
     if (!theOrchestrator.getObjectInfo()) {
        std::cerr << "theOrchestrator.getObjectInfo failure" << std::endl;
     } else {
-        if (!theOrchestrator.execute(0)) {
+        if (!theOrchestrator.execute(200000)) {
             std::cerr << "theOrchestrator.execute failure" << std::endl;
         }
     }

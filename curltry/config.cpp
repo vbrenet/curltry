@@ -65,16 +65,12 @@ void config::updateExcludedAttributes(const std::string& line) {
 void config::getIsSandbox(const std::string& line) {
     size_t firstColon = line.find_first_of(':');
     if (firstColon != std::string::npos) {
-        size_t secondColon = line.find_first_of(':',firstColon+1);
-        if (secondColon != std::string::npos) {
-            std::string value = line.substr(firstColon+1,secondColon-firstColon-1);
-            if (value.compare("false") == 0)
-                isASandbox = true;
-            else if (value.compare("true") == 0)
-                isASandbox = false;
-            }
+        std::string value = line.substr(firstColon+1);
+        if (value.compare("false") == 0)
+            isASandbox = true;
+        else if (value.compare("true") == 0)
+            isASandbox = false;
     }
-
 }
 //
 //
@@ -143,7 +139,7 @@ bool config::getExcludedAttributes(const std::string object, std::vector<std::st
 //
 //
 void config::getAttributeList(const std::string dirname, const std::string object, std::vector<std::string>& target) {
-    std::string filename = dirname + "/" + object;
+    std::string filename = dirname + object;
     std::ifstream configFile {filename};
     std::string currentLine;
     

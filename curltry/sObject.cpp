@@ -30,7 +30,7 @@ std::string sObject::makeAllAttributeQuery() {
 
     if (actualList.size() == 0) {
         // try to get attribute list from file
-        config::getAttributeList("/Users/vbrenet/Documents/Pocs/curltry/config", name, actualList);
+        config::getAttributeList("/Users/vbrenet/Documents/Pocs/curltry/", name, actualList);
         std::cout <<  "makeAllAttributeQuery: actualList from file = " << actualList.size() << std::endl;
     }
     
