@@ -140,4 +140,15 @@ bool config::getExcludedAttributes(const std::string object, std::vector<std::st
         return true;
     }
 }
+//
+//
+void config::getAttributeList(const std::string dirname, const std::string object, std::vector<std::string>& target) {
+    std::string filename = dirname + "/" + object;
+    std::ifstream configFile {filename};
+    std::string currentLine;
+    
+    while (getline(configFile,currentLine)) {
+        target.push_back(currentLine);
+    }
 
+}

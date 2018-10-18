@@ -7,6 +7,7 @@
 //
 #include <iostream>
 #include "sObject.hpp"
+#include "config.hpp"
 
 void sObject::print() const {
     for (sAttribute s : attributeList)
@@ -25,8 +26,14 @@ std::string sObject::makeAllAttributeQuery() {
             std::cout << "excluded : " << it->getName() << std::endl;
     
     std::cout <<  "makeAllAttributeQuery: attributeList.size = " <<attributeList.size()<< std::endl;
-    std::cout <<  "makeAllAttributeQuery: actualList = " <<actualList.size()<< std::endl;
+    std::cout <<  "makeAllAttributeQuery: actualList = " << actualList.size() << std::endl;
 
+    if (actualList.size() == 0) {
+        // try to get attribute list from file
+        config::getAttributeList("/Users/vbrenet/Documents/Pocs/curltry/config", name, actualList);
+        std::cout <<  "makeAllAttributeQuery: actualList from file = " << actualList.size() << std::endl;
+    }
+    
     query = "Select ";
     
     for (auto i=0; i < actualList.size(); i++) {

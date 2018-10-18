@@ -38,6 +38,7 @@ public:
     static bool isASandbox;
     
     static void getConfig(const std::string filename);
+    static void getAttributeList(const std::string dirname, const std::string object, std::vector<std::string>&);
     //
     //  config accessors
     //
