@@ -66,6 +66,7 @@ bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer)
         
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         res = curl_easy_perform(curl);
         if(res != CURLE_OK)
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
@@ -105,16 +106,7 @@ void runBulkSession() {
 //
 void runOrchestration() {
     // credentials creation
-    /*
-    sessionCredentials credentials {false,
-                                    "vbrlight-dev-ed.my.salesforce.com",
-                                    "3MVG98_Psg5cppyaViFlqbC.qo_drqk_L1ZWJnB4UB.NmykHpAvz.3wxbx23DBjgnccMNsZVfBF8UgvovtfYh",
-                                    "8703187062703750250",
-                                    "vbrlight@brenet.com",
-                                    "Petrosian0"};
-     */
-    // credentials creation
-    sessionCredentials credentials {false,
+    sessionCredentials credentials {config::isSandbox(),
         config::getDomain(),
         config::getClientId(),
         config::getClientSecret(),
@@ -122,7 +114,7 @@ void runOrchestration() {
         config::getPassword()};
 
     //
-    orchestrator theOrchestrator {"User", credentials};
+    orchestrator theOrchestrator {"Campaign", credentials};
     //
     if (!theOrchestrator.getObjectInfo()) {
        std::cerr << "theOrchestrator.getObjectInfo failure" << std::endl;

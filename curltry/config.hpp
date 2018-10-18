@@ -17,7 +17,7 @@
 
 class config {
 private:
-    enum class token  {DOMAIN, CLIENTID, CLIENTSECRET, USERNAME, PASSWORD, SOBJECT, UNKNOWN};
+    enum class token  {DOMAIN, CLIENTID, CLIENTSECRET, USERNAME, PASSWORD, SOBJECT, ISPROD, UNKNOWN};
     struct tokenDesc {
         token theToken;
         std::string literal;
@@ -25,7 +25,7 @@ private:
     static const std::vector<tokenDesc> tokenDescriptions;
 //
     static std::map<std::string,std::vector<std::string>> excludedAttributesByObj;
-    
+    static void getIsSandbox(const std::string&);
     static void updateExcludedAttributes(const std::string&);
     static token getTokenValue(const std::string&, std::string&);
     static void processLine(const std::string&);
@@ -35,6 +35,7 @@ public:
     static std::string domain;
     static std::string username;
     static std::string password;
+    static bool isASandbox;
     
     static void getConfig(const std::string filename);
     //
@@ -46,6 +47,8 @@ public:
     static std::string& getDomain() {return domain;};
     static std::string& getUsername() {return username;};
     static std::string& getPassword() {return password;};
+    static bool isSandbox() {return isASandbox;};
+
     //
     static void printMap();
 };

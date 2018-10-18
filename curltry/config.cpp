@@ -16,6 +16,8 @@ std::string config::clientsecret;    // REST connected app secret
 std::string config::domain;
 std::string config::username;
 std::string config::password;
+bool config::isASandbox {false};
+
 std::map<std::string,std::vector<std::string>> config::excludedAttributesByObj;
 
 const std::vector<config::tokenDesc> config::tokenDescriptions = {
@@ -25,6 +27,7 @@ const std::vector<config::tokenDesc> config::tokenDescriptions = {
     {config::token::USERNAME, "_username_:"},
     {config::token::PASSWORD, "_password_:"},
     {config::token::SOBJECT, "_object_:"},
+    {config::token::ISPROD, "_isprod_:"},
 };
 //
 //  for test purpose
@@ -55,6 +58,23 @@ void config::updateExcludedAttributes(const std::string& line) {
             }
         }
     }
+}
+//
+//
+//
+void config::getIsSandbox(const std::string& line) {
+    size_t firstColon = line.find_first_of(':');
+    if (firstColon != std::string::npos) {
+        size_t secondColon = line.find_first_of(':',firstColon+1);
+        if (secondColon != std::string::npos) {
+            std::string value = line.substr(firstColon+1,secondColon-firstColon-1);
+            if (value.compare("false") == 0)
+                isASandbox = true;
+            else if (value.compare("true") == 0)
+                isASandbox = false;
+            }
+    }
+
 }
 //
 //
@@ -92,6 +112,10 @@ void config::processLine(const std::string& line) {
         case token::SOBJECT:
             updateExcludedAttributes(line);
             break;
+        case token::ISPROD:
+            getIsSandbox(line);
+            break;
+
         default:
             break;
     }
