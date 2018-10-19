@@ -6,6 +6,7 @@
 //  Copyright © 2018 Vincent Brenet. All rights reserved.
 //
 #include <iostream>
+#include <fstream>
 #include "sObject.hpp"
 #include "config.hpp"
 
@@ -86,4 +87,14 @@ void sObject::computerecords(const std::string &xmlresult) {
 void sObject::printAttributeCounters() {
     for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++)
         std::cout << it->first << " : " << it->second << std::endl;
+}
+//
+//
+void sObject::outputAttributeCounters(const std::string &outputfile) {
+    std::ofstream ofs {outputfile};
+    
+    for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++)
+        ofs << it->first << " : " << it->second << std::endl;
+
+    ofs.close();
 }

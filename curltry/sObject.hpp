@@ -34,4 +34,5 @@ public:
     void print() const;
     void computerecords(const std::string &xmlresult);
     void printAttributeCounters();
+    void outputAttributeCounters(const std::string &);
 };

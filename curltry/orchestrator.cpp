@@ -117,6 +117,7 @@ bool orchestrator::execute(int chunksize) {
         // treat result
         if (moreResult || (chunksize == 0)) {
             theObject.computerecords(result);
+            theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
             //std::cout << "***result :" << std::endl;
             //std::cout << result << std::endl;
         }
@@ -125,7 +126,8 @@ bool orchestrator::execute(int chunksize) {
     // close the job
     if (!bulkQuery::closeJob())
         return false;
-
+   
+    theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
     theObject.printAttributeCounters();
     
     return true;
