@@ -33,6 +33,11 @@ std::string sObject::makeAllAttributeQuery() {
         // try to get attribute list from file
         config::getAttributeList("/Users/vbrenet/Documents/Pocs/curltry/", name, actualList);
         std::cout <<  "makeAllAttributeQuery: actualList from file = " << actualList.size() << std::endl;
+        if (actualList.size() > 0) {
+            for (auto it = actualList.begin(); it != actualList.end(); it++) {
+                addAttribute({*it,false});
+            }
+        }
     }
     
     query = "Select ";

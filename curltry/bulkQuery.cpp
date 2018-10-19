@@ -232,7 +232,7 @@ bool bulkQuery::waitCompletion() {
         int processed = jobInfo.numberBatchesTotal - jobInfo.numberBatchesQueued - jobInfo.numberBatchesInProgress;
         
         if (pkchunking)
-            terminated = ((jobInfo.numberBatchesTotal != 1) && (jobInfo.numberBatchesQueued == 0) && (jobInfo.numberBatchesInProgress == 0));
+            terminated = (((jobInfo.numberBatchesTotal != 1) && (jobInfo.numberBatchesQueued == 0) && (jobInfo.numberBatchesInProgress == 0)) || (jobInfo.numberBatchesCompleted == jobInfo.numberBatchesTotal));
         else
             terminated = ((jobInfo.numberBatchesTotal - processed) == 0);
         
