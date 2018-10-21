@@ -16,9 +16,6 @@
 
 #include "sAttribute.hpp"
 
-
-#endif /* sObject_hpp */
-
 class sObject{
 private:
     std::string name;
@@ -36,3 +33,5 @@ public:
     void printAttributeCounters();
     void outputAttributeCounters(const std::string &);
 };
+
+#endif /* sObject_hpp */
