@@ -104,7 +104,7 @@ void runBulkSession() {
 }
 //
 //
-void runOrchestration() {
+void runOrchestration(const std::string& theObj, int chunksize) {
     // credentials creation
     sessionCredentials credentials {config::isSandbox(),
         config::getDomain(),
@@ -114,24 +114,40 @@ void runOrchestration() {
         config::getPassword()};
 
     //
-    orchestrator theOrchestrator {"Opportunity", credentials};
+    orchestrator theOrchestrator {theObj, credentials};
     //
     if (!theOrchestrator.getObjectInfo()) {
        std::cerr << "theOrchestrator.getObjectInfo failure" << std::endl;
     } else {
-        if (!theOrchestrator.execute(50000)) {
+        if (!theOrchestrator.execute(chunksize)) {
             std::cerr << "theOrchestrator.execute failure" << std::endl;
         }
     }
 }
 //
+//
 int main(int argc, const char * argv[]) {
 
-//   runBulkSession();
-//  testConfig();
+    if (argc != 3) {
+        std::cerr << "Syntax : curltry <object name> <chunksize>" << std::endl;
+        exit(-1);
+    }
+    
+    std::string theObject {argv[1]};
+    std::string arg2 {argv[2]};
+
+    int chunksize = std::stoi(arg2);
+    if (chunksize < 0) {
+        std::cerr << "Error : chunksize invalid" << std::endl;
+        exit(-1);
+    }
+        
+    //std::cout << "theObject : " << theObject << std::endl;
+    //std::cout << "chunksize : " << chunksize << std::endl;
+    
     config::getConfig("/Users/vbrenet/Documents/Pocs/curltry/config");
 
-    runOrchestration();
+    runOrchestration(theObject,chunksize);
     
     return 0;
 }
