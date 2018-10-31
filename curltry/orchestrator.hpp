@@ -22,7 +22,7 @@ private:
     sessionCredentials credentials;
     
     bool threadedMode {false};
-    std::vector<threadBucket> buckets {};
+    static std::vector<threadBucket> buckets;
     
     bool describeObject();
 public:

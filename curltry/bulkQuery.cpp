@@ -474,33 +474,30 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
     
 }
 //
-void bulkQuery::getBatchResult2(const std::string batchid, const std::string resultid, std::string * result) {
-    CURL *curl;
-    CURLcode res;
-    std::string readBuffer;
+void bulkQuery::getBatchResult2(const std::string batchid, const std::string resultid, threadBucket *ptb) {
     
-    curl = curl_easy_init();
+    ptb->curl = curl_easy_init();
     
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result/"+resultid).c_str());
+    if(ptb->curl) {
+        curl_easy_setopt(ptb->curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result/"+resultid).c_str());
         
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        curl_easy_setopt(ptb->curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(ptb->curl, CURLOPT_WRITEDATA, &ptb->readBuffer);
         
         // set header
         struct curl_slist *list = NULL;
         list = curl_slist_append(list, "Content-Type: application/xml; charset=UTF-8");
         list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
+        curl_easy_setopt(ptb->curl, CURLOPT_HTTPHEADER, list);
         
-        res = curl_easy_perform(curl);
-        curl_slist_free_all(list); /* free the list  */
+        ptb->res = curl_easy_perform(ptb->curl);
+        //curl_slist_free_all(list); /* free the list  */
         
-        if (res != CURLE_OK) {
-            std::cerr << "bulkQuery::getBatchResultId : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
+        if (ptb->res != CURLE_OK) {
+            std::cerr << "bulkQuery::getBatchResultId : curl_easy_perform error: " << curl_easy_strerror(ptb->res) << std::endl;
             return ;
         }
-        curl_easy_cleanup(curl);
+        //curl_easy_cleanup(ptb->curl);
         
     }
     
@@ -509,8 +506,8 @@ void bulkQuery::getBatchResult2(const std::string batchid, const std::string res
         return ;
     }
     
-    for (char c : readBuffer)
-        *result++ = c;
+    ptb->buffer = ptb->readBuffer;
+    return;
 }
 
 //
@@ -554,6 +551,7 @@ bool bulkQuery::getResult(std::string& result) {
     
     return moreResult;
 }
+//
 //
 //
 bool bulkQuery::closeJob() {
@@ -640,7 +638,7 @@ bool bulkQuery::getMultipleResults(std::vector<threadBucket>& thebuckets) {
     for (auto it=batches.begin(); it!=batches.end(); ++it) {
         thebuckets.push_back({});
         
-        std::thread tt {getBatchResult2,it->first,it->second.resultId,&thebuckets.back().buffer};
+        std::thread tt {getBatchResult2,it->first,it->second.resultId,&thebuckets.back()};
         threads.push_back(std::move(tt));
     }
     

@@ -13,6 +13,7 @@
 #include "config.hpp"
 //
 extern bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer);
+std::vector<threadBucket> orchestrator::buckets;
 
 //
 //
@@ -109,19 +110,26 @@ bool orchestrator::execute(int chunksize) {
     if (!bulkQuery::waitCompletion())
         return false;
     
-    std::string result;
-    bool moreResult {false};
-    do {
-        moreResult = bulkQuery::getResult(result);
-        
-        // treat result
-        if (moreResult || (chunksize == 0)) {
-            theObject.computerecords(result);
-            theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
-            //std::cout << "***result :" << std::endl;
-            //std::cout << result << std::endl;
-        }
-    } while (moreResult);
+    if (chunksize > 0)
+        threadedMode = true;
+    
+    if (!threadedMode) {
+        std::string result;
+        bool moreResult {false};
+        do {
+            moreResult = bulkQuery::getResult(result);
+            
+            // treat result
+            if (moreResult || (chunksize == 0)) {
+                theObject.computerecords(result);
+                theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
+                //std::cout << "***result :" << std::endl;
+                //std::cout << result << std::endl;
+            }
+        } while (moreResult);
+    } else {
+        bulkQuery::getMultipleResults(buckets);
+    }
 
     // close the job
     if (!bulkQuery::closeJob())
