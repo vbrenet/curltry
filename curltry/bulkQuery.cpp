@@ -509,8 +509,8 @@ void bulkQuery::getBatchResult2(const std::string batchid, const std::string res
         return ;
     }
     
-    //result = readBuffer;
-    
+    for (char c : readBuffer)
+        *result++ = c;
 }
 
 //
