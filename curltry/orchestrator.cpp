@@ -109,10 +109,10 @@ bool orchestrator::execute(int chunksize) {
     // bulkQuery::waitCompletion()
     if (!bulkQuery::waitCompletion())
         return false;
-    
+    /*********************  to test threads
     if (chunksize > 0)
         threadedMode = true;
-    
+    */
     if (!threadedMode) {
         std::string result;
         bool moreResult {false};
