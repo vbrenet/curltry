@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <string>
 #include <map>
+#include <vector>
+#include "threadBucket.hpp"
 //
 //  job info provided by Salesforce during job execution
 //
@@ -58,9 +60,12 @@ private:
     static bool getJobStatus(); // get job status, using bulk API resource
     static bool getBatchResultId(const std::string& batchid, std::string& resultid); // get result id of a given batch
     static bool getBatchResult(const std::string& batchid, const std::string& resultid, std::string& result);
+    static void getBatchResult2(const std::string batchid, const std::string resultid, std::string * result);
+
     static void extractJobStatusInfo (const std::string&, jobStatusInfo&);  // helper method to extract job info
     static bool getBatchesInfo();   // populate the batches map by all batch ids and status, using bulk API resource
     static void extractBatchesInfo(const std::string&); // helper method to extract batch info
+    static bool getBatchesResultIds();  // get all batches result ids and populate batches map with that info
 
 public:
     static bool createJob(const std::string objectName, int chunksize); // first step to use the bulk API
@@ -68,6 +73,7 @@ public:
     static bool waitCompletion();                   // third step : wait for completion of batches
     static bool getResult(std::string& result);     // fourth step : get data result
     static bool closeJob();                         // fifth step : close the job
+    static bool getMultipleResults(std::vector<threadBucket>&); // create threadBuckets and fill them
 };
 
 #endif /* bulkQuery_hpp */

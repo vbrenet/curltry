@@ -18,8 +18,9 @@
 class threadBucket {
 private:
 public:
-    std::string buffer; //  buffer to analyze
+    std::string buffer {}; //  buffer to analyze
     std::map<std::string,long> attributeCounters {};    // results
+    threadBucket() {};
 };
 
 
