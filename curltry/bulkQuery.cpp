@@ -85,7 +85,7 @@ bool bulkQuery::createJob(const std::string objectName, int chunksize, config::d
     <<          "<operation>query</operation>\n"
     <<          "<object>" << objectName << "</object>\n"
     <<          "<concurrencyMode>Parallel</concurrencyMode>\n"
-    <<          "<contentType>XML</contentType>\n"
+    <<          "<contentType>" << (theformat == config::dataformat::XML ? "XML" : "CSV")  << "</contentType>\n"
     <<          "</jobInfo>\n";
     
     body = ssbody.str();
@@ -174,7 +174,10 @@ bool bulkQuery::addQuery(const std::string& query){
         
         // set header
         struct curl_slist *list = NULL;
-        list = curl_slist_append(list, "Content-Type: application/xml; charset=UTF-8");
+        if (format == config::dataformat::XML)
+            list = curl_slist_append(list, "Content-Type: application/xml; charset=UTF-8");
+        else
+            list = curl_slist_append(list, "Content-Type: text/csv; charset=UTF-8");
         list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
         

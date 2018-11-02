@@ -121,10 +121,13 @@ bool orchestrator::execute(int chunksize) {
             
             // treat result
             if (moreResult || (chunksize == 0)) {
-                theObject.computerecords(result);
-                theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
-                //std::cout << "***result :" << std::endl;
-                //std::cout << result << std::endl;
+                if (config::getFormat() == config::dataformat::XML) {
+                    theObject.computerecords(result);
+                    theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
+                } else {
+                    std::cout << "***result :" << std::endl;
+                    std::cout << result << std::endl;
+                }
             }
         } while (moreResult);
     } else {
