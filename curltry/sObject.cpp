@@ -115,24 +115,65 @@ void sObject::computeCsvRecords(const std::string &csvString, const std::string 
     std::string token {};
     std::string record {};
     
-    enum class state {START_TOKEN, QUOTE_RECEIVED, TOKEN_IN_PROGRESS, RETURN_IN_PROGRESS, PARSING_ERROR};
+    enum class state {START_TOKEN, QUOTE_RECEIVED, TOKEN_IN_PROGRESS, RETURN_IN_PROGRESS};
     state currentState {state::START_TOKEN};
     
     for (char c : csvString) {
         switch (currentState) {
             case state::START_TOKEN:
+                if (c == '"') {
+                    currentState = state::TOKEN_IN_PROGRESS;
+                }
+                else if (c == 10) { // line feed
+                    // end of record
+                    currentState = state::START_TOKEN;
+                }
+                else {
+                    std::cerr << "Parsing error : START_TOKEN, received a character different of \" or LF" << std::endl;
+                    errorFound = true;
+                }
                 break;
             case state::QUOTE_RECEIVED:
+                if (c == '"') {
+                    currentState = state::TOKEN_IN_PROGRESS;
+                }
+                else if (c == ',') {
+                    // end of token
+                    currentState = state::START_TOKEN;
+                }
+                else {
+                    std::cerr << "Parsing error : QUOTE_RECEIVED, received a character different of \" or ," << std::endl;
+                    errorFound = true;
+                }
                 break;
             case state::TOKEN_IN_PROGRESS:
+                if (c == '"') {
+                    currentState = state::QUOTE_RECEIVED;
+                }
+                else if (c == 13) { // carriage return
+                    currentState = state::RETURN_IN_PROGRESS;
+                }
+                else if (c == 10) { // line feed
+                    std::cerr << "Parsing error : TOKEN_IN_PROGRESS, received a LF character" << std::endl;
+                    errorFound = true;
+                }
+                else {
+                    // accumulate current token
+                }
                 break;
             case state::RETURN_IN_PROGRESS:
-                break;
-            case state::PARSING_ERROR:
-                std::cerr << "computeCsvRecords : parsing error" << std::endl;
-                errorFound = true;
+                if (c == 10) {  // line feed
+                    currentState = state::TOKEN_IN_PROGRESS;
+                    // add carriage return in token
+                }
+                else {
+                    std::cerr << "Parsing error : RETURN_IN_PROGRESS, received a character different of LF" << std::endl;
+                    errorFound = true;
+                }
                 break;
             default:
+                std::cerr << "Parsing error, unknown state" << std::endl;
+                errorFound = true;
                 break;
         }
         if (errorFound)
