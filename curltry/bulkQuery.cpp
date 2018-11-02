@@ -445,6 +445,7 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
         
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        curl_easy_setopt(curl, CURLOPT_BUFFERSIZE, CURL_MAX_READ_SIZE);
         
         // set header
         struct curl_slist *list = NULL;

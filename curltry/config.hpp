@@ -16,26 +16,31 @@
 
 
 class config {
+public:
+    enum class dataformat  {XML, CSV};
+
 private:
-    enum class token  {DOMAIN, CLIENTID, CLIENTSECRET, USERNAME, PASSWORD, SOBJECT, ISPROD, UNKNOWN};
+    enum class token  {DOMAIN, CLIENTID, CLIENTSECRET, USERNAME, PASSWORD, SOBJECT, ISPROD, DATAFORMAT, UNKNOWN};
     struct tokenDesc {
         token theToken;
         std::string literal;
     };
     static const std::vector<tokenDesc> tokenDescriptions;
-//
-    static std::map<std::string,std::vector<std::string>> excludedAttributesByObj;
-    static void getIsSandbox(const std::string&);
-    static void updateExcludedAttributes(const std::string&);
-    static token getTokenValue(const std::string&, std::string&);
-    static void processLine(const std::string&);
-public:
     static std::string clientid;        // REST connected app
     static std::string clientsecret;    // REST connected app secret
     static std::string domain;
     static std::string username;
     static std::string password;
     static bool isASandbox;
+    static dataformat theformat;
+    static std::map<std::string,std::vector<std::string>> excludedAttributesByObj;
+//
+    static void computeDataFormat(const std::string&);
+    static void getIsSandbox(const std::string&);
+    static void updateExcludedAttributes(const std::string&);
+    static token getTokenValue(const std::string&, std::string&);
+    static void processLine(const std::string&);
+public:
     
     static void getConfig(const std::string filename);
     static void getAttributeList(const std::string dirname, const std::string object, std::vector<std::string>&);
@@ -49,6 +54,7 @@ public:
     static std::string& getUsername() {return username;};
     static std::string& getPassword() {return password;};
     static bool isSandbox() {return isASandbox;};
+    static dataformat getFormat() {return theformat;};
 
     //
     static void printMap();
