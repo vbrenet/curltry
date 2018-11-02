@@ -99,7 +99,7 @@ bool orchestrator::execute(int chunksize) {
         return false;
     
     // bulkQuery::createJob(const std::string objectName, int chunksize)
-    if (!bulkQuery::createJob(theObject.getName(), chunksize))
+    if (!bulkQuery::createJob(theObject.getName(), chunksize, config::getFormat()))
         return false;
 
     // bulkQuery::addQuery(const std::string& query)

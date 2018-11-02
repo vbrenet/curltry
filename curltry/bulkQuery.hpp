@@ -14,6 +14,8 @@
 #include <map>
 #include <vector>
 #include "threadBucket.hpp"
+#include "config.hpp"
+
 //
 //  job info provided by Salesforce during job execution
 //
@@ -55,6 +57,7 @@ private:
     static jobStatusInfo closedJobInfo;   // job info provided at the closing by the bulk API, related to the session's job
     static std::map<std::string,batchInfo> batches; // map of ids and batch info of each batch related to the job
     static bool pkchunking;     // true if we are in PK chunking mode
+    static config::dataformat format;   // xml or csv
     
     static size_t read_callback(void *dest, size_t size, size_t nmemb, void *userp); // callback called by libcurl to send data in POST requests
     static bool getJobStatus(); // get job status, using bulk API resource
@@ -68,7 +71,7 @@ private:
     static bool getBatchesResultIds();  // get all batches result ids and populate batches map with that info
 
 public:
-    static bool createJob(const std::string objectName, int chunksize); // first step to use the bulk API
+    static bool createJob(const std::string objectName, int chunksize, config::dataformat); // first step to use the bulk API
     static bool addQuery(const std::string& query); // second step : create a query batch
     static bool waitCompletion();                   // third step : wait for completion of batches
     static bool getResult(std::string& result);     // fourth step : get data result

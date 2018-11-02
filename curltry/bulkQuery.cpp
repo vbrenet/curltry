@@ -21,6 +21,7 @@ std::string bulkQuery::mainBatchId;
 jobStatusInfo bulkQuery::jobInfo;
 jobStatusInfo bulkQuery::closedJobInfo;
 std::map<std::string,batchInfo> bulkQuery::batches {};
+config::dataformat bulkQuery::format;   // xml or csv
 //
 //
 extern size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
@@ -70,11 +71,13 @@ size_t bulkQuery::read_callback(void *dest, size_t size, size_t nmemb, void *use
 //  bulkQuery::createJob - create a new bulk API job
 //      objectName : name of sObject to be queried (e.g. "account")
 //      chunksize : size of chunks - if >0, PKChunking is used, otherwise no
+//      theformat : xml or csv
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool bulkQuery::createJob(const std::string objectName, int chunksize) {
+bool bulkQuery::createJob(const std::string objectName, int chunksize, config::dataformat theformat) {
     
     pkchunking = (chunksize > 0);
+    format = theformat;
     
     std::stringstream ssbody;
     ssbody <<   "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"
