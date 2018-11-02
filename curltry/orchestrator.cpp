@@ -125,8 +125,7 @@ bool orchestrator::execute(int chunksize) {
                     theObject.computerecords(result);
                     theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
                 } else {
-                    std::cout << "***result size :" << result.size() << std::endl;
-                    //std::cout << result << std::endl;
+                    theObject.computeCsvRecords(result,"/Users/vbrenet/Documents/Pocs/curltry/csvResult");
                 }
             }
         } while (moreResult);

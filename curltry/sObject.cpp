@@ -106,17 +106,39 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
 }
 //
 //
-void sObject::computeCsvLine(const std::string &csvLine) {
-    std::cout << csvLine << std::endl;
-}
 //
-//
-void sObject::computeCsvRecords(const std::string &csvString) {
-    std::stringstream str {csvString};
-    std::string currentLine;
+void sObject::computeCsvRecords(const std::string &csvString, const std::string &outputfile) {
+    std::ofstream ofs {outputfile};
+    bool firstRecord {true};
+    bool errorFound {false};
+
+    std::string token {};
+    std::string record {};
     
-    while (getline(str, currentLine)) {
-        computeCsvLine(currentLine);
+    enum class state {START_TOKEN, QUOTE_RECEIVED, TOKEN_IN_PROGRESS, RETURN_IN_PROGRESS, PARSING_ERROR};
+    state currentState {state::START_TOKEN};
+    
+    for (char c : csvString) {
+        switch (currentState) {
+            case state::START_TOKEN:
+                break;
+            case state::QUOTE_RECEIVED:
+                break;
+            case state::TOKEN_IN_PROGRESS:
+                break;
+            case state::RETURN_IN_PROGRESS:
+                break;
+            case state::PARSING_ERROR:
+                std::cerr << "computeCsvRecords : parsing error" << std::endl;
+                errorFound = true;
+                break;
+            default:
+                break;
+        }
+        if (errorFound)
+            break;
     }
+    
+    ofs.close();
 
 }
