@@ -22,6 +22,7 @@ private:
     std::vector<sAttribute> attributeList {};
     std::map<std::string,long> attributeCounters {};
     void computeAttributes(const std::string &record, int);
+    void computeCsvLine(const std::string &csvLine);
 
 public:
     sObject (const std::string objname)  : name {objname} {}
@@ -30,6 +31,7 @@ public:
     std::string makeAllAttributeQuery();
     void print() const;
     void computerecords(const std::string &xmlresult);
+    void computeCsvRecords(const std::string &);
     void printAttributeCounters();
     void outputAttributeCounters(const std::string &);
 };

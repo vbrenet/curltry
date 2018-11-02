@@ -7,6 +7,7 @@
 //
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "sObject.hpp"
 #include "config.hpp"
 
@@ -102,4 +103,20 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
         ofs << it->first << " : " << it->second << std::endl;
 
     ofs.close();
+}
+//
+//
+void sObject::computeCsvLine(const std::string &csvLine) {
+    std::cout << csvLine << std::endl;
+}
+//
+//
+void sObject::computeCsvRecords(const std::string &csvString) {
+    std::stringstream str {csvString};
+    std::string currentLine;
+    
+    while (getline(str, currentLine)) {
+        computeCsvLine(currentLine);
+    }
+
 }
