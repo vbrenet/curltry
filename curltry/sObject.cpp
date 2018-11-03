@@ -107,8 +107,7 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
 //
 //
 //
-void sObject::computeCsvRecords(const std::string &csvString, const std::string &outputfile) {
-    std::ofstream ofs {outputfile};
+void sObject::computeCsvRecords(const std::string &csvString) {
     bool firstRecord {true};
     bool errorFound {false};
 
@@ -117,6 +116,7 @@ void sObject::computeCsvRecords(const std::string &csvString, const std::string 
     
     enum class state {START_TOKEN, QUOTE_RECEIVED, TOKEN_IN_PROGRESS, RETURN_IN_PROGRESS};
     state currentState {state::START_TOKEN};
+    int counter {0};
     
     for (char c : csvString) {
         switch (currentState) {
@@ -135,14 +135,38 @@ void sObject::computeCsvRecords(const std::string &csvString, const std::string 
                 break;
             case state::QUOTE_RECEIVED:
                 if (c == '"') {
+                    token.push_back(c);
                     currentState = state::TOKEN_IN_PROGRESS;
                 }
                 else if (c == ',') {
                     // end of token
+                    if (firstRecord) {
+                        counter++;
+                        csvAttributeMap.insert(std::pair<int,std::string>({counter},{token}));
+                        token.clear();
+                    }
+                    else {
+                        counter++;
+                        attributeCounters[csvAttributeMap[counter]]++;
+                    }
+                    currentState = state::START_TOKEN;
+                }
+                else if (c == 10) {
+                    // end of token, end of record
+                    if (firstRecord) {
+                        counter++;
+                        csvAttributeMap.insert(std::pair<int,std::string>({counter},{token}));
+                        token.clear();
+                        firstRecord = false;
+                    }
+                    else {
+                        counter++;
+                        attributeCounters[csvAttributeMap[counter]]++;
+                    }
                     currentState = state::START_TOKEN;
                 }
                 else {
-                    std::cerr << "Parsing error : QUOTE_RECEIVED, received a character different of \" or ," << std::endl;
+                    std::cerr << "Parsing error : QUOTE_RECEIVED, received a character different of \" or , or LF" << std::endl;
                     errorFound = true;
                 }
                 break;
@@ -159,10 +183,12 @@ void sObject::computeCsvRecords(const std::string &csvString, const std::string 
                 }
                 else {
                     // accumulate current token
+                    token.push_back(c);
                 }
                 break;
             case state::RETURN_IN_PROGRESS:
                 if (c == 10) {  // line feed
+                    token.push_back(c);
                     currentState = state::TOKEN_IN_PROGRESS;
                     // add carriage return in token
                 }
@@ -179,7 +205,5 @@ void sObject::computeCsvRecords(const std::string &csvString, const std::string 
         if (errorFound)
             break;
     }
-    
-    ofs.close();
 
 }
