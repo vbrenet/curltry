@@ -138,7 +138,11 @@ bool orchestrator::execute(int chunksize) {
     if (!bulkQuery::closeJob())
         return false;
    
-    theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
+    if (config::getFormat() == config::dataformat::XML)
+        theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
+    else
+        theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
+
     theObject.printAttributeCounters();
     
     return true;

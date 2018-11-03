@@ -147,7 +147,9 @@ void sObject::computeCsvRecords(const std::string &csvString) {
                     }
                     else {
                         counter++;
-                        attributeCounters[csvAttributeMap[counter]]++;
+                        if (token.size() > 0)
+                            attributeCounters[csvAttributeMap[counter]]++;
+                        token.clear();
                     }
                     currentState = state::START_TOKEN;
                 }
@@ -157,11 +159,18 @@ void sObject::computeCsvRecords(const std::string &csvString) {
                         counter++;
                         csvAttributeMap.insert(std::pair<int,std::string>({counter},{token}));
                         token.clear();
+                        counter = 0;
                         firstRecord = false;
+                        //std::cout << "end first record" << std::endl;
+                        //for (auto it = csvAttributeMap.begin(); it != csvAttributeMap.end(); it++)
+                          //  std::cout << "number " << it->first << " : " << it->second << std::endl;
                     }
                     else {
                         counter++;
-                        attributeCounters[csvAttributeMap[counter]]++;
+                        if (token.size() > 0)
+                            attributeCounters[csvAttributeMap[counter]]++;
+                        counter = 0;
+                        token.clear();
                     }
                     currentState = state::START_TOKEN;
                 }

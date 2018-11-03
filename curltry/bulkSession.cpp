@@ -94,7 +94,7 @@ bool bulkSession::openBulkSession(bool isSandbox, const std::string username, co
         list = curl_slist_append(list, "Content-Type: text/xml; charset=UTF-8");
 
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
         /* Now specify we want to POST data */
         curl_easy_setopt(curl, CURLOPT_POST, 1L);
