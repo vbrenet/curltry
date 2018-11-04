@@ -183,9 +183,6 @@ void sObject::computeCsvRecords(const std::string &csvString) {
                 if (c == '"') {
                     currentState = state::QUOTE_RECEIVED;
                 }
-                else if (c == 13) { // carriage return
-                    currentState = state::RETURN_IN_PROGRESS;
-                }
                 else {
                     // accumulate current token
                     token.push_back(c);
