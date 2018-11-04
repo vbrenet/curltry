@@ -161,7 +161,7 @@ void sObject::computeCsvRecords(const std::string &csvString) {
                         token.clear();
                         counter = 0;
                         firstRecord = false;
-                        //std::cout << "end first record" << std::endl;
+                        //std::cout << "Attribute map:" << std::endl;
                         //for (auto it = csvAttributeMap.begin(); it != csvAttributeMap.end(); it++)
                           //  std::cout << "number " << it->first << " : " << it->second << std::endl;
                     }
@@ -185,10 +185,6 @@ void sObject::computeCsvRecords(const std::string &csvString) {
                 }
                 else if (c == 13) { // carriage return
                     currentState = state::RETURN_IN_PROGRESS;
-                }
-                else if (c == 10) { // line feed
-                    std::cerr << "Parsing error : TOKEN_IN_PROGRESS, received a LF character" << std::endl;
-                    errorFound = true;
                 }
                 else {
                     // accumulate current token
