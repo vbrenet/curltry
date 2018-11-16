@@ -14,6 +14,7 @@
 #include "orchestrator.hpp"
 #include "sessionCredentials.hpp"
 #include "config.hpp"
+#include "corpNameGenerator.hpp"
 
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
@@ -126,8 +127,25 @@ void runOrchestration(const std::string& theObj, int chunksize) {
 }
 //
 //
-int main(int argc, const char * argv[]) {
+void testrandomname() {
+    std::cout << corpNameGenerator::getName() << std::endl;
+    std::cout << corpNameGenerator::getName() << std::endl;
+    std::cout << corpNameGenerator::getName() << std::endl;
+    std::cout << corpNameGenerator::getName() << std::endl;
+    std::cout << corpNameGenerator::getName() << std::endl;
+    std::cout << corpNameGenerator::getName() << std::endl;
+    std::cout << corpNameGenerator::getName() << std::endl;
+    std::cout << corpNameGenerator::getName() << std::endl;
+    std::cout << corpNameGenerator::getName() << std::endl;
 
+    exit(0);
+}
+//
+int main(int argc, const char * argv[]) {
+    
+    corpNameGenerator::init();
+    testrandomname();
+    
     if (argc != 3) {
         std::cerr << "Syntax : curltry <object name> <chunksize>" << std::endl;
         exit(-1);
