@@ -15,6 +15,7 @@
 		6FA46F53216B451B0071654E /* bulkSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA46F51216B451B0071654E /* bulkSession.cpp */; };
 		6FD1CAA521639E1D004D2DF5 /* sObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD1CAA321639E1D004D2DF5 /* sObject.cpp */; };
 		6FD1CAA821639EFE004D2DF5 /* sAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD1CAA621639EFE004D2DF5 /* sAttribute.cpp */; };
+		6FD4C697219EBEFA00588A1F /* injectionOrchestrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD4C695219EBEFA00588A1F /* injectionOrchestrator.cpp */; };
 		6FD68FF3216F2BC200838E74 /* bulkQuery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD68FF1216F2BC200838E74 /* bulkQuery.cpp */; };
 		6FD68FF6216F2EE600838E74 /* orchestrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD68FF4216F2EE600838E74 /* orchestrator.cpp */; };
 		6FF4C267215A6BCA002D89F7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF4C266215A6BCA002D89F7 /* main.cpp */; };
@@ -48,6 +49,8 @@
 		6FD1CAA421639E1D004D2DF5 /* sObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sObject.hpp; sourceTree = "<group>"; };
 		6FD1CAA621639EFE004D2DF5 /* sAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sAttribute.cpp; sourceTree = "<group>"; };
 		6FD1CAA721639EFE004D2DF5 /* sAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sAttribute.hpp; sourceTree = "<group>"; };
+		6FD4C695219EBEFA00588A1F /* injectionOrchestrator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = injectionOrchestrator.cpp; sourceTree = "<group>"; };
+		6FD4C696219EBEFA00588A1F /* injectionOrchestrator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = injectionOrchestrator.hpp; sourceTree = "<group>"; };
 		6FD68FF1216F2BC200838E74 /* bulkQuery.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bulkQuery.cpp; sourceTree = "<group>"; };
 		6FD68FF2216F2BC200838E74 /* bulkQuery.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bulkQuery.hpp; sourceTree = "<group>"; };
 		6FD68FF4216F2EE600838E74 /* orchestrator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = orchestrator.cpp; sourceTree = "<group>"; };
@@ -113,6 +116,8 @@
 				6F709E5A216F935000D9668A /* sessionCredentials.cpp */,
 				6F709E5B216F935000D9668A /* sessionCredentials.hpp */,
 				6FD68FF5216F2EE600838E74 /* orchestrator.hpp */,
+				6FD4C695219EBEFA00588A1F /* injectionOrchestrator.cpp */,
+				6FD4C696219EBEFA00588A1F /* injectionOrchestrator.hpp */,
 				6FD1CAA621639EFE004D2DF5 /* sAttribute.cpp */,
 				6FD1CAA721639EFE004D2DF5 /* sAttribute.hpp */,
 			);
@@ -183,6 +188,7 @@
 				6FF4C267215A6BCA002D89F7 /* main.cpp in Sources */,
 				6FD68FF3216F2BC200838E74 /* bulkQuery.cpp in Sources */,
 				6FD68FF6216F2EE600838E74 /* orchestrator.cpp in Sources */,
+				6FD4C697219EBEFA00588A1F /* injectionOrchestrator.cpp in Sources */,
 				6FA46F53216B451B0071654E /* bulkSession.cpp in Sources */,
 				6F47C29F21763AFE003A25D5 /* config.cpp in Sources */,
 			);
