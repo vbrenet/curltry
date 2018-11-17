@@ -17,6 +17,7 @@
 		6F5F36AA219FF76200F02B20 /* picklistAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5F36A8219FF76200F02B20 /* picklistAttribute.cpp */; };
 		6F5F36AD21A05D2900F02B20 /* textGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5F36AB21A05D2900F02B20 /* textGenerator.cpp */; };
 		6F5F36B021A05F7E00F02B20 /* textAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5F36AE21A05F7E00F02B20 /* textAttribute.cpp */; };
+		6F5F36B321A061EC00F02B20 /* recordGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5F36B121A061EC00F02B20 /* recordGenerator.cpp */; };
 		6F709E5C216F935000D9668A /* sessionCredentials.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F709E5A216F935000D9668A /* sessionCredentials.cpp */; };
 		6F7C006C219F250800DA5B99 /* corpNameGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F7C006A219F250800DA5B99 /* corpNameGenerator.cpp */; };
 		6FA46F53216B451B0071654E /* bulkSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA46F51216B451B0071654E /* bulkSession.cpp */; };
@@ -60,6 +61,8 @@
 		6F5F36AC21A05D2900F02B20 /* textGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = textGenerator.hpp; sourceTree = "<group>"; };
 		6F5F36AE21A05F7E00F02B20 /* textAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = textAttribute.cpp; sourceTree = "<group>"; };
 		6F5F36AF21A05F7E00F02B20 /* textAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = textAttribute.hpp; sourceTree = "<group>"; };
+		6F5F36B121A061EC00F02B20 /* recordGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = recordGenerator.cpp; sourceTree = "<group>"; };
+		6F5F36B221A061EC00F02B20 /* recordGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = recordGenerator.hpp; sourceTree = "<group>"; };
 		6F709E5A216F935000D9668A /* sessionCredentials.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sessionCredentials.cpp; sourceTree = "<group>"; };
 		6F709E5B216F935000D9668A /* sessionCredentials.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sessionCredentials.hpp; sourceTree = "<group>"; };
 		6F7C006A219F250800DA5B99 /* corpNameGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = corpNameGenerator.cpp; sourceTree = "<group>"; };
@@ -145,6 +148,8 @@
 				6F5F36A2219FF47100F02B20 /* nameAttribute.cpp */,
 				6F5F36A3219FF47100F02B20 /* nameAttribute.hpp */,
 				6F5F36AE21A05F7E00F02B20 /* textAttribute.cpp */,
+				6F5F36B121A061EC00F02B20 /* recordGenerator.cpp */,
+				6F5F36B221A061EC00F02B20 /* recordGenerator.hpp */,
 				6F5F36AF21A05F7E00F02B20 /* textAttribute.hpp */,
 				6F5F36A5219FF63500F02B20 /* integerAttribute.cpp */,
 				6F5F36A6219FF63500F02B20 /* integerAttribute.hpp */,
@@ -217,6 +222,7 @@
 			files = (
 				6FD1CAA521639E1D004D2DF5 /* sObject.cpp in Sources */,
 				6F5F36A1219FF1D700F02B20 /* genericAttribute.cpp in Sources */,
+				6F5F36B321A061EC00F02B20 /* recordGenerator.cpp in Sources */,
 				6F17514C217C720600BF4B3B /* threadBucket.cpp in Sources */,
 				6F709E5C216F935000D9668A /* sessionCredentials.cpp in Sources */,
 				6F0764AC2164A46400C26AFB /* SalesforceSession.cpp in Sources */,
