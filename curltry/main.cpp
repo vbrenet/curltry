@@ -15,6 +15,7 @@
 #include "sessionCredentials.hpp"
 #include "config.hpp"
 #include "corpNameGenerator.hpp"
+#include "textGenerator.hpp"
 
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
@@ -128,15 +129,7 @@ void runOrchestration(const std::string& theObj, int chunksize) {
 //
 //
 void testrandomname() {
-    std::cout << corpNameGenerator::getName() << std::endl;
-    std::cout << corpNameGenerator::getName() << std::endl;
-    std::cout << corpNameGenerator::getName() << std::endl;
-    std::cout << corpNameGenerator::getName() << std::endl;
-    std::cout << corpNameGenerator::getName() << std::endl;
-    std::cout << corpNameGenerator::getName() << std::endl;
-    std::cout << corpNameGenerator::getName() << std::endl;
-    std::cout << corpNameGenerator::getName() << std::endl;
-    std::cout << corpNameGenerator::getName() << std::endl;
+    std::cout << textGenerator::gettext() << std::endl;
 
     exit(0);
 }
@@ -144,6 +137,8 @@ void testrandomname() {
 int main(int argc, const char * argv[]) {
     
     corpNameGenerator::init();
+    textGenerator::init();
+    
     testrandomname();
     
     if (argc != 3) {
