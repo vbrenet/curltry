@@ -7,3 +7,8 @@
 //
 
 #include "integerAttribute.hpp"
+
+integerAttribute::integerAttribute(std::string n) {
+    name = n;
+    csvName = "\"" + name + "\"";
+}

@@ -15,6 +15,9 @@
 class nameAttribute : public genericAttribute {
 private:
 public:
+    nameAttribute(std::string s);
+    ~nameAttribute() {}
+
     const std::string getCsvValue() const;
 };
 

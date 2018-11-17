@@ -14,3 +14,11 @@ const std::string textAttribute::getCsvValue() const {
     s = s.substr(0,size);
     return "\"" + s + "\"";
 }
+//
+
+textAttribute::textAttribute(const std::string& n, int s) {
+    name = n;
+    csvName = "\"" + name + "\"";
+    size = s;
+}
+

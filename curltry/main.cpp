@@ -16,6 +16,11 @@
 #include "config.hpp"
 #include "corpNameGenerator.hpp"
 #include "textGenerator.hpp"
+#include "nameAttribute.hpp"
+#include "textAttribute.hpp"
+#include "integerAttribute.hpp"
+#include "picklistAttribute.hpp"
+#include "recordGenerator.hpp"
 
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
@@ -128,8 +133,24 @@ void runOrchestration(const std::string& theObj, int chunksize) {
 }
 //
 //
-void testrandomname() {
-    std::cout << textGenerator::gettext() << std::endl;
+void testrun() {
+    
+    std::vector<genericAttribute> v;
+    
+    nameAttribute nameAtt {"name"};
+    integerAttribute intAtt {"employees"};
+    picklistAttribute pickAtt {"industry", {"apparel","services"}};
+    textAttribute textAtt {"description", 50};
+    
+    v.push_back(nameAtt);
+    v.push_back(intAtt);
+    v.push_back(pickAtt);
+    v.push_back(textAtt);
+
+    recordGenerator recgen {v};
+    
+    std::cout << "rec header: " << recgen.getCsvHeader() << std::endl;
+    std::cout << "rec values: " << recgen.getCsvRecord() << std::endl;
 
     exit(0);
 }
@@ -139,7 +160,7 @@ int main(int argc, const char * argv[]) {
     corpNameGenerator::init();
     textGenerator::init();
     
-    testrandomname();
+    testrun();
     
     if (argc != 3) {
         std::cerr << "Syntax : curltry <object name> <chunksize>" << std::endl;

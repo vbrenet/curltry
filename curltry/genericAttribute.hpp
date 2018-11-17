@@ -14,15 +14,16 @@
 
 
 class genericAttribute {
-private:
+protected:
     std::string name;
     std::string csvName;
 
 public:
-    genericAttribute(std::string);
+    genericAttribute() {}
+    virtual ~genericAttribute() {}
     const std::string& getCsvName() const {return csvName;}
     const std::string& getName() const {return name;}
-    virtual const std::string getCsvValue() const {return "";} ;
+    virtual const std::string getCsvValue() const = 0  ;
     
 };
 
