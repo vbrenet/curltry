@@ -17,8 +17,12 @@
 class recordGenerator {
 private:
     std::vector<genericAttribute *> attributes;
+    void processLine(const std::string&);
+    void fillValues(const std::string, std::vector<std::string>&);
 public:
+    recordGenerator(std::string pathname);
     recordGenerator(std::vector<genericAttribute *>& attlist) : attributes {attlist} {}
+    ~recordGenerator();
     const std::string getCsvHeader() const;
     const std::string getCsvRecord() const;
 };
