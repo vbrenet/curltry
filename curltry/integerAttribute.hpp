@@ -17,9 +17,9 @@
 class integerAttribute : public genericAttribute {
 private:
 public:
-    integerAttribute(std::string s);
+    integerAttribute(std::string s) : genericAttribute(s) {}
     ~integerAttribute() {}
-    const std::string getCsvValue() const {return "\"" + std::to_string(rand()%100000) + "\"";};
+     std::string getCsvValue() const {return "\"" + std::to_string(rand()%100000) + "\"";};
 };
 
 #endif /* integerAttribute_hpp */

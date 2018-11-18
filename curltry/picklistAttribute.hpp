@@ -18,9 +18,9 @@ class picklistAttribute : public genericAttribute {
 private:
     std::vector<std::string> values;
 public:
-    picklistAttribute(const std::string& n, const std::vector<std::string>& v);
+    picklistAttribute(const std::string& n, const std::vector<std::string>& v) : genericAttribute(n), values {v} {}
     ~picklistAttribute() {}
-    const std::string getCsvValue() const {return "\"" + values[rand() % values.size()] + "\"";};
+     std::string getCsvValue() const {return "\"" + values[rand() % values.size()] + "\"";};
 };
 
 #endif /* picklistAttribute_hpp */

@@ -7,9 +7,3 @@
 //
 
 #include "picklistAttribute.hpp"
-
-picklistAttribute::picklistAttribute(const std::string& n, const std::vector<std::string>& v) {
-    name = n;
-    csvName = "\"" + name + "\"";
-    values = v;
-}

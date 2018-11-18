@@ -15,10 +15,10 @@
 class nameAttribute : public genericAttribute {
 private:
 public:
-    nameAttribute(std::string s);
+    nameAttribute(std::string s) : genericAttribute(s) {}
     ~nameAttribute() {}
 
-    const std::string getCsvValue() const;
+     std::string getCsvValue() const;
 };
 
 #endif /* nameAttribute_hpp */

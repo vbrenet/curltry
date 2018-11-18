@@ -16,9 +16,9 @@
 
 class recordGenerator {
 private:
-    std::vector<genericAttribute> attributes;
+    std::vector<genericAttribute *> attributes;
 public:
-    recordGenerator(std::vector<genericAttribute>& attlist) : attributes {attlist} {}
+    recordGenerator(std::vector<genericAttribute *>& attlist) : attributes {attlist} {}
     const std::string getCsvHeader() const;
     const std::string getCsvRecord() const;
 };

@@ -135,20 +135,20 @@ void runOrchestration(const std::string& theObj, int chunksize) {
 //
 void testrun() {
     
-    std::vector<genericAttribute> v;
+    std::vector<genericAttribute *> v;
     
     nameAttribute nameAtt {"name"};
     integerAttribute intAtt {"employees"};
-    picklistAttribute pickAtt {"industry", {"apparel","services"}};
-    textAttribute textAtt {"description", 50};
+    picklistAttribute pickAtt {"industry", {"apparel","services","bank","insurance","automotive"}};
+    textAttribute textAtt {"description", 20};
     
-    v.push_back(nameAtt);
-    v.push_back(intAtt);
-    v.push_back(pickAtt);
-    v.push_back(textAtt);
+    v.push_back(&nameAtt);
+    v.push_back(&intAtt);
+    v.push_back(&pickAtt);
+    v.push_back(&textAtt);
 
     recordGenerator recgen {v};
-    
+
     std::cout << "rec header: " << recgen.getCsvHeader() << std::endl;
     std::cout << "rec values: " << recgen.getCsvRecord() << std::endl;
 

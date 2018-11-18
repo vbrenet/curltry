@@ -9,16 +9,10 @@
 #include "textAttribute.hpp"
 #include "textGenerator.hpp"
 
-const std::string textAttribute::getCsvValue() const {
+ std::string textAttribute::getCsvValue() const {
     std::string s = textGenerator::gettext();
     s = s.substr(0,size);
     return "\"" + s + "\"";
 }
 //
-
-textAttribute::textAttribute(const std::string& n, int s) {
-    name = n;
-    csvName = "\"" + name + "\"";
-    size = s;
-}
 

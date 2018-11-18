@@ -18,9 +18,9 @@ class textAttribute : public genericAttribute {
 private:
     int size;
 public:
-    textAttribute(const std::string& n, int s) ; 
+    textAttribute(const std::string& n, int s) : genericAttribute(n), size{s} {}
     ~textAttribute() {}
 
-    const std::string getCsvValue() const;
+    std::string getCsvValue() const;
 };
 #endif /* textAttribute_hpp */

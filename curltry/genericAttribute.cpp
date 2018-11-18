@@ -8,7 +8,7 @@
 
 #include "genericAttribute.hpp"
 
-//genericAttribute::genericAttribute(std::string n) {
-//    name = n;
-//    csvName = "\"" + name + "\"";
-//}
+genericAttribute::genericAttribute(std::string n) {
+    name = n;
+    csvName = "\"" + name + "\"";
+}

@@ -10,11 +10,6 @@
 #include "corpNameGenerator.hpp"
 
 
-const std::string nameAttribute::getCsvValue() const {
+ std::string nameAttribute::getCsvValue() const {
     return "\"" + corpNameGenerator::getName() + "\"";
-}
-
-nameAttribute::nameAttribute(std::string n) {
-    name = n;
-    csvName = "\"" + name + "\"";
 }
