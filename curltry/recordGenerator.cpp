@@ -64,6 +64,9 @@ void recordGenerator::fillValues(std::string source, std::vector<std::string>& t
         start = end + delim.length();
         end = source.find(delim, start);
     }
+    std::string token = source.substr(start, end);
+    target.push_back(removeQuotes(token));
+
 }
 //
 void recordGenerator::processLine(const std::string& line) {
@@ -71,17 +74,17 @@ void recordGenerator::processLine(const std::string& line) {
     size_t firstcolon = line.find_first_of(':');
     if (firstcolon != std::string::npos) {
         std::string attributeName = line.substr(0,firstcolon);
-        size_t secondcolon = line.find_first_of(':',firstcolon);
+        size_t secondcolon = line.find_first_of(':',firstcolon+1);
         std::string attributeType {};
         if (secondcolon == std::string::npos)
-            attributeType = line.substr(firstcolon);
+            attributeType = line.substr(firstcolon+1);
         else
-            attributeType = line.substr(firstcolon,secondcolon-firstcolon);
+            attributeType = line.substr(firstcolon+1,secondcolon-firstcolon-1);
         if (attributeType.compare("nameAttribute") == 0) {
             nameAttribute *att = new nameAttribute(attributeName);
             attributes.push_back(att);
         } else if (attributeType.compare("text") == 0) {
-            std::string textLength = line.substr(secondcolon);
+            std::string textLength = line.substr(secondcolon+1);
             textAttribute *att = new textAttribute(attributeName, std::atoi(textLength.c_str()));
             attributes.push_back(att);
         } else if (attributeType.compare("integer") == 0) {
@@ -89,7 +92,7 @@ void recordGenerator::processLine(const std::string& line) {
             attributes.push_back(att);
         } else if (attributeType.compare("picklist") == 0) {
             std::vector<std::string> values {};
-            fillValues(line.substr(secondcolon), values);
+            fillValues(line.substr(secondcolon+1), values);
             picklistAttribute *att = new picklistAttribute(attributeName, values);
             attributes.push_back(att);
         }
