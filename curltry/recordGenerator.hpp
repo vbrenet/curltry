@@ -18,7 +18,9 @@ class recordGenerator {
 private:
     std::vector<genericAttribute *> attributes;
     void processLine(const std::string&);
-    void fillValues(const std::string, std::vector<std::string>&);
+    void fillValues(std::string, std::vector<std::string>&);
+    std::string removeQuotes (const std::string& input);
+
 public:
     recordGenerator(std::string pathname);
     recordGenerator(std::vector<genericAttribute *>& attlist) : attributes {attlist} {}

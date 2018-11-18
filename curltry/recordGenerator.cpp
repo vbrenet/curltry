@@ -13,6 +13,8 @@
 #include "picklistAttribute.hpp"
 #include <fstream>
 #include <vector>
+#include <stdio.h>
+
 
 //
 //
@@ -41,8 +43,27 @@ const std::string recordGenerator::getCsvRecord() const {
 }
 //
 //
-void recordGenerator::fillValues(const std::string source, std::vector<std::string>& target) {
+std::string recordGenerator::removeQuotes (const std::string& input) {
+    std::string result {input};
+    std::size_t found;
     
+    while ((found = result.find("\"")) != std::string::npos) {
+        result.erase(found, 1);
+    }
+    
+    return result;
+}
+//
+void recordGenerator::fillValues(std::string source, std::vector<std::string>& target) {
+    std::string delim = ",";
+    size_t start {0};
+    size_t end = source.find(delim);
+    while (end != std::string::npos) {
+        std::string token = source.substr(start, end - start);
+        target.push_back(removeQuotes(token));
+        start = end + delim.length();
+        end = source.find(delim, start);
+    }
 }
 //
 void recordGenerator::processLine(const std::string& line) {
