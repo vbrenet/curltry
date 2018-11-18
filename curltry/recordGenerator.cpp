@@ -111,4 +111,7 @@ recordGenerator::recordGenerator(std::string pathname) {
 //
 recordGenerator::~recordGenerator() {
 //  clean attributes vector
+    for (auto p : attributes)
+        delete p;
+    attributes.clear();
 }

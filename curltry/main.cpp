@@ -132,6 +132,9 @@ void runOrchestration(const std::string& theObj, int chunksize) {
     }
 }
 //
+void terminate() {
+    exit(0);
+}
 //
 void testrun() {
     
@@ -153,8 +156,8 @@ void testrun() {
 
     std::cout << "rec header: " << recgen.getCsvHeader() << std::endl;
     std::cout << "rec values: " << recgen.getCsvRecord() << std::endl;
-
-    exit(0);
+    
+    terminate();
 }
 //
 int main(int argc, const char * argv[]) {
