@@ -24,7 +24,6 @@ extern size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string bulkInject::extractJobId(const std::string & input) {
-    //    bulkInject::createJob : received buffer: {"id":"7505800000Ltf5GAAR","operation":"insert","object":"Account","createdById":"00558000000jlbAAAQ","createdDate":"2018-11-19T13:19:49.000+0000","systemModstamp":"2018-11-19T13:19:49.000+0000","state":"Open","concurrencyMode":"Parallel","contentType":"CSV","apiVersion":41.0,"contentUrl":"services/data/v41.0/jobs/ingest/7505800000Ltf5GAAR/batches","lineEnding":"CRLF","columnDelimiter":"COMMA"}
     std::string id {};
     size_t index = input.find("\"id\":\"");
     if (index != std::string::npos) {
@@ -35,7 +34,7 @@ std::string bulkInject::extractJobId(const std::string & input) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  bulkInject::read_callback
-//      callback used by libcurl to fill POST bodies
+//      callback used by libcurl to fill bodies
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 size_t bulkInject::read_callback(void *dest, size_t size, size_t nmemb, void *userp)
@@ -204,3 +203,74 @@ bool bulkInject::addRecords(const std::string& content){
     
     return true;
 }
+//
+//
+bool bulkInject::closeJob() {
+    std::stringstream ssbody;
+    ssbody << "{\n";
+    ssbody << "\"state\" : \"UploadComplete\"";
+    ssbody << "}\n";
+    
+    body = ssbody.str();
+
+    
+    CURL *curl;
+    CURLcode res;
+    std::string readBuffer;
+    
+    curl = curl_easy_init();
+    
+    if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getInjectUrl()+"/jobs/ingest/"+jobId).c_str());
+        
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        
+        // set header
+        struct curl_slist *list = NULL;
+        list = curl_slist_append(list, "Content-Type: application/json; charset=UTF-8");
+        list = curl_slist_append(list, "Accept: application/json");
+        list = curl_slist_append(list, ("Authorization: Bearer " + bulkSession::getSessionId()).c_str());
+
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
+        
+        /* Now specify we want to PATCH  */
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PATCH");
+
+        /* we want to use our own read function */
+        firstTime = true;
+        curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
+        
+        /* pointer to pass to our read function */
+        curl_easy_setopt(curl, CURLOPT_READDATA, ssbody.str().c_str());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(ssbody.str().c_str()));
+        
+        res = curl_easy_perform(curl);
+        curl_slist_free_all(list); /* free the list  */
+        
+        long http_code = 0;
+        curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
+        if (http_code >= 400) {
+            std::cerr << "bulkInject::closeJob : http error: " << http_code << std::endl;
+            return false;
+        }
+        
+        curl_easy_cleanup(curl);
+    }
+    else {
+        std::cerr << "bulkInject::closeJob : curl_easy_init failure" << std::endl;
+        return false;
+    }
+    
+    if (res != CURLE_OK) {
+        std::cerr << "bulkInject::closeJob : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
+        return false;
+    }
+    
+    
+    std::cout << "Final job status : " << readBuffer << std::endl;
+    
+    return true;
+    
+}
+
