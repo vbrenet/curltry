@@ -137,3 +137,70 @@ bool bulkInject::createJob(const std::string objectName) {
 
     return true;
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  bulkInject::addRecords - set the query clause of the existing job
+//      query : the query clause, which must respect bulk API limitations
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool bulkInject::addRecords(const std::string& content){
+    
+    body = content;
+    
+    CURL *curl;
+    CURLcode res;
+    std::string readBuffer;
+    
+    curl = curl_easy_init();
+    
+    if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getInjectUrl()+"/jobs/ingest/"+jobId+"/batches").c_str());
+        
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        
+        
+        // set header
+        struct curl_slist *list = NULL;
+        list = curl_slist_append(list, "Content-Type: text/csv");
+        list = curl_slist_append(list, "Accept: application/json");
+        list = curl_slist_append(list, ("Authorization: Bearer " + bulkSession::getSessionId()).c_str());
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
+        
+        /* Now specify we want to POST data */
+        curl_easy_setopt(curl, CURLOPT_PUT, 1L);
+        
+        /* we want to use our own read function */
+        firstTime = true;
+        curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
+        
+        /* pointer to pass to our read function */
+        curl_easy_setopt(curl, CURLOPT_READDATA, body.c_str());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(body.c_str()));
+        
+        res = curl_easy_perform(curl);
+        curl_slist_free_all(list); /* free the list  */
+        
+        long http_code = 0;
+        curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
+        if (http_code >= 400) {
+            std::cerr << "bulkInject::addRecords : http error: " << http_code << std::endl;
+            return false;
+        }
+        
+        curl_easy_cleanup(curl);
+    }
+    else {
+        std::cerr << "bulkInject::addRecords : curl_easy_init failure" << std::endl;
+        return false;
+    }
+    
+    if (res != CURLE_OK) {
+        std::cerr << "bulkInject::addRecords : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
+        return false;
+    }
+    
+    std::cout << "Received buffer: " << readBuffer << std::endl;
+    
+    return true;
+}

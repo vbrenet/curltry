@@ -24,6 +24,7 @@ private:
     
 public:
     static bool createJob(const std::string objectName); // first step to use the bulk API
+    static bool addRecords(const std::string& content);
 //    static bool waitCompletion();                   // third step : wait for completion of batches
 //    static bool getResult(std::string& result);     // fourth step : get data result
 //    static bool closeJob();                         // fifth step : close the job
