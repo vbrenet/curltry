@@ -21,6 +21,7 @@
 		6F709E5C216F935000D9668A /* sessionCredentials.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F709E5A216F935000D9668A /* sessionCredentials.cpp */; };
 		6F7C006C219F250800DA5B99 /* corpNameGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F7C006A219F250800DA5B99 /* corpNameGenerator.cpp */; };
 		6FA46F53216B451B0071654E /* bulkSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA46F51216B451B0071654E /* bulkSession.cpp */; };
+		6FC3633621A2CA0000A4B244 /* bulkInject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FC3633421A2CA0000A4B244 /* bulkInject.cpp */; };
 		6FD1CAA521639E1D004D2DF5 /* sObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD1CAA321639E1D004D2DF5 /* sObject.cpp */; };
 		6FD1CAA821639EFE004D2DF5 /* sAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD1CAA621639EFE004D2DF5 /* sAttribute.cpp */; };
 		6FD4C697219EBEFA00588A1F /* injectionOrchestrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD4C695219EBEFA00588A1F /* injectionOrchestrator.cpp */; };
@@ -69,6 +70,8 @@
 		6F7C006B219F250800DA5B99 /* corpNameGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = corpNameGenerator.hpp; sourceTree = "<group>"; };
 		6FA46F51216B451B0071654E /* bulkSession.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bulkSession.cpp; sourceTree = "<group>"; };
 		6FA46F52216B451B0071654E /* bulkSession.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bulkSession.hpp; sourceTree = "<group>"; };
+		6FC3633421A2CA0000A4B244 /* bulkInject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bulkInject.cpp; sourceTree = "<group>"; };
+		6FC3633521A2CA0000A4B244 /* bulkInject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bulkInject.hpp; sourceTree = "<group>"; };
 		6FD1CAA321639E1D004D2DF5 /* sObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sObject.cpp; sourceTree = "<group>"; };
 		6FD1CAA421639E1D004D2DF5 /* sObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sObject.hpp; sourceTree = "<group>"; };
 		6FD1CAA621639EFE004D2DF5 /* sAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sAttribute.cpp; sourceTree = "<group>"; };
@@ -124,6 +127,8 @@
 			isa = PBXGroup;
 			children = (
 				6FF4C266215A6BCA002D89F7 /* main.cpp */,
+				6FC3633421A2CA0000A4B244 /* bulkInject.cpp */,
+				6FC3633521A2CA0000A4B244 /* bulkInject.hpp */,
 				6FD68FF1216F2BC200838E74 /* bulkQuery.cpp */,
 				6FD68FF2216F2BC200838E74 /* bulkQuery.hpp */,
 				6F0764AA2164A46400C26AFB /* SalesforceSession.cpp */,
@@ -238,6 +243,7 @@
 				6FD4C697219EBEFA00588A1F /* injectionOrchestrator.cpp in Sources */,
 				6F5F36AA219FF76200F02B20 /* picklistAttribute.cpp in Sources */,
 				6FA46F53216B451B0071654E /* bulkSession.cpp in Sources */,
+				6FC3633621A2CA0000A4B244 /* bulkInject.cpp in Sources */,
 				6F47C29F21763AFE003A25D5 /* config.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

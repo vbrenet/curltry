@@ -21,6 +21,7 @@
 #include "integerAttribute.hpp"
 #include "picklistAttribute.hpp"
 #include "recordGenerator.hpp"
+#include "injectionOrchestrator.hpp"
 
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
@@ -132,25 +133,27 @@ void runOrchestration(const std::string& theObj, int chunksize) {
     }
 }
 //
+//
+void runInjection(const std::string& theObj) {
+    // credentials creation
+    sessionCredentials credentials {config::isSandbox(),
+        config::getDomain(),
+        config::getClientId(),
+        config::getClientSecret(),
+        config::getUsername(),
+        config::getPassword()};
+    
+    //
+    injectionOrchestrator theOrchestrator {theObj, credentials};
+    //
+}
+//
+//
 void terminate() {
     exit(0);
 }
 //
 void testrun() {
-    
-//    std::vector<genericAttribute *> v;
-//
-//    nameAttribute nameAtt {"name"};
-//    integerAttribute intAtt {"employees"};
-//    picklistAttribute pickAtt {"industry", {"apparel","services","bank","insurance","automotive"}};
-//    textAttribute textAtt {"description", 20};
-//
-//    v.push_back(&nameAtt);
-//    v.push_back(&intAtt);
-//    v.push_back(&pickAtt);
-//    v.push_back(&textAtt);
-//
-//    recordGenerator recgen {v};
     
     recordGenerator recgen ("/Users/vbrenet/Documents/Pocs/curltry/Account.inject");
 
@@ -165,11 +168,25 @@ int main(int argc, const char * argv[]) {
     corpNameGenerator::init();
     textGenerator::init();
     
+    bool injection {false};
+    
     testrun();
     
-    if (argc != 3) {
-        std::cerr << "Syntax : curltry <object name> <chunksize>" << std::endl;
+    if (argc < 3) {
+        std::cerr << "Syntax : curltry <object name> <chunksize> [injection=true|false>]" << std::endl;
         exit(-1);
+    }
+    
+    if (argc == 4) {
+        std::string injectionParam {argv[3]};
+        if (injectionParam.compare("injection=true") == 0)
+            injection = true;
+        else if (injectionParam.compare("injection=true") == 0)
+            injection = false;
+        else {
+            std::cerr << "Syntax : curltry <object name> <chunksize> [injection=true|false>]" << std::endl;
+            exit(-1);
+        }
     }
     
     std::string theObject {argv[1]};
@@ -180,13 +197,14 @@ int main(int argc, const char * argv[]) {
         std::cerr << "Error : chunksize invalid" << std::endl;
         exit(-1);
     }
-        
-    //std::cout << "theObject : " << theObject << std::endl;
-    //std::cout << "chunksize : " << chunksize << std::endl;
-    
+            
     config::getConfig("/Users/vbrenet/Documents/Pocs/curltry/config");
 
-    runOrchestration(theObject,chunksize);
+    if (injection) {
+        runInjection(theObject);
+    } else {
+        runOrchestration(theObject,chunksize);
+    }
     
     return 0;
 }
