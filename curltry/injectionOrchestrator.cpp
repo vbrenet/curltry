@@ -22,7 +22,7 @@ bool injectionOrchestrator::execute() {
         return false;
 
     // prepare records
-    recordGenerator recgen ("/Users/vbrenet/Documents/Pocs/curltry/" + theObject.getName() + "inject");
+    recordGenerator recgen ("/Users/vbrenet/Documents/Pocs/curltry/" + theObject.getName() + ".inject");
     
     char cr = 13;
     char lf = 10;

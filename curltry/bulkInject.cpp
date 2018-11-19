@@ -138,8 +138,8 @@ bool bulkInject::createJob(const std::string objectName) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//  bulkInject::addRecords - set the query clause of the existing job
-//      query : the query clause, which must respect bulk API limitations
+//  bulkInject::addRecords -
+//
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool bulkInject::addRecords(const std::string& content){
@@ -166,14 +166,16 @@ bool bulkInject::addRecords(const std::string& content){
         list = curl_slist_append(list, ("Authorization: Bearer " + bulkSession::getSessionId()).c_str());
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
         
-        /* Now specify we want to POST data */
-        curl_easy_setopt(curl, CURLOPT_PUT, 1L);
-        
+        /* Now specify we want to PUT data */
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
+
         /* we want to use our own read function */
         firstTime = true;
         curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
         
         /* pointer to pass to our read function */
+        std::cout << "strlen(body.c_str): " << strlen(body.c_str()) << std::endl;
+
         curl_easy_setopt(curl, CURLOPT_READDATA, body.c_str());
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(body.c_str()));
         
@@ -182,7 +184,7 @@ bool bulkInject::addRecords(const std::string& content){
         
         long http_code = 0;
         curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
-        if (http_code >= 400) {
+        if (http_code != 201) {
             std::cerr << "bulkInject::addRecords : http error: " << http_code << std::endl;
             return false;
         }
@@ -198,9 +200,7 @@ bool bulkInject::addRecords(const std::string& content){
         std::cerr << "bulkInject::addRecords : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
         return false;
     }
-    
-    std::cout << "Received buffer: " << readBuffer << std::endl;
-    
+        
     return true;
 }
 //

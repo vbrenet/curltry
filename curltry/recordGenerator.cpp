@@ -26,6 +26,11 @@ const std::string recordGenerator::getCsvHeader() const {
         header += (pt->getCsvName() + ',');
 
     }
+
+    size_t found = header.find_last_of(',');
+    
+    if (found != std::string::npos)
+        header.erase(found, 1);
     
     return header;
 }
@@ -38,6 +43,12 @@ const std::string recordGenerator::getCsvRecord() const {
         genericAttribute *pt = *it;
         value += (pt->getCsvValue() + ',');
     }
+    
+    size_t found = value.find_last_of(',');
+    
+    if (found != std::string::npos)
+        value.erase(found, 1);
+
     
     return value;
 }
