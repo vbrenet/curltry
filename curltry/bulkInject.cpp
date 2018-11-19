@@ -69,14 +69,17 @@ bool bulkInject::createJob(const std::string objectName) {
     curl = curl_easy_init();
     
     if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job").c_str());
+        
+        ///services/data/vXX.X/jobs/ingest
+        curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getInjectUrl()+"/jobs/ingest").c_str());
         
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
         
         // set header
         struct curl_slist *list = NULL;
-        list = curl_slist_append(list, "Content-Type: application/xml; charset=UTF-8");
+        list = curl_slist_append(list, "Content-Type: application/json; charset=UTF-8");
+        list = curl_slist_append(list, "Accept: application/json");
         list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
 
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
@@ -98,25 +101,25 @@ bool bulkInject::createJob(const std::string objectName) {
         long http_code = 0;
         curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
         if (http_code >= 400) {
-            std::cerr << "bulkQuery::createJob : http error: " << http_code << std::endl;
+            std::cerr << "bulkInject::createJob : http error: " << http_code << std::endl;
             return false;
         }
         
         curl_easy_cleanup(curl);
     }
     else {
-        std::cerr << "bulkQuery::createJob : curl_easy_init failure" << std::endl;
+        std::cerr << "bulkInject::createJob : curl_easy_init failure" << std::endl;
         return false;
     }
     
     if (res != CURLE_OK) {
-        std::cerr << "bulkQuery::createJob : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
+        std::cerr << "bulkInject::createJob : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
         return false;
     }
     
-    //std::cout << "Received buffer: " << readBuffer << std::endl;
+    std::cout << "bulkInject::createJob : received buffer: " << readBuffer << std::endl;
     
-    jobId = extractXmlToken(readBuffer, "<id>");
+    //jobId = extractXmlToken(readBuffer, "<id>");
     
     return true;
 }

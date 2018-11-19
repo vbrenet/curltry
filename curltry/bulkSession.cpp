@@ -14,6 +14,7 @@ extern size_t WriteCallback(void *, size_t , size_t , void *);
 extern std::string extractXmlToken(const std::string& inputbuffer, const std::string& token);
 std::string bulkSession::sessionId;
 std::string bulkSession::serverUrl;
+std::string bulkSession::injectUrl;
 
 //
 //
@@ -44,6 +45,8 @@ void bulkSession::processResponse(const std::string& response) {
     std::string version = serverUrlToken.substr(lastslash+1);
     size_t soap = serverUrlToken.find("/Soap");
     serverUrl = serverUrlToken.substr(0,soap) + "/async/" + version;
+    injectUrl = serverUrlToken.substr(0,soap) + "/data/" + "41.0";
+
     sessionId = extractXmlToken(response, "<sessionId>");
 }
 
@@ -132,6 +135,7 @@ bool bulkSession::openBulkSession(bool isSandbox, const std::string username, co
     
     std::cout <<  "sessionid: " << sessionId << std::endl;
     std::cout <<  "serverurl: " << serverUrl << std::endl;
+    std::cout <<  "injecturl: " << injectUrl << std::endl;
 
     return result;
 }

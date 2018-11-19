@@ -21,6 +21,7 @@ private:
 
 public:
     injectionOrchestrator(const std::string sObjectName, const sessionCredentials& c): theObject {sObjectName}, credentials{c} {}
+    bool execute();
 
 };
 

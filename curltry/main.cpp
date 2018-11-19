@@ -146,6 +146,10 @@ void runInjection(const std::string& theObj) {
     //
     injectionOrchestrator theOrchestrator {theObj, credentials};
     //
+    if (!theOrchestrator.execute()) {
+        std::cerr << "injectionOrchestrator.execute failure" << std::endl;
+
+    }
 }
 //
 //
@@ -170,8 +174,6 @@ int main(int argc, const char * argv[]) {
     
     bool injection {false};
     
-    testrun();
-    
     if (argc < 3) {
         std::cerr << "Syntax : curltry <object name> <chunksize> [injection=true|false>]" << std::endl;
         exit(-1);
@@ -181,7 +183,7 @@ int main(int argc, const char * argv[]) {
         std::string injectionParam {argv[3]};
         if (injectionParam.compare("injection=true") == 0)
             injection = true;
-        else if (injectionParam.compare("injection=true") == 0)
+        else if (injectionParam.compare("injection=false") == 0)
             injection = false;
         else {
             std::cerr << "Syntax : curltry <object name> <chunksize> [injection=true|false>]" << std::endl;
