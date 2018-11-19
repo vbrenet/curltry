@@ -19,6 +19,7 @@ private:
     static std::string jobId;   // jobID of the bulkQuery session
     
     static size_t read_callback(void *dest, size_t size, size_t nmemb, void *userp); // callback called by libcurl to send data in POST requests
+    static std::string extractJobId(const std::string &);
 //    static bool getJobStatus(); // get job status, using bulk API resource
     
 public:

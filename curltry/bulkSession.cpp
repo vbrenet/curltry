@@ -45,7 +45,7 @@ void bulkSession::processResponse(const std::string& response) {
     std::string version = serverUrlToken.substr(lastslash+1);
     size_t soap = serverUrlToken.find("/Soap");
     serverUrl = serverUrlToken.substr(0,soap) + "/async/" + version;
-    injectUrl = serverUrlToken.substr(0,soap) + "/data/" + "41.0";
+    injectUrl = serverUrlToken.substr(0,soap) + "/data/" + "v41.0";
 
     sessionId = extractXmlToken(response, "<sessionId>");
 }

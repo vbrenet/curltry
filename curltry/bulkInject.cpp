@@ -17,8 +17,21 @@ std::string bulkInject::body;
 std::string bulkInject::jobId;
 //
 extern size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
-extern std::string extractXmlToken(const std::string& inputbuffer, const std::string& token);
-extern std::string extractXmlToken(const std::string& inputbuffer, size_t pos, const std::string& token);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  bulkInject::extractJsonId
+//      extractJobId from the response received to create job request
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string bulkInject::extractJobId(const std::string & input) {
+    //    bulkInject::createJob : received buffer: {"id":"7505800000Ltf5GAAR","operation":"insert","object":"Account","createdById":"00558000000jlbAAAQ","createdDate":"2018-11-19T13:19:49.000+0000","systemModstamp":"2018-11-19T13:19:49.000+0000","state":"Open","concurrencyMode":"Parallel","contentType":"CSV","apiVersion":41.0,"contentUrl":"services/data/v41.0/jobs/ingest/7505800000Ltf5GAAR/batches","lineEnding":"CRLF","columnDelimiter":"COMMA"}
+    std::string id {};
+    size_t index = input.find("\"id\":\"");
+    if (index != std::string::npos) {
+        id = input.substr(index+5+1,18);
+    }
+    return id;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  bulkInject::read_callback
@@ -80,7 +93,7 @@ bool bulkInject::createJob(const std::string objectName) {
         struct curl_slist *list = NULL;
         list = curl_slist_append(list, "Content-Type: application/json; charset=UTF-8");
         list = curl_slist_append(list, "Accept: application/json");
-        list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
+        list = curl_slist_append(list, ("Authorization: Bearer " + bulkSession::getSessionId()).c_str());
 
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
         
@@ -119,7 +132,8 @@ bool bulkInject::createJob(const std::string objectName) {
     
     std::cout << "bulkInject::createJob : received buffer: " << readBuffer << std::endl;
     
-    //jobId = extractXmlToken(readBuffer, "<id>");
-    
+    jobId = extractJobId(readBuffer);
+    std::cout << "bulkInject::createJob : id: " << jobId << std::endl;
+
     return true;
 }
