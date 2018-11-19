@@ -5,5 +5,118 @@
 //  Created by Vincent Brenet on 19/11/2018.
 //  Copyright © 2018 Vincent Brenet. All rights reserved.
 //
-
+#include <curl/curl.h>
+#include <iostream>
+#include <sstream>
 #include "bulkInject.hpp"
+#include "bulkSession.hpp"
+
+//
+bool bulkInject::firstTime = true;
+std::string bulkInject::body;
+std::string bulkInject::jobId;
+//
+extern size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
+extern std::string extractXmlToken(const std::string& inputbuffer, const std::string& token);
+extern std::string extractXmlToken(const std::string& inputbuffer, size_t pos, const std::string& token);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  bulkInject::read_callback
+//      callback used by libcurl to fill POST bodies
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+size_t bulkInject::read_callback(void *dest, size_t size, size_t nmemb, void *userp)
+{
+    char *thedest = (char *)dest;
+    if (bulkInject::firstTime) {
+        bulkInject::firstTime = false;
+        for (auto i=0; i < bulkInject::body.size(); i++)
+            thedest[i] = bulkInject::body[i];
+        return bulkInject::body.size();
+    }
+    return 0;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  bulkInject::createJob - create a new bulk API job
+//      objectName : name of sObject to be queried (e.g. "account")
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool bulkInject::createJob(const std::string objectName) {
+    
+//    {
+//        "object" : "Contact",
+//        "contentType" : "CSV",
+//        "operation" : "insert",
+//        "lineEnding": "CRLF"
+//    }
+    
+    
+    std::stringstream ssbody;
+    ssbody << "{\n";
+    ssbody << "\"object\" : \"" << objectName << "\",\n";
+    ssbody << "\"contentType\" : \"CSV\",\n";
+    ssbody << "\"operation\" : \"insert\",\n";
+    ssbody << "\"lineEnding\": \"CRLF\"";
+    ssbody << "}\n";
+    
+    body = ssbody.str();
+    
+    CURL *curl;
+    CURLcode res;
+    std::string readBuffer;
+    
+    curl = curl_easy_init();
+    
+    if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job").c_str());
+        
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        
+        // set header
+        struct curl_slist *list = NULL;
+        list = curl_slist_append(list, "Content-Type: application/xml; charset=UTF-8");
+        list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
+
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
+        
+        /* Now specify we want to POST data */
+        curl_easy_setopt(curl, CURLOPT_POST, 1L);
+        
+        /* we want to use our own read function */
+        firstTime = true;
+        curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
+        
+        /* pointer to pass to our read function */
+        curl_easy_setopt(curl, CURLOPT_READDATA, ssbody.str().c_str());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(ssbody.str().c_str()));
+        
+        res = curl_easy_perform(curl);
+        curl_slist_free_all(list); /* free the list  */
+        
+        long http_code = 0;
+        curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
+        if (http_code >= 400) {
+            std::cerr << "bulkQuery::createJob : http error: " << http_code << std::endl;
+            return false;
+        }
+        
+        curl_easy_cleanup(curl);
+    }
+    else {
+        std::cerr << "bulkQuery::createJob : curl_easy_init failure" << std::endl;
+        return false;
+    }
+    
+    if (res != CURLE_OK) {
+        std::cerr << "bulkQuery::createJob : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
+        return false;
+    }
+    
+    //std::cout << "Received buffer: " << readBuffer << std::endl;
+    
+    jobId = extractXmlToken(readBuffer, "<id>");
+    
+    return true;
+}

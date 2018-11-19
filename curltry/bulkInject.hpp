@@ -19,13 +19,13 @@ private:
     static std::string jobId;   // jobID of the bulkQuery session
     
     static size_t read_callback(void *dest, size_t size, size_t nmemb, void *userp); // callback called by libcurl to send data in POST requests
-    static bool getJobStatus(); // get job status, using bulk API resource
+//    static bool getJobStatus(); // get job status, using bulk API resource
     
 public:
     static bool createJob(const std::string objectName); // first step to use the bulk API
-    static bool waitCompletion();                   // third step : wait for completion of batches
-    static bool getResult(std::string& result);     // fourth step : get data result
-    static bool closeJob();                         // fifth step : close the job
+//    static bool waitCompletion();                   // third step : wait for completion of batches
+//    static bool getResult(std::string& result);     // fourth step : get data result
+//    static bool closeJob();                         // fifth step : close the job
 };
 
 
