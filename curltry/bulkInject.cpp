@@ -8,6 +8,7 @@
 #include <curl/curl.h>
 #include <iostream>
 #include <sstream>
+
 #include "bulkInject.hpp"
 #include "bulkSession.hpp"
 
@@ -69,7 +70,7 @@ bool bulkInject::createJob(const std::string objectName) {
     ssbody << "\"object\" : \"" << objectName << "\",\n";
     ssbody << "\"contentType\" : \"CSV\",\n";
     ssbody << "\"operation\" : \"insert\",\n";
-    ssbody << "\"lineEnding\": \"CRLF\"";
+    ssbody << "\"lineEnding\": \"LF\"\n";
     ssbody << "}\n";
     
     body = ssbody.str();
@@ -167,7 +168,7 @@ bool bulkInject::addRecords(const std::string& content){
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
         
         /* Now specify we want to PUT data */
-        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_easy_setopt(curl, CURLOPT_PUT, 1L);
 
         /* we want to use our own read function */
         firstTime = true;
@@ -208,11 +209,12 @@ bool bulkInject::addRecords(const std::string& content){
 bool bulkInject::closeJob() {
     std::stringstream ssbody;
     ssbody << "{\n";
-    ssbody << "\"state\" : \"UploadComplete\"";
-    ssbody << "}\n";
+    ssbody << "\t\"state\" : \"UploadComplete\"\n";
+    ssbody << "}";
     
     body = ssbody.str();
 
+    std::cout << "closeJob, body: \n" << body << std::endl;
     
     CURL *curl;
     CURLcode res;
@@ -245,6 +247,8 @@ bool bulkInject::closeJob() {
         curl_easy_setopt(curl, CURLOPT_READDATA, ssbody.str().c_str());
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(ssbody.str().c_str()));
         
+        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+
         res = curl_easy_perform(curl);
         curl_slist_free_all(list); /* free the list  */
         
