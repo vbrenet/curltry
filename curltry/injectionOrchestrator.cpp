@@ -30,7 +30,7 @@ bool injectionOrchestrator::execute() {
     std::string content = recgen.getCsvHeader();
     content += lf;
 
-    for (auto i=0; i != 1000; i++) {
+    for (auto i=0; i != 10000; i++) {
         content += recgen.getCsvRecord();
         content += lf;
     }
