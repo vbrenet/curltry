@@ -15,6 +15,9 @@
 //
 bool bulkInject::firstTime = true;
 std::string bulkInject::body;
+size_t bulkInject::sizeleft;
+int bulkInject::currindex;
+
 std::string bulkInject::jobId;
 //
 extern size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
@@ -49,6 +52,32 @@ size_t bulkInject::read_callback(void *dest, size_t size, size_t nmemb, void *us
     }
     return 0;
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  bulkInject::read_callback_inject
+//      callback used by libcurl to fill bodies
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+size_t bulkInject::read_callback_inject(void *dest, size_t size, size_t nmemb, void *userp)
+{
+    char *thedest = (char *)dest;
+    size_t maxtocopy = size*nmemb;
+    
+    if (sizeleft > 0) {
+        size_t sizeToCopy = sizeleft;
+        if (sizeToCopy > maxtocopy)
+            sizeToCopy = maxtocopy;
+        for (auto j=0; j < sizeToCopy; j++) {
+            thedest[j] = body[currindex];
+            currindex++;
+        }
+        sizeleft -= sizeToCopy;
+        return sizeToCopy;
+    }
+    
+    return 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  bulkInject::createJob - create a new bulk API job
@@ -171,11 +200,14 @@ bool bulkInject::addRecords(const std::string& content){
         curl_easy_setopt(curl, CURLOPT_PUT, 1L);
 
         /* we want to use our own read function */
+        std::cout << "strlen(body.c_str): " << strlen(body.c_str()) << std::endl;
         firstTime = true;
-        curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
+        sizeleft = body.size();
+        currindex = 0;
+        
+        curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback_inject);
         
         /* pointer to pass to our read function */
-        std::cout << "strlen(body.c_str): " << strlen(body.c_str()) << std::endl;
 
         curl_easy_setopt(curl, CURLOPT_READDATA, body.c_str());
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(body.c_str()));
