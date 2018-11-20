@@ -11,6 +11,7 @@
 #include "textAttribute.hpp"
 #include "integerAttribute.hpp"
 #include "picklistAttribute.hpp"
+#include "idAttribute.hpp"
 #include <fstream>
 #include <vector>
 #include <stdio.h>
@@ -105,6 +106,9 @@ void recordGenerator::processLine(const std::string& line) {
             std::vector<std::string> values {};
             fillValues(line.substr(secondcolon+1), values);
             picklistAttribute *att = new picklistAttribute(attributeName, values);
+            attributes.push_back(att);
+        } else if (attributeType.compare("id") == 0) {
+            idAttribute *att = new idAttribute(attributeName, line.substr(secondcolon+1));
             attributes.push_back(att);
         }
     } // first colon found

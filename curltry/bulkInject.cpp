@@ -246,7 +246,7 @@ bool bulkInject::closeJob() {
     
     body = ssbody.str();
 
-//    std::cout << "closeJob, body: \n" << body << std::endl;
+    std::cout << "closeJob, body: \n" << body << std::endl;
     
     CURL *curl;
     CURLcode res;

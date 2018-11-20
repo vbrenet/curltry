@@ -30,13 +30,13 @@ bool injectionOrchestrator::execute() {
     std::string content = recgen.getCsvHeader();
     content += lf;
 
-    for (auto i=0; i != 10000; i++) {
+    for (auto i=0; i != 20000; i++) {
         content += recgen.getCsvRecord();
         content += lf;
     }
     
-//    std::ofstream csvlog {"/Users/vbrenet/Documents/Pocs/curltry/output.csv"};
-//    csvlog << content;
+    std::ofstream csvlog {"/Users/vbrenet/Documents/Pocs/curltry/output.csv"};
+    csvlog << content;
 
     // put records
     if (!bulkInject::addRecords(content))
