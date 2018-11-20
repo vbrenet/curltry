@@ -214,7 +214,7 @@ bool bulkInject::closeJob() {
     
     body = ssbody.str();
 
-    std::cout << "closeJob, body: \n" << body << std::endl;
+//    std::cout << "closeJob, body: \n" << body << std::endl;
     
     CURL *curl;
     CURLcode res;
@@ -248,7 +248,7 @@ bool bulkInject::closeJob() {
         curl_easy_setopt(curl, CURLOPT_READDATA, ssbody.str().c_str());
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(ssbody.str().c_str()));
         
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+//        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
         res = curl_easy_perform(curl);
         curl_slist_free_all(list); /* free the list  */
@@ -271,7 +271,6 @@ bool bulkInject::closeJob() {
         std::cerr << "bulkInject::closeJob : curl_easy_perform error: " << curl_easy_strerror(res) << std::endl;
         return false;
     }
-    
     
     std::cout << "Final job status : " << readBuffer << std::endl;
     
