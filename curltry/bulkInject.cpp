@@ -237,6 +237,7 @@ bool bulkInject::closeJob() {
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
         
         /* Now specify we want to PATCH  */
+        curl_easy_setopt(curl, CURLOPT_POST, 1L);
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PATCH");
 
         /* we want to use our own read function */
