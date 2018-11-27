@@ -13,7 +13,7 @@
 #include "bulkSession.hpp"
 #include "recordGenerator.hpp"
 
-bool injectionOrchestrator::execute() {
+bool injectionOrchestrator::execute(int nbrec) {
     
     // open bulk session bulkSession::openBulkSession
     if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password))
@@ -30,7 +30,7 @@ bool injectionOrchestrator::execute() {
     std::string content = recgen.getCsvHeader();
     content += lf;
 
-    for (auto i=0; i != 30000; i++) {
+    for (auto i=0; i != nbrec; i++) {
         content += recgen.getCsvRecord();
         content += lf;
     }

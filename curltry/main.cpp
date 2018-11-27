@@ -134,7 +134,7 @@ void runOrchestration(const std::string& theObj, int chunksize) {
 }
 //
 //
-void runInjection(const std::string& theObj) {
+void runInjection(const std::string& theObj, int nbrec) {
     // credentials creation
     sessionCredentials credentials {config::isSandbox(),
         config::getDomain(),
@@ -146,7 +146,7 @@ void runInjection(const std::string& theObj) {
     //
     injectionOrchestrator theOrchestrator {theObj, credentials};
     //
-    if (!theOrchestrator.execute()) {
+    if (!theOrchestrator.execute(nbrec)) {
         std::cerr << "injectionOrchestrator.execute failure" << std::endl;
 
     }
@@ -203,7 +203,7 @@ int main(int argc, const char * argv[]) {
     config::getConfig("/Users/vbrenet/Documents/Pocs/curltry/config");
 
     if (injection) {
-        runInjection(theObject);
+        runInjection(theObject,chunksize);
     } else {
         runOrchestration(theObject,chunksize);
     }

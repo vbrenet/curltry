@@ -43,7 +43,7 @@ bool SalesforceSession::openSession(const std::string thedomain, const std::stri
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS,urlParameters.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+//        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         res = curl_easy_perform(curl);
         curl_easy_cleanup(curl);
     }
