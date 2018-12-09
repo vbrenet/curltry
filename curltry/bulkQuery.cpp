@@ -452,11 +452,14 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
         curl_easy_setopt(curl, CURLOPT_BUFFERSIZE, CURL_MAX_READ_SIZE);
-        
+        curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
         // set header
         struct curl_slist *list = NULL;
         list = curl_slist_append(list, "Content-Type: application/xml; charset=UTF-8");
+        list = curl_slist_append(list, "Accept-Encoding: gzip");
+
         list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
+        
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
         
         res = curl_easy_perform(curl);
