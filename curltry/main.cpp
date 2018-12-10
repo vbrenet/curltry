@@ -112,6 +112,30 @@ void runBulkSession() {
 }
 //
 //
+//
+void runGetResultFromId(const std::string& theObj,  const std::string& theId) {
+    // credentials creation
+    sessionCredentials credentials {config::isSandbox(),
+        config::getDomain(),
+        config::getClientId(),
+        config::getClientSecret(),
+        config::getUsername(),
+        config::getPassword()};
+    
+    //
+    orchestrator theOrchestrator {theObj, credentials};
+    //
+    if (!theOrchestrator.getObjectInfo()) {
+        std::cerr << "theOrchestrator.getObjectInfo failure" << std::endl;
+    } else {
+        if (!theOrchestrator.getResultFromJobId(theId)) {
+            std::cerr << "theOrchestrator.getResultFromJobId failure" << std::endl;
+        }
+    }
+}
+//
+//
+//
 void runOrchestration(const std::string& theObj, int chunksize) {
     // credentials creation
     sessionCredentials credentials {config::isSandbox(),
@@ -169,14 +193,16 @@ void testrun() {
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 6Dec2018 V1" << std::endl;
+    std::cout << "curltry : version 10Dec2018 V1" << std::endl;
     corpNameGenerator::init();
     textGenerator::init();
     
     bool injection {false};
+    bool getResultFromJobId {false};
+    std::string paramJobId {};
     
     if (argc < 3) {
-        std::cerr << "Syntax : curltry <object name> <chunksize> [injection=true|false>]" << std::endl;
+        std::cerr << "Syntax : curltry <object name> <chunksize> [injection=<true|false>|id=<jobid>]" << std::endl;
         exit(-1);
     }
     
@@ -186,8 +212,12 @@ int main(int argc, const char * argv[]) {
             injection = true;
         else if (injectionParam.compare("injection=false") == 0)
             injection = false;
+        else if (injectionParam.compare(0,3,"id=") == 0) {
+            getResultFromJobId = true;
+            paramJobId = injectionParam.substr(3);
+        }
         else {
-            std::cerr << "Syntax : curltry <object name> <chunksize> [injection=true|false>]" << std::endl;
+            std::cerr << "Syntax : curltry <object name> <chunksize> [injection=<true|false>|id=<jobid>]" << std::endl;
             exit(-1);
         }
     }
@@ -205,8 +235,10 @@ int main(int argc, const char * argv[]) {
 
     if (injection) {
         runInjection(theObject,chunksize);
-    } else {
+    } else if (!getResultFromJobId ){
         runOrchestration(theObject,chunksize);
+    } else {
+        runGetResultFromId(theObject,paramJobId);
     }
     
     return 0;

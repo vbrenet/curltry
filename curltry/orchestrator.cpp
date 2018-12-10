@@ -147,3 +147,45 @@ bool orchestrator::execute(int chunksize) {
     
     return true;
 };
+//
+//
+//
+bool orchestrator::getResultFromJobId(const std::string& jobid) {
+    
+    // open bulk session bulkSession::openBulkSession
+    if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password))
+        return false;
+    
+    bulkQuery::setJobId(jobid);
+    
+    // bulkQuery::waitCompletion()
+    if (!bulkQuery::waitCompletion())
+        return false;
+
+    std::string result;
+    bool moreResult {false};
+    do {
+        moreResult = bulkQuery::getResult(result);
+            
+        // treat result
+        if (moreResult) {
+            if (config::getFormat() == config::dataformat::XML) {
+                theObject.computerecords(result);
+                theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
+            } else {
+                theObject.computeCsvRecords(result);
+                theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
+            }
+        }
+    } while (moreResult);
+    
+    if (config::getFormat() == config::dataformat::XML)
+        theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
+    else
+        theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
+    
+    theObject.printAttributeCounters();
+    
+    return true;
+}
+

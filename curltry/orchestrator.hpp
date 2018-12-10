@@ -29,6 +29,7 @@ public:
     orchestrator(const std::string sObjectName, const sessionCredentials& c): theObject {sObjectName}, credentials{c} {}
     bool getObjectInfo();
     bool execute(int chunksize);
+    bool getResultFromJobId(const std::string&);
 };
 
 
