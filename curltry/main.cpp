@@ -193,7 +193,7 @@ void testrun() {
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 10Dec2018 V1" << std::endl;
+    std::cout << "curltry : version 10Dec2018 V2" << std::endl;
     corpNameGenerator::init();
     textGenerator::init();
     

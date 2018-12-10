@@ -107,7 +107,7 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
 //
 //
 //
-void sObject::computeCsvRecords(const std::string &csvString) {
+long sObject::computeCsvRecords(const std::string &csvString) {
     bool firstRecord {true};
     bool errorFound {false};
 
@@ -117,6 +117,7 @@ void sObject::computeCsvRecords(const std::string &csvString) {
     enum class state {START_TOKEN, QUOTE_RECEIVED, TOKEN_IN_PROGRESS, RETURN_IN_PROGRESS};
     state currentState {state::START_TOKEN};
     int counter {0};
+    int nbRecords {0};
     
     for (char c : csvString) {
         switch (currentState) {
@@ -166,6 +167,7 @@ void sObject::computeCsvRecords(const std::string &csvString) {
                           //  std::cout << "number " << it->first << " : " << it->second << std::endl;
                     }
                     else {
+                        nbRecords++;
                         counter++;
                         if (token.size() > 0)
                             attributeCounters[csvAttributeMap[counter]]++;
@@ -207,5 +209,5 @@ void sObject::computeCsvRecords(const std::string &csvString) {
         if (errorFound)
             break;
     }
-
+    return nbRecords;
 }

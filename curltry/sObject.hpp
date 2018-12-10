@@ -32,7 +32,7 @@ public:
     std::string makeAllAttributeQuery();
     void print() const;
     void computerecords(const std::string &xmlresult);
-    void computeCsvRecords(const std::string &);
+    long computeCsvRecords(const std::string &);
     void printAttributeCounters();
     void outputAttributeCounters(const std::string &);
 };
