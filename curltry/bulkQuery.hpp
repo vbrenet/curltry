@@ -77,6 +77,7 @@ public:
     static bool getResult(std::string& result);     // fourth step : get data result
     static bool closeJob();                         // fifth step : close the job
     static bool getMultipleResults(std::vector<threadBucket>&); // create threadBuckets and fill them
+    static void setJobId(const std::string id) {jobId=id;};
 };
 
 #endif /* bulkQuery_hpp */
