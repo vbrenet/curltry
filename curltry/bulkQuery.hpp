@@ -62,11 +62,13 @@ private:
     static size_t read_callback(void *dest, size_t size, size_t nmemb, void *userp); // callback called by libcurl to send data in POST requests
     static bool getJobStatus(); // get job status, using bulk API resource
     static bool getBatchResultId(const std::string& batchid, std::string& resultid); // get result id of a given batch
+    static bool getBatchResultIdNew(const std::string& batchid, std::map<std::string,bool>&); // get result IDS of a given batch
     static bool getBatchResult(const std::string& batchid, const std::string& resultid, std::string& result);
 
     static void extractJobStatusInfo (const std::string&, jobStatusInfo&);  // helper method to extract job info
     static bool getBatchesInfo();   // populate the batches map by all batch ids and status, using bulk API resource
     static void extractBatchesInfo(const std::string&); // helper method to extract batch info
+    static void extractBatchResults (const std::string& input, std::map<std::string,bool>& results);
 
 public:
     static bool createJob(const std::string objectName, int chunksize, config::dataformat); // first step to use the bulk API
