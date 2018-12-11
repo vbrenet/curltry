@@ -13,7 +13,6 @@
 #include "config.hpp"
 //
 extern bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer);
-std::vector<threadBucket> orchestrator::buckets;
 
 //
 //
@@ -109,30 +108,23 @@ bool orchestrator::execute(int chunksize) {
     // bulkQuery::waitCompletion()
     if (!bulkQuery::waitCompletion())
         return false;
-    /*********************  to test threads
-    if (chunksize > 0)
-        threadedMode = true;
-    */
-    if (!threadedMode) {
-        std::string result;
-        bool moreResult {false};
-        do {
-            moreResult = bulkQuery::getResult(result);
+
+    std::string result;
+    bool moreResult {false};
+    do {
+        moreResult = bulkQuery::getResult(result);
             
             // treat result
-            if (moreResult || (chunksize == 0)) {
-                if (config::getFormat() == config::dataformat::XML) {
-                    theObject.computerecords(result);
-                    theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
-                } else {
-                    theObject.computeCsvRecords(result);
-                    theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
-                }
+        if (moreResult || (chunksize == 0)) {
+            if (config::getFormat() == config::dataformat::XML) {
+                theObject.computerecords(result);
+                theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
+            } else {
+                theObject.computeCsvRecords(result);
+                theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
             }
-        } while (moreResult);
-    } else {
-        bulkQuery::getMultipleResults(buckets);
-    }
+        }
+    } while (moreResult);
 
     // close the job
     if (!bulkQuery::closeJob())

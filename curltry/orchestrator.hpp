@@ -14,15 +14,11 @@
 #include <vector>
 #include "sObject.hpp"
 #include "sessionCredentials.hpp"
-#include "threadBucket.hpp"
 
 class orchestrator {
 private:
     sObject theObject ;
     sessionCredentials credentials;
-    
-    bool threadedMode {false};
-    static std::vector<threadBucket> buckets;
     
     bool describeObject();
 public:

@@ -484,51 +484,6 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
     
 }
 //
-void bulkQuery::getBatchResult2(const std::string batchid, const std::string resultid, threadBucket *ptb) {
-    
-    ptb->curl = curl_easy_init();
-    
-    if(ptb->curl) {
-        curl_easy_setopt(ptb->curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result/"+resultid).c_str());
-        
-        curl_easy_setopt(ptb->curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(ptb->curl, CURLOPT_WRITEDATA, &ptb->readBuffer);
-        
-        // set header
-        struct curl_slist *list = NULL;
-        list = curl_slist_append(list, "Content-Type: application/xml; charset=UTF-8");
-        list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
-        curl_easy_setopt(ptb->curl, CURLOPT_HTTPHEADER, list);
-        
-        ptb->res = curl_easy_perform(ptb->curl);
-        //curl_slist_free_all(list); /* free the list  */
-        
-        if (ptb->res != CURLE_OK) {
-            std::cerr << "bulkQuery::getBatchResultId : curl_easy_perform error: " << curl_easy_strerror(ptb->res) << std::endl;
-            return ;
-        }
-        //curl_easy_cleanup(ptb->curl);
-        
-    }
-    
-    else {
-        std::cerr << "bulkQuery::getBatchResultId : curl_easy_init failure" << std::endl;
-        return ;
-    }
-    
-    ptb->buffer = ptb->readBuffer;
-    return;
-}
-
-//
-//
-bool bulkQuery::getBatchesResultIds() {
-    for (auto it=batches.begin(); it!=batches.end(); ++it){
-        if (!getBatchResultId(it->first, it->second.resultId))
-            return false;
-    }
-    return true;
-}
 //
 //
 bool bulkQuery::getResult(std::string& result) {
@@ -632,29 +587,4 @@ bool bulkQuery::closeJob() {
     
     return true;
 
-}
-//
-// create threadBuckets and fill them
-//
-bool bulkQuery::getMultipleResults(std::vector<threadBucket>& thebuckets) {
-    // first, get and populate batch ids
-    bool result = getBatchesResultIds();
-    if (!result)
-        return false;
-    
-    static std::vector<std::thread> threads;
-    
-    // second, for each batch, launch a thread to get result
-    for (auto it=batches.begin(); it!=batches.end(); ++it) {
-        thebuckets.push_back({});
-        
-        std::thread tt {getBatchResult2,it->first,it->second.resultId,&thebuckets.back()};
-        threads.push_back(std::move(tt));
-    }
-    
-    // join threads
-    for (auto& t : threads) t.join();
-    
-    return true;
-    
 }
