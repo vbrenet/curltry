@@ -511,6 +511,7 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
     curl = curl_easy_init();
     
     if(curl) {
+        std::cout << bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result/"+resultid << std::endl;
         curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result/"+resultid).c_str());
         
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -557,19 +558,35 @@ bool bulkQuery::getResult(std::string& result) {
         for (auto it=batches.begin(); it!=batches.end(); ++it) {
             if (!it->second.isRead) {
                 // call read batch
-                if (!getBatchResultId(it->first, it->second.resultId))
+                if (!getBatchResultIdNew(it->first, it->second.resultMap))
                     return false;
-                // getBatchResult(batch id, batch result id, result)
-                if (!getBatchResult(it->first, it->second.resultId, result))
-                    return false;
+                
+                // output map
+//                for (auto it2 = it->second.resultMap.begin(); it2!= it->second.resultMap.end(); ++it2){
+//                    std::cout << "result id: " << it2->first << " status : " << it2->second << std::endl;
+//                 }
+
+                bool allResultsRead {true};
+                for (auto it2 = it->second.resultMap.begin(); it2!= it->second.resultMap.end(); ++it2){
+                    if (it2->second == false) {
+                        allResultsRead = false;
+                        if (!getBatchResult(it->first, it2->first, result))
+                            return false;
+                        it2->second = true;
+                        break;
+                    }
+                }
+
                 // set isread to true
-                it->second.isRead = true;
+                if (allResultsRead)
+                    it->second.isRead = true;
                 moreResult = true;
                 break;
             }
         }
     }
     else {
+        // !!! TO BE REWRITED
         std::string resultId {};
         if (!getBatchResultId(mainBatchId, resultId))
             return false;
