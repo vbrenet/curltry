@@ -432,7 +432,7 @@ bool bulkQuery::getBatchResultId(const std::string& batchid, std::string& result
     }
     
     resultid = extractXmlToken(readBuffer, "<result>");
-
+//    std::cout << "getBatchResultId : " << readBuffer << std::endl;
     return true;
 
 }

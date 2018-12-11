@@ -108,6 +108,9 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
 //
 //
 long sObject::computeCsvRecords(const std::string &csvString) {
+//    std::ofstream trc;
+//    trc.open ("/Users/vbrenet/Documents/Pocs/curltry/trace", std::ofstream::out | std::ofstream::app);
+    
     bool firstRecord {true};
     bool errorFound {false};
 
@@ -144,12 +147,17 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                     if (firstRecord) {
                         counter++;
                         csvAttributeMap.insert(std::pair<int,std::string>({counter},{token}));
+//                        trc << "created counter map entry: " << counter << " token: " << token << std::endl;
                         token.clear();
                     }
                     else {
                         counter++;
-                        if (token.size() > 0)
+                        if (token.size() > 0) {
                             attributeCounters[csvAttributeMap[counter]]++;
+//                            trc << "inserted counter: " << counter;
+                        }
+//                        if (counter ==1)
+//                            trc << " token : " << token << std::endl;
                         token.clear();
                     }
                     currentState = state::START_TOKEN;
@@ -159,18 +167,20 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                     if (firstRecord) {
                         counter++;
                         csvAttributeMap.insert(std::pair<int,std::string>({counter},{token}));
+//                        trc << "created counter map entry: " << counter << " token: " << token << std::endl;
                         token.clear();
                         counter = 0;
                         firstRecord = false;
-                        //std::cout << "Attribute map:" << std::endl;
-                        //for (auto it = csvAttributeMap.begin(); it != csvAttributeMap.end(); it++)
-                          //  std::cout << "number " << it->first << " : " << it->second << std::endl;
                     }
                     else {
                         nbRecords++;
                         counter++;
-                        if (token.size() > 0)
+                        if (token.size() > 0) {
                             attributeCounters[csvAttributeMap[counter]]++;
+//                            trc << "inserted counter: " << counter;
+                        }
+//                        if (counter ==1)
+//                            trc << " token : " << token << std::endl;
                         counter = 0;
                         token.clear();
                     }
