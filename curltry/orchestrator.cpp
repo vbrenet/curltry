@@ -111,11 +111,13 @@ bool orchestrator::execute(int chunksize) {
 
     std::string result;
     bool moreResult {false};
+    bool allResultsRead {true};
+
     do {
-        moreResult = bulkQuery::getResult(result);
+        moreResult = bulkQuery::getResult(result,allResultsRead);
             
             // treat result
-        if (moreResult || (chunksize == 0)) {
+        if ((moreResult && !allResultsRead)|| (chunksize == 0)) {
             if (config::getFormat() == config::dataformat::XML) {
                 theObject.computerecords(result);
                 theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
@@ -158,11 +160,12 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
 
     std::string result;
     bool moreResult {false};
+    bool allResultsRead {true};
     do {
-        moreResult = bulkQuery::getResult(result);
+        moreResult = bulkQuery::getResult(result,allResultsRead);
             
         // treat result
-        if (moreResult) {
+        if (moreResult && !allResultsRead) {
             if (config::getFormat() == config::dataformat::XML) {
                 theObject.computerecords(result);
                 theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");

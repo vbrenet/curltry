@@ -551,7 +551,7 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
 //
 //
 //
-bool bulkQuery::getResult(std::string& result) {
+bool bulkQuery::getResult(std::string& result, bool& allResultsRead) {
     bool moreResult {false};
 
     if (pkchunking) {
@@ -566,7 +566,7 @@ bool bulkQuery::getResult(std::string& result) {
 //                    std::cout << "result id: " << it2->first << " status : " << it2->second << std::endl;
 //                 }
 
-                bool allResultsRead {true};
+                allResultsRead = true;
                 for (auto it2 = it->second.resultMap.begin(); it2!= it->second.resultMap.end(); ++it2){
                     if (it2->second == false) {
                         allResultsRead = false;
