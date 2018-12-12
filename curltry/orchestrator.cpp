@@ -92,7 +92,8 @@ bool orchestrator::getObjectInfo() {
 //
 //
 bool orchestrator::execute(int chunksize) {
-        
+    long totalRecords {0};
+
     // open bulk session bulkSession::openBulkSession
     if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password))
         return false;
@@ -122,7 +123,9 @@ bool orchestrator::execute(int chunksize) {
                 theObject.computerecords(result);
                 theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
             } else {
-                theObject.computeCsvRecords(result);
+                long nbrec = theObject.computeCsvRecords(result);
+                totalRecords += nbrec;
+                std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
                 theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
             }
         }
