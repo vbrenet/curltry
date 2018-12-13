@@ -105,6 +105,16 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
     ofs.close();
 }
 //
+void sObject::outputMatrixCounters(const std::string &outputfile) {
+    std::ofstream ofs {outputfile};
+    
+    for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
+        ofs << it->first.first << "," << it->first.second << " : " << it->second << std::endl;
+    }
+    
+    ofs.close();
+}
+
 //
 //
 long sObject::computeCsvRecords(const std::string &csvString) {

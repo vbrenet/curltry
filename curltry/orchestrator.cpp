@@ -127,6 +127,8 @@ bool orchestrator::execute(int chunksize) {
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
                 theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
+                theObject.outputMatrixCounters("/Users/vbrenet/Documents/Pocs/curltry/matrix");
+
             }
         }
     } while (moreResult);
@@ -137,8 +139,10 @@ bool orchestrator::execute(int chunksize) {
    
     if (config::getFormat() == config::dataformat::XML)
         theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
-    else
+    else {
         theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
+        theObject.outputMatrixCounters("/Users/vbrenet/Documents/Pocs/curltry/matrix");
+    }
 
     theObject.printAttributeCounters();
     

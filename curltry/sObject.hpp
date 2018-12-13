@@ -36,6 +36,8 @@ public:
     long computeCsvRecords(const std::string &);
     void printAttributeCounters();
     void outputAttributeCounters(const std::string &);
+    void outputMatrixCounters(const std::string &outputfile);
+
 };
 
 #endif /* sObject_hpp */
