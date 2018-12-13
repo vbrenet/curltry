@@ -22,6 +22,7 @@ private:
     std::string name;
     std::vector<sAttribute> attributeList {};
     std::map<std::string,long> attributeCounters {};
+    std::map<std::pair<std::string,std::string>,long> recordTypeMatrixCounters {};//key: (record type id, attribute name)
     std::map<int,std::string> csvAttributeMap {};
     void computeAttributes(const std::string &record, int);
 

@@ -120,7 +120,9 @@ long sObject::computeCsvRecords(const std::string &csvString) {
     enum class state {START_TOKEN, QUOTE_RECEIVED, TOKEN_IN_PROGRESS, RETURN_IN_PROGRESS};
     state currentState {state::START_TOKEN};
     int counter {0};
+    int recordtypeidnumber {0};
     int nbRecords {0};
+    std::string currentRecordTypeId;
     
     for (char c : csvString) {
         switch (currentState) {
@@ -147,17 +149,20 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                     if (firstRecord) {
                         counter++;
                         csvAttributeMap.insert(std::pair<int,std::string>({counter},{token}));
-//                        trc << "created counter map entry: " << counter << " token: " << token << std::endl;
+                        if (token.compare("RecordTypeId") == 0)
+                            recordtypeidnumber = counter;
                         token.clear();
                     }
                     else {
                         counter++;
+                        if (counter == recordtypeidnumber)
+                            currentRecordTypeId = token;
                         if (token.size() > 0) {
                             attributeCounters[csvAttributeMap[counter]]++;
-//                            trc << "inserted counter: " << counter;
+                            std::pair<std::string,std::string> key {{currentRecordTypeId},{csvAttributeMap[counter]}};
+                            recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
+                            recordTypeMatrixCounters[key]++;
                         }
-//                        if (counter ==1)
-//                            trc << " token : " << token << std::endl;
                         token.clear();
                     }
                     currentState = state::START_TOKEN;
@@ -167,7 +172,8 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                     if (firstRecord) {
                         counter++;
                         csvAttributeMap.insert(std::pair<int,std::string>({counter},{token}));
-//                        trc << "created counter map entry: " << counter << " token: " << token << std::endl;
+                        if (token.compare("RecordTypeId") == 0)
+                            recordtypeidnumber = counter;
                         token.clear();
                         counter = 0;
                         firstRecord = false;
@@ -175,12 +181,14 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                     else {
                         nbRecords++;
                         counter++;
+                        if (counter == recordtypeidnumber)
+                            currentRecordTypeId = token;
                         if (token.size() > 0) {
                             attributeCounters[csvAttributeMap[counter]]++;
-//                            trc << "inserted counter: " << counter;
+                            std::pair<std::string,std::string> key {{currentRecordTypeId},{csvAttributeMap[counter]}};
+                            recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
+                            recordTypeMatrixCounters[key]++;
                         }
-//                        if (counter ==1)
-//                            trc << " token : " << token << std::endl;
                         counter = 0;
                         token.clear();
                     }
