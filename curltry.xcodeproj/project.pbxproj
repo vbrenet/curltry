@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6F0764AC2164A46400C26AFB /* SalesforceSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F0764AA2164A46400C26AFB /* SalesforceSession.cpp */; };
+		6F16CD9121C399280056C78E /* recordType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F16CD8F21C399280056C78E /* recordType.cpp */; };
 		6F17514C217C720600BF4B3B /* threadBucket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F17514A217C720600BF4B3B /* threadBucket.cpp */; };
 		6F31AE71216242680008332E /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F31AE70216242680008332E /* libcurl.tbd */; };
 		6F47C29F21763AFE003A25D5 /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F47C29D21763AFE003A25D5 /* config.cpp */; };
@@ -46,6 +47,8 @@
 /* Begin PBXFileReference section */
 		6F0764AA2164A46400C26AFB /* SalesforceSession.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SalesforceSession.cpp; sourceTree = "<group>"; };
 		6F0764AB2164A46400C26AFB /* SalesforceSession.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SalesforceSession.hpp; sourceTree = "<group>"; };
+		6F16CD8F21C399280056C78E /* recordType.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = recordType.cpp; sourceTree = "<group>"; };
+		6F16CD9021C399280056C78E /* recordType.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = recordType.hpp; sourceTree = "<group>"; };
 		6F17514A217C720600BF4B3B /* threadBucket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = threadBucket.cpp; sourceTree = "<group>"; };
 		6F17514B217C720600BF4B3B /* threadBucket.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = threadBucket.hpp; sourceTree = "<group>"; };
 		6F31AE70216242680008332E /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
@@ -137,6 +140,8 @@
 				6F0764AA2164A46400C26AFB /* SalesforceSession.cpp */,
 				6F0764AB2164A46400C26AFB /* SalesforceSession.hpp */,
 				6FA46F51216B451B0071654E /* bulkSession.cpp */,
+				6F16CD8F21C399280056C78E /* recordType.cpp */,
+				6F16CD9021C399280056C78E /* recordType.hpp */,
 				6FA46F52216B451B0071654E /* bulkSession.hpp */,
 				6FD1CAA321639E1D004D2DF5 /* sObject.cpp */,
 				6FD1CAA421639E1D004D2DF5 /* sObject.hpp */,
@@ -236,6 +241,7 @@
 				6F17514C217C720600BF4B3B /* threadBucket.cpp in Sources */,
 				6F709E5C216F935000D9668A /* sessionCredentials.cpp in Sources */,
 				6F0764AC2164A46400C26AFB /* SalesforceSession.cpp in Sources */,
+				6F16CD9121C399280056C78E /* recordType.cpp in Sources */,
 				6F5F36AD21A05D2900F02B20 /* textGenerator.cpp in Sources */,
 				6F5F36A4219FF47100F02B20 /* nameAttribute.cpp in Sources */,
 				6FD1CAA821639EFE004D2DF5 /* sAttribute.cpp in Sources */,
