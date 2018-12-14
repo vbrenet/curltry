@@ -109,7 +109,10 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
     for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
-        ofs << it->first.first << "," << it->first.second << " : " << it->second << std::endl;
+        std::string recordtypename = it->first.first;
+        if (recordtypename.size() == 0)
+            recordtypename = "null";
+        ofs << recordtypename << "," << it->first.second << " : " << it->second << std::endl;
     }
     
     ofs.close();
