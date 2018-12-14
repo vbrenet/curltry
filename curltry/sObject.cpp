@@ -10,6 +10,7 @@
 #include <sstream>
 #include "sObject.hpp"
 #include "config.hpp"
+#include "recordTypeMap.hpp"
 
 void sObject::print() const {
     for (sAttribute s : attributeList)
@@ -106,12 +107,17 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
 }
 //
 void sObject::outputMatrixCounters(const std::string &outputfile) {
+    recordTypeMap rtm {"/Users/vbrenet/Documents/Pocs/curltry/recordTypes"};
+    
     std::ofstream ofs {outputfile};
     
     for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
-        std::string recordtypename = it->first.first;
-        if (recordtypename.size() == 0)
+        std::string recordtypeid = it->first.first;
+        std::string recordtypename;
+        if (recordtypeid.size() == 0)
             recordtypename = "null";
+        else
+            recordtypename = rtm.getnamebyid(recordtypeid);
         ofs << recordtypename << "," << it->first.second << " : " << it->second << std::endl;
     }
     
