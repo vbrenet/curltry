@@ -176,19 +176,23 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
             if (config::getFormat() == config::dataformat::XML) {
                 theObject.computerecords(result);
                 theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
+
             } else {
                 long nbrec = theObject.computeCsvRecords(result);
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
                 theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
+                theObject.outputMatrixCounters("/Users/vbrenet/Documents/Pocs/curltry/matrix");
             }
         }
     } while (moreResult);
     
     if (config::getFormat() == config::dataformat::XML)
         theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
-    else
+    else {
         theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
+        theObject.outputMatrixCounters("/Users/vbrenet/Documents/Pocs/curltry/matrix");
+    }
     
     theObject.printAttributeCounters();
     
