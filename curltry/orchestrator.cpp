@@ -21,15 +21,16 @@ bool orchestrator::describeObject() {
     std::vector<std::string> excludedAttributes {};
     config::getExcludedAttributes(theObject.getName(), excludedAttributes);
     
-    /*
-    config::getAttributeList("/Users/vbrenet/Documents/Pocs/curltry/", name, actualList);
-    std::cout <<  "makeAllAttributeQuery: actualList from file = " << actualList.size() << std::endl;
-    if (actualList.size() > 0) {
-        for (auto it = actualList.begin(); it != actualList.end(); it++) {
-            addAttribute({*it,false});
+    if (config::useFileForAttrList()) {
+        std::vector<std::string> attrList;
+        config::getAttributeList("/Users/vbrenet/Documents/Pocs/curltry/", theObject.getName(), attrList);
+        if (attrList.size() > 0) {
+            for (auto it = attrList.begin(); it != attrList.end(); it++) {
+                theObject.addAttribute({*it,false});
+            }
         }
+        return true;
     }
-     */
     
     // launch describe request (produce a buffer)
     if (!getDescribeAttributesBuffer(theObject.getName(), rawAttributeList))
