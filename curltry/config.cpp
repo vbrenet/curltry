@@ -17,6 +17,8 @@ std::string config::domain;
 std::string config::username;
 std::string config::password;
 bool config::isASandbox {false};
+bool config::useFileForAttributeList {false};
+
 config::dataformat config::theformat {dataformat::CSV};
 
 
@@ -31,7 +33,7 @@ const std::vector<config::tokenDesc> config::tokenDescriptions = {
     {config::token::SOBJECT, "_object_:"},
     {config::token::ISPROD, "_isprod_:"},
     {config::token::DATAFORMAT, "_dataformat_:"},
-
+    {config::token::USEFILEFORATTRLIST, "_usefileforattributelist_"}
 };
 //
 //  for test purpose
@@ -88,6 +90,18 @@ void config::getIsSandbox(const std::string& line) {
     }
 }
 //
+void config::getUseFileForAttributeList(const std::string&line) {
+    size_t firstColon = line.find_first_of(':');
+    if (firstColon != std::string::npos) {
+        std::string value = line.substr(firstColon+1);
+        if (value.compare("true") == 0)
+            useFileForAttributeList = true;
+        else if (value.compare("false") == 0)
+            useFileForAttributeList = false;
+    }
+}
+
+//
 //
 config::token config::getTokenValue(const std::string& line, std::string& value) {
     for (auto it = tokenDescriptions.begin(); it != tokenDescriptions.end(); it++) {
@@ -128,6 +142,9 @@ void config::processLine(const std::string& line) {
             break;
         case token::DATAFORMAT:
             computeDataFormat(line);
+            break;
+        case token::USEFILEFORATTRLIST:
+            getUseFileForAttributeList(line);
             break;
 
         default:

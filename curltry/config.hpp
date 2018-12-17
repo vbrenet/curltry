@@ -20,7 +20,7 @@ public:
     enum class dataformat  {XML, CSV};
 
 private:
-    enum class token  {DOMAIN, CLIENTID, CLIENTSECRET, USERNAME, PASSWORD, SOBJECT, ISPROD, DATAFORMAT, UNKNOWN};
+    enum class token  {DOMAIN, CLIENTID, CLIENTSECRET, USERNAME, PASSWORD, SOBJECT, ISPROD, DATAFORMAT, USEFILEFORATTRLIST, UNKNOWN};
     struct tokenDesc {
         token theToken;
         std::string literal;
@@ -32,11 +32,14 @@ private:
     static std::string username;
     static std::string password;
     static bool isASandbox;
+    static bool useFileForAttributeList;
+
     static dataformat theformat;
     static std::map<std::string,std::vector<std::string>> excludedAttributesByObj;
 //
     static void computeDataFormat(const std::string&);
     static void getIsSandbox(const std::string&);
+    static void getUseFileForAttributeList(const std::string&);
     static void updateExcludedAttributes(const std::string&);
     static token getTokenValue(const std::string&, std::string&);
     static void processLine(const std::string&);
@@ -54,6 +57,7 @@ public:
     static std::string& getUsername() {return username;};
     static std::string& getPassword() {return password;};
     static bool isSandbox() {return isASandbox;};
+    static bool useFileForAttrList() {return useFileForAttributeList;}
     static dataformat getFormat() {return theformat;};
 
     //
