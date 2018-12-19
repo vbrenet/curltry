@@ -21,18 +21,22 @@ void sObject::print() const {
 std::string sObject::makeAllAttributeQuery() {
     std::string query {};
     std::vector<std::string> actualList {};
+    bool isRecordTypeIdFound {false};
     
-    for (auto it = attributeList.begin(); it != attributeList.end(); it++)
+    for (auto it = attributeList.begin(); it != attributeList.end(); it++) {
         if (!it->isExcluded())
             actualList.push_back(it->getName());
         else
             std::cout << "excluded : " << it->getName() << std::endl;
+        if (it->getName().compare("RecordTypeId") ==0)
+            isRecordTypeIdFound = true;
+    }
     
     std::cout <<  "makeAllAttributeQuery: attributeList.size = " <<attributeList.size()<< std::endl;
     std::cout <<  "makeAllAttributeQuery: actualList = " << actualList.size() << std::endl;
 
     if (actualList.size() == 0) {
-        // try to get attribute list from file
+        // try to get attribute list from file (RecordTypeId must be in first)
         config::getAttributeList("/Users/vbrenet/Documents/Pocs/curltry/", name, actualList);
         std::cout <<  "makeAllAttributeQuery: actualList from file = " << actualList.size() << std::endl;
         if (actualList.size() > 0) {
@@ -44,7 +48,17 @@ std::string sObject::makeAllAttributeQuery() {
     
     query = "Select ";
     
+    if (isRecordTypeIdFound) {
+        attributeCounters.insert(std::pair<std::string,int>({"RecordTypeId",0}));
+        query += "RecordTypeId";
+        if (actualList.size() > 1)
+            query += ",";
+    }
+    
     for (auto i=0; i < actualList.size(); i++) {
+        
+        if (isRecordTypeIdFound && (actualList[i].compare("RecordTypeId") == 0))
+            continue;
         
         attributeCounters.insert(std::pair<std::string,int>({actualList[i],0}));
         query += actualList[i];
