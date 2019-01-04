@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <string>
 #include <curl/curl.h>
+#include <cstring>
 
 #endif /* bulkSession_hpp */
 
