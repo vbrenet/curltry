@@ -12,6 +12,7 @@
 #include "integerAttribute.hpp"
 #include "picklistAttribute.hpp"
 #include "idAttribute.hpp"
+#include "checkboxAttribute.hpp"
 #include <fstream>
 #include <vector>
 #include <stdio.h>
@@ -110,7 +111,11 @@ void recordGenerator::processLine(const std::string& line) {
         } else if (attributeType.compare("id") == 0) {
             idAttribute *att = new idAttribute(attributeName, line.substr(secondcolon+1));
             attributes.push_back(att);
+        } else if (attributeType.compare("checkbox") == 0) {
+            checkBoxAttribute *att = new checkBoxAttribute(attributeName, line.substr(secondcolon+1));
+            attributes.push_back(att);
         }
+
     } // first colon found
 }
 //

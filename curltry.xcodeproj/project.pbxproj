@@ -30,6 +30,7 @@
 		6FD4C697219EBEFA00588A1F /* injectionOrchestrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD4C695219EBEFA00588A1F /* injectionOrchestrator.cpp */; };
 		6FD68FF3216F2BC200838E74 /* bulkQuery.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD68FF1216F2BC200838E74 /* bulkQuery.cpp */; };
 		6FD68FF6216F2EE600838E74 /* orchestrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD68FF4216F2EE600838E74 /* orchestrator.cpp */; };
+		6FD739B821ECBBDA004F1401 /* checkboxAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD739B621ECBBDA004F1401 /* checkboxAttribute.cpp */; };
 		6FF4C267215A6BCA002D89F7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF4C266215A6BCA002D89F7 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +92,8 @@
 		6FD68FF2216F2BC200838E74 /* bulkQuery.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bulkQuery.hpp; sourceTree = "<group>"; };
 		6FD68FF4216F2EE600838E74 /* orchestrator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = orchestrator.cpp; sourceTree = "<group>"; };
 		6FD68FF5216F2EE600838E74 /* orchestrator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = orchestrator.hpp; sourceTree = "<group>"; };
+		6FD739B621ECBBDA004F1401 /* checkboxAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = checkboxAttribute.cpp; sourceTree = "<group>"; };
+		6FD739B721ECBBDA004F1401 /* checkboxAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = checkboxAttribute.hpp; sourceTree = "<group>"; };
 		6FF4C263215A6BCA002D89F7 /* curltry */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = curltry; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FF4C266215A6BCA002D89F7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -173,6 +176,8 @@
 				6F6BCE4D21A436DD004D065A /* idAttribute.hpp */,
 				6F5F36A5219FF63500F02B20 /* integerAttribute.cpp */,
 				6F5F36A6219FF63500F02B20 /* integerAttribute.hpp */,
+				6FD739B621ECBBDA004F1401 /* checkboxAttribute.cpp */,
+				6FD739B721ECBBDA004F1401 /* checkboxAttribute.hpp */,
 				6F5F36A8219FF76200F02B20 /* picklistAttribute.cpp */,
 				6F5F36A9219FF76200F02B20 /* picklistAttribute.hpp */,
 				6F7C006B219F250800DA5B99 /* corpNameGenerator.hpp */,
@@ -257,6 +262,7 @@
 				6FD68FF3216F2BC200838E74 /* bulkQuery.cpp in Sources */,
 				6F6BCE4E21A436DD004D065A /* idAttribute.cpp in Sources */,
 				6FD68FF6216F2EE600838E74 /* orchestrator.cpp in Sources */,
+				6FD739B821ECBBDA004F1401 /* checkboxAttribute.cpp in Sources */,
 				6FD4C697219EBEFA00588A1F /* injectionOrchestrator.cpp in Sources */,
 				6F5F36AA219FF76200F02B20 /* picklistAttribute.cpp in Sources */,
 				6F16CD9421C39A6F0056C78E /* recordTypeMap.cpp in Sources */,
