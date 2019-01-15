@@ -98,14 +98,15 @@ bool bulkInjectV1::createJob(const std::string objectName) {
     
     std::stringstream ssbody;
     ssbody << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    ssbody << "<jobInfo xmlns=\"http://www.force.com/2009/06/asyncapi/dataload\">\n";
+    ssbody << "<jobInfo\n xmlns=\"http://www.force.com/2009/06/asyncapi/dataload\">\n";
     ssbody << "<operation>insert</operation>\n";
-    ssbody << "<object>" << objectName << "</object>\n";
+    ssbody << "<object>" << objectName  << "</object>\n";
     ssbody << "<contentType>CSV</contentType>\n";
     ssbody << "</jobInfo>\n";
 
     body = ssbody.str();
-    
+    std::cout << "bulkInjectV1::createJob : body: " << body << std::endl;
+
     CURL *curl;
     CURLcode res;
     std::string readBuffer;
@@ -113,19 +114,20 @@ bool bulkInjectV1::createJob(const std::string objectName) {
     curl = curl_easy_init();
     
     if(curl) {
-        
-        ///services/data/vXX.X/jobs/ingest
+        std::cout << "bulkInjectV1::createJob : url: " << bulkSession::getServerUrl()+"/job" << std::endl;
+
         curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job").c_str());
         
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-        
+//        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+
         // set header
         struct curl_slist *list = NULL;
-        list = curl_slist_append(list, "Content-Type: application/csv; charset=UTF-8");
-        list = curl_slist_append(list, "Accept: application/csv");
-        list = curl_slist_append(list, ("Authorization: Bearer " + bulkSession::getSessionId()).c_str());
-        
+        list = curl_slist_append(list, "Content-Type: text/xml; charset=UTF-8");
+        list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
+        std::cout << "bulkInjectV1::createJob : sessionid: " << bulkSession::getSessionId() << std::endl;
+
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
         
         /* Now specify we want to POST data */

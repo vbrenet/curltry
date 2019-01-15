@@ -169,12 +169,13 @@ void runInjection(const std::string& theObj, int nbrec) {
         config::getPassword()};
     
     //
-    if (theObj.compare("Individual") == 0) {
-        injectionOrchestratorV1 theOrchestrator {theObj, credentials};
-        if (!theOrchestrator.execute(nbrec)) {
-            std::cerr << "injectionOrchestratorV1.execute failure" << std::endl;
-        }
-    } else {
+//    if (theObj.compare("Individual") == 0) {
+//        injectionOrchestratorV1 theOrchestrator {theObj, credentials};
+//        if (!theOrchestrator.execute(nbrec)) {
+//            std::cerr << "injectionOrchestratorV1.execute failure" << std::endl;
+//        }
+//    } else
+        {
         injectionOrchestrator theOrchestrator {theObj, credentials};
         if (!theOrchestrator.execute(nbrec)) {
             std::cerr << "injectionOrchestrator.execute failure" << std::endl;

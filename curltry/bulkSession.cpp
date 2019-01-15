@@ -45,7 +45,7 @@ void bulkSession::processResponse(const std::string& response) {
     std::string version = serverUrlToken.substr(lastslash+1);
     size_t soap = serverUrlToken.find("/Soap");
     serverUrl = serverUrlToken.substr(0,soap) + "/async/" + version;
-    injectUrl = serverUrlToken.substr(0,soap) + "/data/" + "v41.0";
+    injectUrl = serverUrlToken.substr(0,soap) + "/data/" + "v42.0";
 
     sessionId = extractXmlToken(response, "<sessionId>");
 }
@@ -57,7 +57,9 @@ bool bulkSession::openBulkSession(bool isSandbox, const std::string username, co
     bool result {true};
     
     std::stringstream ssurl;
-    ssurl << "https://" << ((isSandbox) ? "test." : "login.") << "salesforce.com/services/Soap/u/39.0";
+    ssurl << "https://" << ((isSandbox) ? "test." : "login.") << "salesforce.com/services/Soap/u/42.0";
+    
+    std::cout << "session open url: " << ssurl.str() << std::endl;
     
     std::stringstream ssbody;
     ssbody << "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"
