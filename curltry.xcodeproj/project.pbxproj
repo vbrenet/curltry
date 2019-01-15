@@ -32,6 +32,7 @@
 		6FD68FF6216F2EE600838E74 /* orchestrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD68FF4216F2EE600838E74 /* orchestrator.cpp */; };
 		6FD739B821ECBBDA004F1401 /* checkboxAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD739B621ECBBDA004F1401 /* checkboxAttribute.cpp */; };
 		6FD739BB21EDC422004F1401 /* bulkInjectV1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD739B921EDC422004F1401 /* bulkInjectV1.cpp */; };
+		6FD739BE21EDC980004F1401 /* injectionOrchestratorV1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD739BC21EDC980004F1401 /* injectionOrchestratorV1.cpp */; };
 		6FF4C267215A6BCA002D89F7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF4C266215A6BCA002D89F7 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -97,6 +98,8 @@
 		6FD739B721ECBBDA004F1401 /* checkboxAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = checkboxAttribute.hpp; sourceTree = "<group>"; };
 		6FD739B921EDC422004F1401 /* bulkInjectV1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bulkInjectV1.cpp; sourceTree = "<group>"; };
 		6FD739BA21EDC422004F1401 /* bulkInjectV1.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bulkInjectV1.hpp; sourceTree = "<group>"; };
+		6FD739BC21EDC980004F1401 /* injectionOrchestratorV1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = injectionOrchestratorV1.cpp; sourceTree = "<group>"; };
+		6FD739BD21EDC980004F1401 /* injectionOrchestratorV1.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = injectionOrchestratorV1.hpp; sourceTree = "<group>"; };
 		6FF4C263215A6BCA002D89F7 /* curltry */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = curltry; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FF4C266215A6BCA002D89F7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -168,6 +171,8 @@
 				6FD68FF5216F2EE600838E74 /* orchestrator.hpp */,
 				6FD4C695219EBEFA00588A1F /* injectionOrchestrator.cpp */,
 				6FD4C696219EBEFA00588A1F /* injectionOrchestrator.hpp */,
+				6FD739BC21EDC980004F1401 /* injectionOrchestratorV1.cpp */,
+				6FD739BD21EDC980004F1401 /* injectionOrchestratorV1.hpp */,
 				6F7C006A219F250800DA5B99 /* corpNameGenerator.cpp */,
 				6F5F369F219FF1D700F02B20 /* genericAttribute.cpp */,
 				6F5F36A0219FF1D700F02B20 /* genericAttribute.hpp */,
@@ -274,6 +279,7 @@
 				6F16CD9421C39A6F0056C78E /* recordTypeMap.cpp in Sources */,
 				6FA46F53216B451B0071654E /* bulkSession.cpp in Sources */,
 				6FC3633621A2CA0000A4B244 /* bulkInject.cpp in Sources */,
+				6FD739BE21EDC980004F1401 /* injectionOrchestratorV1.cpp in Sources */,
 				6F47C29F21763AFE003A25D5 /* config.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
