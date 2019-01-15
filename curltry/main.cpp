@@ -22,6 +22,7 @@
 #include "picklistAttribute.hpp"
 #include "recordGenerator.hpp"
 #include "injectionOrchestrator.hpp"
+#include "injectionOrchestratorV1.hpp"
 
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
@@ -168,11 +169,16 @@ void runInjection(const std::string& theObj, int nbrec) {
         config::getPassword()};
     
     //
-    injectionOrchestrator theOrchestrator {theObj, credentials};
-    //
-    if (!theOrchestrator.execute(nbrec)) {
-        std::cerr << "injectionOrchestrator.execute failure" << std::endl;
-
+    if (theObj.compare("Individual") == 0) {
+        injectionOrchestratorV1 theOrchestrator {theObj, credentials};
+        if (!theOrchestrator.execute(nbrec)) {
+            std::cerr << "injectionOrchestratorV1.execute failure" << std::endl;
+        }
+    } else {
+        injectionOrchestrator theOrchestrator {theObj, credentials};
+        if (!theOrchestrator.execute(nbrec)) {
+            std::cerr << "injectionOrchestrator.execute failure" << std::endl;
+        }
     }
 }
 //
