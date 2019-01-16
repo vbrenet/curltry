@@ -23,7 +23,8 @@
 #include "recordGenerator.hpp"
 #include "injectionOrchestrator.hpp"
 #include "injectionOrchestratorV1.hpp"
-
+#include "expectedParameters.hpp"
+#include "ActualParameters.hpp"
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -200,44 +201,64 @@ void testrun() {
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 19Dec2018 V1" << std::endl;
-    corpNameGenerator::init();
-    textGenerator::init();
+    std::cout << "curltry : version 16January2019 V1" << std::endl;
     
+    expectedParameters ep {
+        true,
+        1,
+        {
+            {"-o",{true,true}},
+            {"-sz",{false,true}},
+            {"-i",{false,false}},
+            {"-j",{false,false}}
+        }
+    };
+    
+    ActualParameters ap;
+    
+    if (!ap.set(argc, argv, ep)) {
+        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i <true|false>] [-j <jobid>] workingDirectory" << std::endl;
+        exit(-1);
+    }
+    else
+        ap.print();
+
     bool injection {false};
     bool getResultFromJobId {false};
     std::string paramJobId {};
+    std::string theObject {};
+    int chunksize {0};
     
-    if (argc < 3) {
-        std::cerr << "Syntax : curltry <object name> <chunksize> [injection=<true|false>|id=<jobid>]" << std::endl;
-        exit(-1);
-    }
-    
-    if (argc == 4) {
-        std::string injectionParam {argv[3]};
-        if (injectionParam.compare("injection=true") == 0)
-            injection = true;
-        else if (injectionParam.compare("injection=false") == 0)
-            injection = false;
-        else if (injectionParam.compare(0,3,"id=") == 0) {
-            getResultFromJobId = true;
-            paramJobId = injectionParam.substr(3);
-        }
-        else {
-            std::cerr << "Syntax : curltry <object name> <chunksize> [injection=<true|false>|id=<jobid>]" << std::endl;
-            exit(-1);
-        }
-    }
-    
-    std::string theObject {argv[1]};
-    std::string arg2 {argv[2]};
+    const std::vector<NamedParameter> parameters = ap.getNamedParameters();
+     
+    for (auto curr : parameters) {
+         if (curr.getName().compare("-o") == 0)
+             theObject = curr.getValue();
+         else if (curr.getName().compare("-sz") == 0) {
+            chunksize = std::stoi(curr.getValue());
+             if (chunksize < 0) {
+                 std::cerr << "Error : chunksize invalid" << std::endl;
+                 exit(-1);
+             }
+         }
+         else if (curr.getName().compare("-i") == 0)
+             injection = true;
+         else if (curr.getName().compare("-j") == 0) {
+             paramJobId = curr.getValue();
+             getResultFromJobId = true;
+         }
+     }
 
-    int chunksize = std::stoi(arg2);
-    if (chunksize < 0) {
-        std::cerr << "Error : chunksize invalid" << std::endl;
+    const std::vector<std::string> values = ap.getValues();
+    if (values.size() != 1) {
+        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i <true|false>] [-j <jobid>] workingDirectory" << std::endl;
         exit(-1);
     }
-            
+    std::string workingDirectory = values[0];
+    
+    corpNameGenerator::init();
+    textGenerator::init();
+        
     config::getConfig("/Users/vbrenet/Documents/Pocs/curltry/config");
 
     if (injection) {
