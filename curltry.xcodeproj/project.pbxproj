@@ -25,6 +25,9 @@
 		6F7C006C219F250800DA5B99 /* corpNameGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F7C006A219F250800DA5B99 /* corpNameGenerator.cpp */; };
 		6FA46F53216B451B0071654E /* bulkSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA46F51216B451B0071654E /* bulkSession.cpp */; };
 		6FC3633621A2CA0000A4B244 /* bulkInject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FC3633421A2CA0000A4B244 /* bulkInject.cpp */; };
+		6FC5AE6321EF2EFE003A632F /* ActualParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FC5AE5D21EF2EFE003A632F /* ActualParameters.cpp */; };
+		6FC5AE6421EF2EFE003A632F /* NamedParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FC5AE5E21EF2EFE003A632F /* NamedParameter.cpp */; };
+		6FC5AE6521EF2EFE003A632F /* expectedParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FC5AE6221EF2EFE003A632F /* expectedParameters.cpp */; };
 		6FD1CAA521639E1D004D2DF5 /* sObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD1CAA321639E1D004D2DF5 /* sObject.cpp */; };
 		6FD1CAA821639EFE004D2DF5 /* sAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD1CAA621639EFE004D2DF5 /* sAttribute.cpp */; };
 		6FD4C697219EBEFA00588A1F /* injectionOrchestrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FD4C695219EBEFA00588A1F /* injectionOrchestrator.cpp */; };
@@ -84,6 +87,12 @@
 		6FA46F52216B451B0071654E /* bulkSession.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bulkSession.hpp; sourceTree = "<group>"; };
 		6FC3633421A2CA0000A4B244 /* bulkInject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bulkInject.cpp; sourceTree = "<group>"; };
 		6FC3633521A2CA0000A4B244 /* bulkInject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bulkInject.hpp; sourceTree = "<group>"; };
+		6FC5AE5D21EF2EFE003A632F /* ActualParameters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActualParameters.cpp; sourceTree = "<group>"; };
+		6FC5AE5E21EF2EFE003A632F /* NamedParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NamedParameter.cpp; sourceTree = "<group>"; };
+		6FC5AE5F21EF2EFE003A632F /* NamedParameter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NamedParameter.hpp; sourceTree = "<group>"; };
+		6FC5AE6021EF2EFE003A632F /* expectedParameters.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = expectedParameters.hpp; sourceTree = "<group>"; };
+		6FC5AE6121EF2EFE003A632F /* ActualParameters.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ActualParameters.hpp; sourceTree = "<group>"; };
+		6FC5AE6221EF2EFE003A632F /* expectedParameters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = expectedParameters.cpp; sourceTree = "<group>"; };
 		6FD1CAA321639E1D004D2DF5 /* sObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sObject.cpp; sourceTree = "<group>"; };
 		6FD1CAA421639E1D004D2DF5 /* sObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sObject.hpp; sourceTree = "<group>"; };
 		6FD1CAA621639EFE004D2DF5 /* sAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sAttribute.cpp; sourceTree = "<group>"; };
@@ -145,6 +154,12 @@
 			isa = PBXGroup;
 			children = (
 				6FF4C266215A6BCA002D89F7 /* main.cpp */,
+				6FC5AE5D21EF2EFE003A632F /* ActualParameters.cpp */,
+				6FC5AE6121EF2EFE003A632F /* ActualParameters.hpp */,
+				6FC5AE6221EF2EFE003A632F /* expectedParameters.cpp */,
+				6FC5AE6021EF2EFE003A632F /* expectedParameters.hpp */,
+				6FC5AE5E21EF2EFE003A632F /* NamedParameter.cpp */,
+				6FC5AE5F21EF2EFE003A632F /* NamedParameter.hpp */,
 				6FC3633421A2CA0000A4B244 /* bulkInject.cpp */,
 				6FC3633521A2CA0000A4B244 /* bulkInject.hpp */,
 				6FD739B921EDC422004F1401 /* bulkInjectV1.cpp */,
@@ -259,6 +274,7 @@
 				6F5F36A1219FF1D700F02B20 /* genericAttribute.cpp in Sources */,
 				6F5F36B321A061EC00F02B20 /* recordGenerator.cpp in Sources */,
 				6F17514C217C720600BF4B3B /* threadBucket.cpp in Sources */,
+				6FC5AE6521EF2EFE003A632F /* expectedParameters.cpp in Sources */,
 				6F709E5C216F935000D9668A /* sessionCredentials.cpp in Sources */,
 				6F0764AC2164A46400C26AFB /* SalesforceSession.cpp in Sources */,
 				6F16CD9121C399280056C78E /* recordType.cpp in Sources */,
@@ -273,8 +289,10 @@
 				6F6BCE4E21A436DD004D065A /* idAttribute.cpp in Sources */,
 				6FD68FF6216F2EE600838E74 /* orchestrator.cpp in Sources */,
 				6FD739B821ECBBDA004F1401 /* checkboxAttribute.cpp in Sources */,
+				6FC5AE6321EF2EFE003A632F /* ActualParameters.cpp in Sources */,
 				6FD4C697219EBEFA00588A1F /* injectionOrchestrator.cpp in Sources */,
 				6FD739BB21EDC422004F1401 /* bulkInjectV1.cpp in Sources */,
+				6FC5AE6421EF2EFE003A632F /* NamedParameter.cpp in Sources */,
 				6F5F36AA219FF76200F02B20 /* picklistAttribute.cpp in Sources */,
 				6F16CD9421C39A6F0056C78E /* recordTypeMap.cpp in Sources */,
 				6FA46F53216B451B0071654E /* bulkSession.cpp in Sources */,
