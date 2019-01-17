@@ -5,13 +5,13 @@
 //  Created by Vincent Brenet on 16/11/2018.
 //  Copyright © 2018 Vincent Brenet. All rights reserved.
 //
-#include <chrono>
-#include <thread>
 
 #include "injectionOrchestrator.hpp"
 #include "bulkInject.hpp"
 #include "bulkSession.hpp"
 #include "recordGenerator.hpp"
+
+extern std::string workingDirectory;
 
 bool injectionOrchestrator::execute(int nbrec) {
     
@@ -24,7 +24,7 @@ bool injectionOrchestrator::execute(int nbrec) {
         return false;
 
     // prepare records
-    recordGenerator recgen ("/Users/vbrenet/Documents/Pocs/curltry/" + theObject.getName() + ".inject");
+    recordGenerator recgen (workingDirectory + "/" + theObject.getName() + ".inject");
     
     char lf = 10;
     std::string content = recgen.getCsvHeader();
@@ -35,15 +35,13 @@ bool injectionOrchestrator::execute(int nbrec) {
         content += lf;
     }
     
-    std::ofstream csvlog {"/Users/vbrenet/Documents/Pocs/curltry/output.csv"};
+    std::ofstream csvlog {workingDirectory + "/output.csv"};
     csvlog << content;
 
     // put records
     if (!bulkInject::addRecords(content))
         return false;
     
-//    std::this_thread::sleep_for(std::chrono::milliseconds(15000));
-
     // close job
     if (!bulkInject::closeJob())
         return false;

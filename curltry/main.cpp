@@ -26,6 +26,8 @@
 #include "expectedParameters.hpp"
 #include "ActualParameters.hpp"
 
+std::string workingDirectory;
+
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
    ((std::string*)userp)->append((char*)contents, size * nmemb);
@@ -93,27 +95,6 @@ bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer)
 }
 //
 //
-void testConfig() {
- //
-    config::getConfig("/Users/vbrenet/Documents/Pocs/curltry/config");
-    std::cout << "domain : " << config::getDomain() << std::endl;
-    std::cout << "clientid : " << config::getClientId() << std::endl;
-    std::cout << "clientsecret : " << config::getClientSecret() << std::endl;
-    std::cout << "username : " << config::getUsername() << std::endl;
-    std::cout << "password : " << config::getPassword() << std::endl;
-    config::printMap();
-}
-//
-//
-void runBulkSession() {
-    if (bulkSession::openBulkSession(false, "vbrlight@brenet.com", "Petrosian0"))
-        std::cout << "openBulkSession successfull" << std::endl;
-    else
-        std::cerr << "openBulkSession error" << std::endl;
-
-}
-//
-//
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {
     // credentials creation
@@ -169,13 +150,6 @@ void runInjection(const std::string& theObj, int nbrec) {
         config::getUsername(),
         config::getPassword()};
     
-    //
-//    if (theObj.compare("Individual") == 0) {
-//        injectionOrchestratorV1 theOrchestrator {theObj, credentials};
-//        if (!theOrchestrator.execute(nbrec)) {
-//            std::cerr << "injectionOrchestratorV1.execute failure" << std::endl;
-//        }
-//    } else
         {
         injectionOrchestrator theOrchestrator {theObj, credentials};
         if (!theOrchestrator.execute(nbrec)) {
@@ -189,19 +163,10 @@ void terminate() {
     exit(0);
 }
 //
-void testrun() {
-    
-    recordGenerator recgen ("/Users/vbrenet/Documents/Pocs/curltry/Account.inject");
-
-    std::cout << "rec header: " << recgen.getCsvHeader() << std::endl;
-    std::cout << "rec values: " << recgen.getCsvRecord() << std::endl;
-    
-    terminate();
-}
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 16January2019 V1" << std::endl;
+    std::cout << "curltry : version 17January2019 V1" << std::endl;
     
     expectedParameters ep {
         true,
@@ -254,12 +219,14 @@ int main(int argc, const char * argv[]) {
         std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i <true|false>] [-j <jobid>] workingDirectory" << std::endl;
         exit(-1);
     }
-    std::string workingDirectory = values[0];
+    
+    workingDirectory = values[0];
     
     corpNameGenerator::init();
     textGenerator::init();
         
-    config::getConfig("/Users/vbrenet/Documents/Pocs/curltry/config");
+//    config::getConfig("/Users/vbrenet/Documents/Pocs/curltry/config");
+    config::getConfig(workingDirectory + "/config");
 
     if (injection) {
         runInjection(theObject,chunksize);

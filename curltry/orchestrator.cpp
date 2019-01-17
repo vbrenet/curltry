@@ -13,6 +13,7 @@
 #include "config.hpp"
 //
 extern bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer);
+extern std::string workingDirectory;
 
 //
 //
@@ -23,7 +24,7 @@ bool orchestrator::describeObject() {
     
     if (config::useFileForAttrList()) {
         std::vector<std::string> attrList;
-        config::getAttributeList("/Users/vbrenet/Documents/Pocs/curltry/", theObject.getName(), attrList);
+        config::getAttributeList(workingDirectory + "/", theObject.getName(), attrList);
         if (attrList.size() > 0) {
             for (auto it = attrList.begin(); it != attrList.end(); it++) {
                 theObject.addAttribute({*it,false});
@@ -132,13 +133,13 @@ bool orchestrator::execute(int chunksize) {
         if ((moreResult && !allResultsRead)|| (chunksize == 0)) {
             if (config::getFormat() == config::dataformat::XML) {
                 theObject.computerecords(result);
-                theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
+                theObject.outputAttributeCounters(workingDirectory + "/result");
             } else {
                 long nbrec = theObject.computeCsvRecords(result);
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
-                theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
-                theObject.outputMatrixCounters("/Users/vbrenet/Documents/Pocs/curltry/matrix");
+                theObject.outputAttributeCounters(workingDirectory + "/csvResult");
+                theObject.outputMatrixCounters(workingDirectory + "/matrix");
 
             }
         }
@@ -149,10 +150,10 @@ bool orchestrator::execute(int chunksize) {
         return false;
    
     if (config::getFormat() == config::dataformat::XML)
-        theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
+        theObject.outputAttributeCounters(workingDirectory + "/result");
     else {
-        theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
-        theObject.outputMatrixCounters("/Users/vbrenet/Documents/Pocs/curltry/matrix");
+        theObject.outputAttributeCounters(workingDirectory + "/csvResult");
+        theObject.outputMatrixCounters(workingDirectory + "/matrix");
     }
 
     theObject.printAttributeCounters();
@@ -186,23 +187,23 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
         if (moreResult && !allResultsRead) {
             if (config::getFormat() == config::dataformat::XML) {
                 theObject.computerecords(result);
-                theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
+                theObject.outputAttributeCounters(workingDirectory + "/result");
 
             } else {
                 long nbrec = theObject.computeCsvRecords(result);
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
-                theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
-                theObject.outputMatrixCounters("/Users/vbrenet/Documents/Pocs/curltry/matrix");
+                theObject.outputAttributeCounters(workingDirectory + "/csvResult");
+                theObject.outputMatrixCounters(workingDirectory + "/matrix");
             }
         }
     } while (moreResult);
     
     if (config::getFormat() == config::dataformat::XML)
-        theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/result");
+        theObject.outputAttributeCounters(workingDirectory + "/result");
     else {
-        theObject.outputAttributeCounters("/Users/vbrenet/Documents/Pocs/curltry/csvResult");
-        theObject.outputMatrixCounters("/Users/vbrenet/Documents/Pocs/curltry/matrix");
+        theObject.outputAttributeCounters(workingDirectory + "/csvResult");
+        theObject.outputMatrixCounters(workingDirectory + "/matrix");
     }
     
     theObject.printAttributeCounters();

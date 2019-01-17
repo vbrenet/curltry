@@ -22,7 +22,7 @@ bool injectionOrchestratorV1::execute(int nbrec) {
         return false;
     
     // prepare records
-//    recordGenerator recgen ("/Users/vbrenet/Documents/Pocs/curltry/" + theObject.getName() + ".inject");
+//    recordGenerator recgen ("/Users//Documents/Pocs/curltry/" + theObject.getName() + ".inject");
 //
 //    char lf = 10;
 //    std::string content = recgen.getCsvHeader();
@@ -33,7 +33,7 @@ bool injectionOrchestratorV1::execute(int nbrec) {
 //        content += lf;
 //    }
 //
-//    std::ofstream csvlog {"/Users/vbrenet/Documents/Pocs/curltry/output.csv"};
+//    std::ofstream csvlog {"/Users//Documents/Pocs/curltry/output.csv"};
 //    csvlog << content;
 //
 //    // put records

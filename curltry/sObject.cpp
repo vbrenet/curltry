@@ -12,6 +12,8 @@
 #include "config.hpp"
 #include "recordTypeMap.hpp"
 
+extern std::string workingDirectory;
+
 void sObject::print() const {
     for (sAttribute s : attributeList)
         std::cout << "Attribute: " << s.getName() << std::endl;
@@ -37,7 +39,7 @@ std::string sObject::makeAllAttributeQuery() {
 
     if (actualList.size() == 0) {
         // try to get attribute list from file (RecordTypeId must be in first)
-        config::getAttributeList("/Users/vbrenet/Documents/Pocs/curltry/", name, actualList);
+        config::getAttributeList(workingDirectory + "/", name, actualList);
         std::cout <<  "makeAllAttributeQuery: actualList from file = " << actualList.size() << std::endl;
         if (actualList.size() > 0) {
             for (auto it = actualList.begin(); it != actualList.end(); it++) {
@@ -121,7 +123,7 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
 }
 //
 void sObject::outputMatrixCounters(const std::string &outputfile) {
-    recordTypeMap rtm {"/Users/vbrenet/Documents/Pocs/curltry/recordTypes"};
+    recordTypeMap rtm {workingDirectory + "/recordTypes"};
     
     std::ofstream ofs {outputfile};
     
@@ -141,8 +143,6 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
 //
 //
 long sObject::computeCsvRecords(const std::string &csvString) {
-//    std::ofstream trc;
-//    trc.open ("/Users/vbrenet/Documents/Pocs/curltry/trace", std::ofstream::out | std::ofstream::app);
     
     bool firstRecord {true};
     bool errorFound {false};
