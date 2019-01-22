@@ -167,7 +167,7 @@ void terminate() {
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 22 January 2019 V1" << std::endl;
+    std::cout << "curltry : version 22 January 2019 V2" << std::endl;
     
     expectedParameters ep {
         true,

@@ -39,6 +39,7 @@ std::string sObject::makeAllAttributeQuery() {
         actualList.clear();
         actualList.push_back("RecordTypeId");
         actualList.push_back("Type");
+        actualList.push_back("objDem__c");
     }
     
     std::cout <<  "makeAllAttributeQuery: attributeList.size = " <<attributeList.size()<< std::endl;
@@ -130,6 +131,16 @@ void sObject::outputTypeCounter(const std::string &outputfile) {
 }
 
 //
+void sObject::outputTypeObjDemMap(const std::string &outputfile) {
+    std::ofstream ofs {outputfile};
+    
+    for (auto it=typeObjDemMap.begin(); it != typeObjDemMap.end(); it++)
+        ofs << it->first.first << "," << it->first.second << " : " << it->second << std::endl;
+    
+    ofs.close();
+}
+
+//
 void sObject::outputAttributeCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
@@ -171,7 +182,11 @@ long sObject::computeCsvRecords(const std::string &csvString) {
     state currentState {state::START_TOKEN};
     int counter {0};
     int recordtypeidnumber {0};
+    // case analysis
     int typeFieldNumber {0};
+    int ObjDemandeFieldNumber {0};
+    std::string currentCaseType;
+
     int nbRecords {0};
     std::string currentRecordTypeId;
     
@@ -205,6 +220,8 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                         if (caseAnalysis) {
                             if (token.compare("Type") == 0)
                                 typeFieldNumber = counter;
+                            if (token.compare("ObjDem__c") == 0)
+                                ObjDemandeFieldNumber = counter;
                         }
                         token.clear();
                     }
@@ -217,11 +234,17 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                             std::pair<std::string,std::string> key {{currentRecordTypeId},{csvAttributeMap[counter]}};
                             recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
                             recordTypeMatrixCounters[key]++;
+                            
                             // caseAnalysis
                             if (caseAnalysis) {
                                 if (typeFieldNumber == counter) {
+                                    currentCaseType = token;
                                     typeFieldMap.insert(std::pair<std::string,long>({token},0));
                                     typeFieldMap[token]++;
+                                }
+                                if (ObjDemandeFieldNumber == counter) {
+                        typeObjDemMap.insert(std::pair<std::pair<std::string,std::string>,long>({{currentCaseType},{token}},0));
+                                    typeObjDemMap[{currentCaseType,token}]++;
                                 }
                             }
                         }
@@ -240,6 +263,8 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                         if (caseAnalysis) {
                             if (token.compare("Type") == 0)
                                 typeFieldNumber = counter;
+                            if (token.compare("ObjDem__c") == 0)
+                                ObjDemandeFieldNumber = counter;
                         }
                         
                         token.clear();
@@ -258,8 +283,13 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                             recordTypeMatrixCounters[key]++;
                             if (caseAnalysis) {
                                 if (typeFieldNumber == counter) {
+                                    currentCaseType = token;
                                     typeFieldMap.insert(std::pair<std::string,long>({token},0));
                                     typeFieldMap[token]++;
+                                }
+                                if (ObjDemandeFieldNumber == counter) {
+                                    typeObjDemMap.insert(std::pair<std::pair<std::string,std::string>,long>({{currentCaseType},{token}},0));
+                                    typeObjDemMap[{currentCaseType,token}]++;
                                 }
                             }
                         }

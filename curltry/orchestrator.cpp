@@ -141,8 +141,10 @@ bool orchestrator::execute(int chunksize) {
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
                 theObject.outputAttributeCounters(workingDirectory + "/csvResult");
                 theObject.outputMatrixCounters(workingDirectory + "/matrix");
-                if (caseAnalysis)
+                if (caseAnalysis) {
                     theObject.outputTypeCounter(workingDirectory + "/caseTypes");
+                    theObject.outputTypeObjDemMap(workingDirectory + "/typeObjectMap");
+                }
             }
         }
     } while (moreResult);
@@ -156,8 +158,10 @@ bool orchestrator::execute(int chunksize) {
     else {
         theObject.outputAttributeCounters(workingDirectory + "/csvResult");
         theObject.outputMatrixCounters(workingDirectory + "/matrix");
-        if (caseAnalysis)
+        if (caseAnalysis) {
             theObject.outputTypeCounter(workingDirectory + "/caseTypes");
+            theObject.outputTypeObjDemMap(workingDirectory + "/typeObjectMap");
+        }
     }
 
     theObject.printAttributeCounters();

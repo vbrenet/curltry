@@ -27,7 +27,8 @@ private:
     void computeAttributes(const std::string &record, int);
 
     std::map<std::string,long> typeFieldMap;    // used if caseAnalysis, to count type values
-    
+    std::map<std::pair<std::string,std::string>,long> typeObjDemMap;     // used if caseAnalysis, to count type and objdem values
+
 public:
     sObject (const std::string objname)  : name {objname} {}
     const std::string& getName() {return name;};
@@ -40,6 +41,7 @@ public:
     void outputAttributeCounters(const std::string &);
     void outputMatrixCounters(const std::string &outputfile);
     void outputTypeCounter(const std::string &outputfile);
+    void outputTypeObjDemMap(const std::string &outputfile);
 
 };
 
