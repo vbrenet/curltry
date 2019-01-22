@@ -150,6 +150,26 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
     ofs.close();
 }
 //
+//
+void sObject::outputTupleMap(const std::string &outputfile) {
+    recordTypeMap rtm {workingDirectory + "/recordTypes"};
+    
+    std::ofstream ofs {outputfile};
+    
+    for (auto it=tupleMap.begin(); it != tupleMap.end(); it++) {
+        std::string recordtypeid = std::get<2>(it->first);
+        std::string recordtypename;
+        if (recordtypeid.size() == 0)
+            recordtypename = "null";
+        else
+            recordtypename = rtm.getnamebyid(recordtypeid);
+        ofs << std::get<0>(it->first) << "," << std::get<1>(it->first) << "," << recordtypename << ":" << it->second << std::endl;
+    }
+
+}
+
+//
+//
 void sObject::outputMatrixCounters(const std::string &outputfile) {
     recordTypeMap rtm {workingDirectory + "/recordTypes"};
     
@@ -220,7 +240,7 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                         if (caseAnalysis) {
                             if (token.compare("Type") == 0)
                                 typeFieldNumber = counter;
-                            if (token.compare("ObjDem__c") == 0)
+                            if (token.compare("objDem__c") == 0)
                                 ObjDemandeFieldNumber = counter;
                         }
                         token.clear();
@@ -245,6 +265,9 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                                 if (ObjDemandeFieldNumber == counter) {
                         typeObjDemMap.insert(std::pair<std::pair<std::string,std::string>,long>({{currentCaseType},{token}},0));
                                     typeObjDemMap[{currentCaseType,token}]++;
+                                    auto currTuple = std::make_tuple(currentCaseType,token,currentRecordTypeId);
+                                    tupleMap.insert(std::pair<std::tuple<std::string,std::string,std::string>,long>(currTuple,0));
+                                    tupleMap[currTuple]++;
                                 }
                             }
                         }
@@ -263,7 +286,7 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                         if (caseAnalysis) {
                             if (token.compare("Type") == 0)
                                 typeFieldNumber = counter;
-                            if (token.compare("ObjDem__c") == 0)
+                            if (token.compare("objDem__c") == 0)
                                 ObjDemandeFieldNumber = counter;
                         }
                         
@@ -290,6 +313,9 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                                 if (ObjDemandeFieldNumber == counter) {
                                     typeObjDemMap.insert(std::pair<std::pair<std::string,std::string>,long>({{currentCaseType},{token}},0));
                                     typeObjDemMap[{currentCaseType,token}]++;
+                                    auto currTuple = std::make_tuple(currentCaseType,token,currentRecordTypeId);
+                                    tupleMap.insert(std::pair<std::tuple<std::string,std::string,std::string>,long>(currTuple,0));
+                                    tupleMap[currTuple]++;
                                 }
                             }
                         }

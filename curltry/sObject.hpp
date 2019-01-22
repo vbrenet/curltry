@@ -14,6 +14,7 @@
 #include <vector>
 #include <fstream>
 #include <map>
+#include <tuple>
 
 #include "sAttribute.hpp"
 
@@ -28,6 +29,7 @@ private:
 
     std::map<std::string,long> typeFieldMap;    // used if caseAnalysis, to count type values
     std::map<std::pair<std::string,std::string>,long> typeObjDemMap;     // used if caseAnalysis, to count type and objdem values
+    std::map<std::tuple<std::string,std::string,std::string>,long> tupleMap;
 
 public:
     sObject (const std::string objname)  : name {objname} {}
@@ -42,6 +44,7 @@ public:
     void outputMatrixCounters(const std::string &outputfile);
     void outputTypeCounter(const std::string &outputfile);
     void outputTypeObjDemMap(const std::string &outputfile);
+    void outputTupleMap(const std::string &outputfile);
 
 };
 

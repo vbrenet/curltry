@@ -144,6 +144,7 @@ bool orchestrator::execute(int chunksize) {
                 if (caseAnalysis) {
                     theObject.outputTypeCounter(workingDirectory + "/caseTypes");
                     theObject.outputTypeObjDemMap(workingDirectory + "/typeObjectMap");
+                    theObject.outputTupleMap(workingDirectory + "/tupleMap");
                 }
             }
         }
@@ -161,6 +162,8 @@ bool orchestrator::execute(int chunksize) {
         if (caseAnalysis) {
             theObject.outputTypeCounter(workingDirectory + "/caseTypes");
             theObject.outputTypeObjDemMap(workingDirectory + "/typeObjectMap");
+            theObject.outputTupleMap(workingDirectory + "/tupleMap");
+
         }
     }
 
