@@ -142,9 +142,9 @@ bool orchestrator::execute(int chunksize) {
                 theObject.outputAttributeCounters(workingDirectory + "/csvResult");
                 theObject.outputMatrixCounters(workingDirectory + "/matrix");
                 if (caseAnalysis) {
-                    theObject.outputTypeCounter(workingDirectory + "/caseTypes");
-                    theObject.outputTypeObjDemMap(workingDirectory + "/typeObjectMap");
-                    theObject.outputTupleMap(workingDirectory + "/tupleMap");
+                    //theObject.outputTypeCounter(workingDirectory + "/caseTypes");
+                    //theObject.outputTypeObjDemMap(workingDirectory + "/typeObjectMap");
+                    //theObject.outputTupleMap(workingDirectory + "/tupleMap");
                 }
             }
         }

@@ -163,7 +163,7 @@ void sObject::outputTupleMap(const std::string &outputfile) {
             recordtypename = "null";
         else
             recordtypename = rtm.getnamebyid(recordtypeid);
-        ofs << std::get<0>(it->first) << "," << std::get<1>(it->first) << "," << recordtypename << ":" << it->second << std::endl;
+        ofs << std::get<0>(it->first) << ":" << std::get<1>(it->first) << ":" << recordtypename << ":" << it->second << std::endl;
     }
 
 }
