@@ -27,6 +27,7 @@
 #include "ActualParameters.hpp"
 
 std::string workingDirectory;
+bool caseAnalysis {false};
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -166,7 +167,7 @@ void terminate() {
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 17January2019 V1" << std::endl;
+    std::cout << "curltry : version 22 January 2019 V1" << std::endl;
     
     expectedParameters ep {
         true,
@@ -175,6 +176,7 @@ int main(int argc, const char * argv[]) {
             {"-o",{true,true}},
             {"-sz",{false,true}},
             {"-i",{false,false}},
+            {"-c",{false,false}},
             {"-j",{false,false}}
         }
     };
@@ -182,7 +184,7 @@ int main(int argc, const char * argv[]) {
     ActualParameters ap;
     
     if (!ap.set(argc, argv, ep)) {
-        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i <true|false>] [-j <jobid>] workingDirectory" << std::endl;
+        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i <true|false>] [-c <true|false>] [-j <jobid>] workingDirectory" << std::endl;
         exit(-1);
     }
     else
@@ -211,6 +213,9 @@ int main(int argc, const char * argv[]) {
          else if (curr.getName().compare("-j") == 0) {
              paramJobId = curr.getValue();
              getResultFromJobId = true;
+         }
+         else if (curr.getName().compare("-c") == 0) {
+             caseAnalysis = true;
          }
      }
 

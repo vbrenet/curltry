@@ -13,6 +13,7 @@
 #include "recordTypeMap.hpp"
 
 extern std::string workingDirectory;
+extern bool caseAnalysis;
 
 void sObject::print() const {
     for (sAttribute s : attributeList)
@@ -32,6 +33,12 @@ std::string sObject::makeAllAttributeQuery() {
             std::cout << "excluded : " << it->getName() << std::endl;
         if (it->getName().compare("RecordTypeId") ==0)
             isRecordTypeIdFound = true;
+    }
+    
+    if (caseAnalysis) {
+        actualList.clear();
+        actualList.push_back("RecordTypeId");
+        actualList.push_back("Type");
     }
     
     std::cout <<  "makeAllAttributeQuery: attributeList.size = " <<attributeList.size()<< std::endl;
@@ -113,6 +120,16 @@ void sObject::printAttributeCounters() {
 }
 //
 //
+void sObject::outputTypeCounter(const std::string &outputfile) {
+    std::ofstream ofs {outputfile};
+    
+    for (auto it=typeFieldMap.begin(); it != typeFieldMap.end(); it++)
+        ofs << it->first << " : " << it->second << std::endl;
+    
+    ofs.close();
+}
+
+//
 void sObject::outputAttributeCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
@@ -154,6 +171,7 @@ long sObject::computeCsvRecords(const std::string &csvString) {
     state currentState {state::START_TOKEN};
     int counter {0};
     int recordtypeidnumber {0};
+    int typeFieldNumber {0};
     int nbRecords {0};
     std::string currentRecordTypeId;
     
@@ -184,6 +202,10 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                         csvAttributeMap.insert(std::pair<int,std::string>({counter},{token}));
                         if (token.compare("RecordTypeId") == 0)
                             recordtypeidnumber = counter;
+                        if (caseAnalysis) {
+                            if (token.compare("Type") == 0)
+                                typeFieldNumber = counter;
+                        }
                         token.clear();
                     }
                     else {
@@ -195,6 +217,13 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                             std::pair<std::string,std::string> key {{currentRecordTypeId},{csvAttributeMap[counter]}};
                             recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
                             recordTypeMatrixCounters[key]++;
+                            // caseAnalysis
+                            if (caseAnalysis) {
+                                if (typeFieldNumber == counter) {
+                                    typeFieldMap.insert(std::pair<std::string,long>({token},0));
+                                    typeFieldMap[token]++;
+                                }
+                            }
                         }
                         token.clear();
                     }
@@ -207,6 +236,12 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                         csvAttributeMap.insert(std::pair<int,std::string>({counter},{token}));
                         if (token.compare("RecordTypeId") == 0)
                             recordtypeidnumber = counter;
+                        
+                        if (caseAnalysis) {
+                            if (token.compare("Type") == 0)
+                                typeFieldNumber = counter;
+                        }
+                        
                         token.clear();
                         counter = 0;
                         firstRecord = false;
@@ -221,6 +256,12 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                             std::pair<std::string,std::string> key {{currentRecordTypeId},{csvAttributeMap[counter]}};
                             recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
                             recordTypeMatrixCounters[key]++;
+                            if (caseAnalysis) {
+                                if (typeFieldNumber == counter) {
+                                    typeFieldMap.insert(std::pair<std::string,long>({token},0));
+                                    typeFieldMap[token]++;
+                                }
+                            }
                         }
                         counter = 0;
                         token.clear();

@@ -26,6 +26,8 @@ private:
     std::map<int,std::string> csvAttributeMap {};
     void computeAttributes(const std::string &record, int);
 
+    std::map<std::string,long> typeFieldMap;    // used if caseAnalysis, to count type values
+    
 public:
     sObject (const std::string objname)  : name {objname} {}
     const std::string& getName() {return name;};
@@ -37,6 +39,7 @@ public:
     void printAttributeCounters();
     void outputAttributeCounters(const std::string &);
     void outputMatrixCounters(const std::string &outputfile);
+    void outputTypeCounter(const std::string &outputfile);
 
 };
 

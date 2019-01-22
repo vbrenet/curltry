@@ -14,6 +14,7 @@
 //
 extern bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer);
 extern std::string workingDirectory;
+extern bool caseAnalysis;
 
 //
 //
@@ -140,7 +141,8 @@ bool orchestrator::execute(int chunksize) {
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
                 theObject.outputAttributeCounters(workingDirectory + "/csvResult");
                 theObject.outputMatrixCounters(workingDirectory + "/matrix");
-
+                if (caseAnalysis)
+                    theObject.outputTypeCounter(workingDirectory + "/caseTypes");
             }
         }
     } while (moreResult);
@@ -154,6 +156,8 @@ bool orchestrator::execute(int chunksize) {
     else {
         theObject.outputAttributeCounters(workingDirectory + "/csvResult");
         theObject.outputMatrixCounters(workingDirectory + "/matrix");
+        if (caseAnalysis)
+            theObject.outputTypeCounter(workingDirectory + "/caseTypes");
     }
 
     theObject.printAttributeCounters();
