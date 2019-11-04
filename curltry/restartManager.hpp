@@ -19,5 +19,7 @@ private:
     static std::vector<std::string> batchids;
 public:
     static void setRestartMode() {restartMode = true;}
+    static void init();
+    static void saveBatchId(const std::string batchid);
 };
 #endif /* restartManager_hpp */

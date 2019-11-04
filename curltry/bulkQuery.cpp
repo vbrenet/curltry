@@ -12,6 +12,7 @@
 #include <functional>
 #include "bulkQuery.hpp"
 #include "bulkSession.hpp"
+#include "restartManager.hpp"
 //
 bool bulkQuery::firstTime = true;
 bool bulkQuery::pkchunking = false;
@@ -572,6 +573,9 @@ bool bulkQuery::getResult(std::string& result, bool& allResultsRead) {
                         allResultsRead = false;
                         if (!getBatchResult(it->first, it2->first, result))
                             return false;
+                        // save result id in case of a restart
+                        restartManager::saveBatchId(it2->first);
+                        
                         it2->second = true;
                         break;
                     }

@@ -240,6 +240,8 @@ int main(int argc, const char * argv[]) {
 //    config::getConfig("/Users/vbrenet/Documents/Pocs/curltry/config");
     config::getConfig(workingDirectory + "/config");
 
+    restartManager::init();
+    
     if (injection) {
         runInjection(theObject,chunksize);
     } else if (!getResultFromJobId ){
