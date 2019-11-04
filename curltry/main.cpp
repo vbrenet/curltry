@@ -27,6 +27,7 @@
 #include "injectionOrchestratorV1.hpp"
 #include "expectedParameters.hpp"
 #include "ActualParameters.hpp"
+#include "restartManager.hpp"
 
 std::string workingDirectory;
 bool caseAnalysis {false};
@@ -169,16 +170,17 @@ void terminate() {
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 07 February 2019 V1" << std::endl;
+    std::cout << "curltry : version 04 November 2019 V1" << std::endl;
     
     expectedParameters ep {
         true,
         1,
         {
-            {"-o",{true,true}},
+            {"-o",{true,true}},     // ismandatory, isvalued
             {"-sz",{false,true}},
             {"-i",{false,false}},
             {"-c",{false,false}},
+            {"-r",{false,false}},
             {"-j",{false,true}}
         }
     };
@@ -186,7 +188,7 @@ int main(int argc, const char * argv[]) {
     ActualParameters ap;
     
     if (!ap.set(argc, argv, ep)) {
-        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i <true|false>] [-c <true|false>] [-j <jobid>] workingDirectory" << std::endl;
+        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i <true|false>] [-c <true|false>] [-j <jobid>] [-r <true|false> workingDirectory" << std::endl;
         exit(-1);
     }
     else
@@ -219,11 +221,14 @@ int main(int argc, const char * argv[]) {
          else if (curr.getName().compare("-c") == 0) {
              caseAnalysis = true;
          }
+         else if (curr.getName().compare("-r") == 0) {
+            restartManager::setRestartMode();
+        }
      }
 
     const std::vector<std::string> values = ap.getValues();
     if (values.size() != 1) {
-        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i <true|false>] [-j <jobid>] workingDirectory" << std::endl;
+        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i <true|false>] [-c <true|false>] [-j <jobid>] [-r <true|false> workingDirectory" << std::endl;
         exit(-1);
     }
     
