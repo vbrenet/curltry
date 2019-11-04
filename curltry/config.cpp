@@ -16,6 +16,8 @@ std::string config::clientsecret;    // REST connected app secret
 std::string config::domain;
 std::string config::username;
 std::string config::password;
+std::string config::apiversion;
+
 bool config::isASandbox {false};
 bool config::useFileForAttributeList {false};
 
@@ -33,7 +35,9 @@ const std::vector<config::tokenDesc> config::tokenDescriptions = {
     {config::token::SOBJECT, "_object_:"},
     {config::token::ISPROD, "_isprod_:"},
     {config::token::DATAFORMAT, "_dataformat_:"},
-    {config::token::USEFILEFORATTRLIST, "_usefileforattributelist_"}
+    {config::token::USEFILEFORATTRLIST, "_usefileforattributelist_"},
+    {config::token::APIVERSION, "_apiversion_"}
+
 };
 //
 //  for test purpose
@@ -133,6 +137,9 @@ void config::processLine(const std::string& line) {
             break;
         case token::PASSWORD:
             password = value;
+            break;
+        case token::APIVERSION:
+            apiversion = value;
             break;
         case token::SOBJECT:
             updateExcludedAttributes(line);

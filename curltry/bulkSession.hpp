@@ -21,12 +21,13 @@ private:
     static std::string sessionId;   // returned at login
     static std::string serverUrl;   // calculated at login
     static std::string injectUrl;   // calculated at login
+    static std::string apiversion;
     static void processResponse(const std::string&);
 public:
     static bool firstTime;
     static std::string body;
 
-    static bool openBulkSession(bool isSandbox, const std::string username, const std::string password);
+    static bool openBulkSession(bool isSandbox, const std::string username, const std::string password, const std::string apiversion);
     //
     //  accessors
     static std::string &getSessionId() {return sessionId;}

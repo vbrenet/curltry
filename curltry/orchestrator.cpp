@@ -108,7 +108,7 @@ bool orchestrator::execute(int chunksize) {
     long totalRecords {0};
 
     // open bulk session bulkSession::openBulkSession
-    if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password))
+    if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password, config::getApiVersion()))
         return false;
     
     // bulkQuery::createJob(const std::string objectName, int chunksize)
@@ -179,7 +179,7 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
     long totalRecords {0};
     
     // open bulk session bulkSession::openBulkSession
-    if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password))
+    if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password, config::getApiVersion()))
         return false;
     
     bulkQuery::setJobId(jobid);

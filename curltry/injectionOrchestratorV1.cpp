@@ -10,11 +10,12 @@
 #include "bulkInjectV1.hpp"
 #include "bulkSession.hpp"
 #include "recordGenerator.hpp"
+#include "config.hpp"
 
 bool injectionOrchestratorV1::execute(int nbrec) {
     
     // open bulk session bulkSession::openBulkSession
-    if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password))
+    if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password,config::getApiVersion()))
         return false;
     
     // bulkQuery::createJob(const std::string objectName, int chunksize)
