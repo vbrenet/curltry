@@ -28,6 +28,11 @@ void restartManager::init() {
     }
     
     batchesFile.close();
+    
+    std::cout << "RESTART MODE" << std::endl;
+    std::cout << "batchs results already read:" << std::endl;
+    for (auto it=batchids.begin(); it!=batchids.end(); ++it)
+        std::cout << *it << std::endl;
 }
 //
 //
@@ -42,5 +47,7 @@ bool restartManager::isAlreadyRead(const std::string theid)  {
     if (!restartMode)
         return false;
     auto it = std::find(batchids.begin(), batchids.end(), theid);
+    std::cout << "isAlreadyRead ? " << theid << std::endl;
+    std::cout << (it != batchids.end() ? "Yes" : "No") << std::endl;
     return (it != batchids.end());
 }
