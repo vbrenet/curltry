@@ -36,3 +36,11 @@ void restartManager::saveBatchId(const std::string batchid) {
     ofs << batchid << std::endl;
     ofs.close();
 }
+//
+//
+bool restartManager::isAlreadyRead(const std::string theid)  {
+    if (!restartMode)
+        return false;
+    auto it = std::find(batchids.begin(), batchids.end(), theid);
+    return (it != batchids.end());
+}

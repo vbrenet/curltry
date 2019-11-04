@@ -572,8 +572,10 @@ bool bulkQuery::getResult(std::string& result, bool& allResultsRead) {
                 for (auto it2 = it->second.resultMap.begin(); it2!= it->second.resultMap.end(); ++it2){
                     if (it2->second == false) {
                         allResultsRead = false;
-                        if (!getBatchResult(it->first, it2->first, result))
-                            return false;
+                        if (!restartManager::isAlreadyRead(it2->first)) {
+                            if (!getBatchResult(it->first, it2->first, result))
+                                return false;
+                        }
                         // save result id in case of a restart
                         restartManager::saveBatchId(it2->first);
                         

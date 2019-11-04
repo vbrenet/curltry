@@ -21,5 +21,6 @@ public:
     static void setRestartMode() {restartMode = true;}
     static void init();
     static void saveBatchId(const std::string batchid);
+    static bool isAlreadyRead(const std::string batchid);
 };
 #endif /* restartManager_hpp */
