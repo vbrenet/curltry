@@ -31,6 +31,8 @@ private:
     std::map<std::pair<std::string,std::string>,long> typeObjDemMap;     // used if caseAnalysis, to count type and objdem values
     std::map<std::tuple<std::string,std::string,std::string>,long> tupleMap;
 
+    void processCsvLine(const std::string &inputline);
+    void initializeCounter(const std::string& attribute, const std::string& countervalue);
 public:
     sObject (const std::string objname)  : name {objname} {}
     const std::string& getName() {return name;};
@@ -40,6 +42,7 @@ public:
     void computerecords(const std::string &xmlresult);
     long computeCsvRecords(const std::string &);
     void printAttributeCounters();
+    void initializeAttributeCounters(const std::string &inputfile);
     void outputAttributeCounters(const std::string &);
     void outputMatrixCounters(const std::string &outputfile);
     void outputTypeCounter(const std::string &outputfile);

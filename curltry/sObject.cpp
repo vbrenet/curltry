@@ -359,3 +359,39 @@ long sObject::computeCsvRecords(const std::string &csvString) {
     }
     return nbRecords;
 }
+//
+//
+void sObject::initializeCounter(const std::string& attribute, const std::string& countervalue) {
+    auto it = attributeCounters.find(attribute);
+    
+    if (it != attributeCounters.end()) {
+        it->second = std::stol(countervalue);
+    }
+}
+//
+//
+void sObject::processCsvLine(const std::string &inputline) {
+    // example:
+    //TECH_ResponsableIdSf__c : 0
+    //TECH_StructureVisibilite__c : 0
+    size_t firstColon = inputline.find_first_of(':');
+    if (firstColon != std::string::npos) {
+        std::string attributeName = inputline.substr(0,firstColon-1);
+        std::string counterValue = inputline.substr(firstColon+1, std::string::npos);
+        initializeCounter(attributeName,counterValue);
+    }
+    
+}
+//
+//
+void sObject::initializeAttributeCounters(const std::string &inputfile) {
+    std::ifstream csvResult {inputfile};
+    
+    std::string currentLine;
+    
+    while (getline(csvResult,currentLine)) {
+        processCsvLine(currentLine);
+    }
+    
+    csvResult.close();
+}

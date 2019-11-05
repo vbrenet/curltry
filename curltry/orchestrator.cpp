@@ -11,6 +11,7 @@
 #include "bulkSession.hpp"
 #include "bulkQuery.hpp"
 #include "config.hpp"
+#include "restartManager.hpp"
 //
 extern bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer);
 extern std::string workingDirectory;
@@ -98,6 +99,12 @@ bool orchestrator::getObjectInfo() {
     //theObject.print();
     std::string thequery = theObject.makeAllAttributeQuery();
     
+    // if restart mode, initialize counters from csvResult file
+    if (restartManager::isRestartMode()) {
+        theObject.initializeAttributeCounters(workingDirectory + "/csvResult");
+    }
+    
+    //
     std::cout << "the query:" << std::endl;
     std::cout << thequery << std::endl;
     
