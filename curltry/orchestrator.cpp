@@ -15,6 +15,7 @@
 extern bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer);
 extern std::string workingDirectory;
 extern bool caseAnalysis;
+extern bool verbose;
 
 //
 //
@@ -167,7 +168,8 @@ bool orchestrator::execute(int chunksize) {
         }
     }
 
-    theObject.printAttributeCounters();
+    if (verbose)
+        theObject.printAttributeCounters();
     
     return true;
 };
@@ -217,7 +219,8 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
         theObject.outputMatrixCounters(workingDirectory + "/matrix");
     }
     
-    theObject.printAttributeCounters();
+    if (verbose)
+        theObject.printAttributeCounters();
     
     return true;
 }

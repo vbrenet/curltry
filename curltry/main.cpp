@@ -31,6 +31,7 @@
 
 std::string workingDirectory;
 bool caseAnalysis {false};
+bool verbose {false};
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -168,6 +169,11 @@ void terminate() {
 }
 //
 //
+void exitWithSyntaxError() {
+    std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-j <jobid>] [-r] [-i] [-v] workingDirectory" << std::endl;
+    exit(-1);
+}
+//
 int main(int argc, const char * argv[]) {
     
     std::cout << "curltry : version 05 November 2019 V1" << std::endl;
@@ -181,6 +187,7 @@ int main(int argc, const char * argv[]) {
             {"-i",{false,false}},
            // {"-c",{false,false}}, suppressed option
             {"-r",{false,false}},
+            {"-v",{false,false}},
             {"-j",{false,true}}
         }
     };
@@ -188,8 +195,7 @@ int main(int argc, const char * argv[]) {
     ActualParameters ap;
     
     if (!ap.set(argc, argv, ep)) {
-        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i] [-j <jobid>] [-r] workingDirectory" << std::endl;
-        exit(-1);
+        exitWithSyntaxError();
     }
 
     bool injection {false};
@@ -219,18 +225,26 @@ int main(int argc, const char * argv[]) {
          else if (curr.getName().compare("-r") == 0) {
             restartManager::setRestartMode();
         }
+         else if (curr.getName().compare("-r") == 0) {
+             verbose = true;
+         }
      }
 
     const std::vector<std::string> values = ap.getValues();
     if (values.size() != 1) {
         std::cerr << "Missing parameter : workingDirectory" << std::endl;
-        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i] [-j <jobid>] [-r] workingDirectory" << std::endl;
-        exit(-1);
+        exitWithSyntaxError();
+    }
+    
+    if (!getResultFromJobId && restartManager::isRestartMode()) {
+        std::cerr << "Restart mode not allowed without option -j <jobid>" << std::endl;
+        exitWithSyntaxError();
     }
     
     workingDirectory = values[0];
     
     corpNameGenerator::init();
+    
     textGenerator::init();
         
     config::getConfig(workingDirectory + "/config");

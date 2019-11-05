@@ -16,8 +16,12 @@ extern std::string workingDirectory;
 //
 //
 void restartManager::init() {
-    if (!restartMode)
+    if (!restartMode) {
+        // if not restart mode, clear batchids file
+        std::ofstream batchesFile {workingDirectory + "/batchids", std::ofstream::out};
+        batchesFile.close();
         return;
+    }
     
     // if restart mode then initialize batchids vector from batchids file
     std::ifstream batchesFile {workingDirectory + "/batchids"};
@@ -44,8 +48,6 @@ void restartManager::saveBatchId(const std::string batchid) {
 //
 //
 bool restartManager::isAlreadyRead(const std::string theid)  {
-    if (!restartMode)
-        return false;
     auto it = std::find(batchids.begin(), batchids.end(), theid);
     std::cout << "isAlreadyRead ? " << theid << std::endl;
     std::cout << (it != batchids.end() ? "Yes" : "No") << std::endl;

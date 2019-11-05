@@ -19,6 +19,7 @@ private:
     static std::vector<std::string> batchids;
 public:
     static void setRestartMode() {restartMode = true;}
+    static bool isRestartMode() {return restartMode;};
     static void init();
     static void saveBatchId(const std::string batchid);
     static bool isAlreadyRead(const std::string batchid);
