@@ -175,7 +175,6 @@ void sObject::outputTupleMap(const std::string &outputfile) {
 //
 //
 void sObject::outputMatrixCounters(const std::string &outputfile) {
-    recordTypeMap rtm {workingDirectory + "/recordTypes"};
     
     std::ofstream ofs {outputfile};
     
@@ -185,7 +184,7 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
         if (recordtypeid.size() == 0)
             recordtypename = "null";
         else
-            recordtypename = rtm.getnamebyid(recordtypeid);
+            recordtypename = getnamebyid(recordtypeid);
         ofs << recordtypename << "," << it->first.second << " : " << it->second << std::endl;
     }
     
@@ -436,6 +435,9 @@ void sObject::parseRecordTypeBuffer(const std::string&buffer) {
         }
     }   // end while
     
+    //
+    recordTypes.insert(std::pair<std::string,std::string>({"","null"}));
+    
     //  output map
     if (verbose) {
         std::cout << "Record Type map from REST" << std::endl;
@@ -495,5 +497,53 @@ bool sObject::initializeRecordTypes() {
     
     parseRecordTypeBuffer(readBuffer);
     
+    initRecordTypeMatrixCounters();
+    
     return true;
+}
+//
+//
+std::string sObject::getnamebyid(const std::string id) {
+std::string result;
+auto it = recordTypes.find(id);
+if (it == recordTypes.end())
+    result = "unknown";
+else
+    result = it->second;
+return result;
+}
+//
+//
+//
+void sObject::initRecordTypeMatrixCounters() {
+    
+    for (auto it = recordTypes.begin(); it != recordTypes.end(); ++it) {
+        for (auto itattr = attributeList.begin(); itattr != attributeList.end(); ++itattr) {
+            if (itattr->isExcluded())
+                continue;
+            std::pair<std::string,std::string> key {it->first,itattr->getName()};
+            recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
+            if (verbose) {
+                //std::cout << "initRecordTypeMatrixCounters: inserted value" << std::endl;
+                //std::cout << key.first << ":" << key.second << std::endl;
+            }
+        }
+    }
+    
+    //
+    if (verbose) {
+        /*
+        std::cout << "recordTypeMatrixCounters after initialization" << std::endl;
+        for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
+            std::string recordtypeid = it->first.first;
+            std::string recordtypename;
+            if (recordtypeid.size() == 0)
+                recordtypename = "null";
+            else
+                recordtypename = getnamebyid(recordtypeid);
+            std::cout << recordtypename << "," << it->first.second << " : " << it->second << std::endl;
+        }
+         */
+    }
+
 }

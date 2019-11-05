@@ -25,17 +25,18 @@ private:
     std::map<std::string,long> attributeCounters {};
     std::map<std::pair<std::string,std::string>,long> recordTypeMatrixCounters {};//key: (record type id, attribute name)
     std::map<int,std::string> csvAttributeMap {};
-    std::map<std::string,std::string> recordTypes {};
+    std::map<std::string,std::string> recordTypes {}; // key : id, value : name
     
     void computeAttributes(const std::string &record, int);
-
     std::map<std::string,long> typeFieldMap;    // used if caseAnalysis, to count type values
     std::map<std::pair<std::string,std::string>,long> typeObjDemMap;     // used if caseAnalysis, to count type and objdem values
     std::map<std::tuple<std::string,std::string,std::string>,long> tupleMap;
 
+    void initRecordTypeMatrixCounters();
     void processCsvLine(const std::string &inputline);
     void initializeCounter(const std::string& attribute, const std::string& countervalue);
     void parseRecordTypeBuffer(const std::string&);
+    std::string getnamebyid(const std::string id);
     static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
 public:
     sObject (const std::string objname)  : name {objname} {}
