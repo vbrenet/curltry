@@ -170,7 +170,7 @@ void terminate() {
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 04 November 2019 V1" << std::endl;
+    std::cout << "curltry : version 05 November 2019 V1" << std::endl;
     
     expectedParameters ep {
         true,
@@ -179,7 +179,7 @@ int main(int argc, const char * argv[]) {
             {"-o",{true,true}},     // ismandatory, isvalued
             {"-sz",{false,true}},
             {"-i",{false,false}},
-            {"-c",{false,false}},
+           // {"-c",{false,false}}, suppressed option
             {"-r",{false,false}},
             {"-j",{false,true}}
         }
@@ -188,11 +188,9 @@ int main(int argc, const char * argv[]) {
     ActualParameters ap;
     
     if (!ap.set(argc, argv, ep)) {
-        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i <true|false>] [-c <true|false>] [-j <jobid>] [-r <true|false> workingDirectory" << std::endl;
+        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i] [-j <jobid>] [-r] workingDirectory" << std::endl;
         exit(-1);
     }
-    else
-        ap.print();
 
     bool injection {false};
     bool getResultFromJobId {false};
@@ -218,9 +216,6 @@ int main(int argc, const char * argv[]) {
              paramJobId = curr.getValue();
              getResultFromJobId = true;
          }
-         else if (curr.getName().compare("-c") == 0) {
-             caseAnalysis = true;
-         }
          else if (curr.getName().compare("-r") == 0) {
             restartManager::setRestartMode();
         }
@@ -228,7 +223,8 @@ int main(int argc, const char * argv[]) {
 
     const std::vector<std::string> values = ap.getValues();
     if (values.size() != 1) {
-        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i <true|false>] [-c <true|false>] [-j <jobid>] [-r <true|false> workingDirectory" << std::endl;
+        std::cerr << "Missing parameter : workingDirectory" << std::endl;
+        std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-i] [-j <jobid>] [-r] workingDirectory" << std::endl;
         exit(-1);
     }
     
@@ -237,7 +233,6 @@ int main(int argc, const char * argv[]) {
     corpNameGenerator::init();
     textGenerator::init();
         
-//    config::getConfig("/Users/vbrenet/Documents/Pocs/curltry/config");
     config::getConfig(workingDirectory + "/config");
 
     restartManager::init();
