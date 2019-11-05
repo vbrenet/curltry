@@ -11,9 +11,13 @@
 #include "sObject.hpp"
 #include "config.hpp"
 #include "recordTypeMap.hpp"
+#include <curl/curl.h>
+#include "SalesforceSession.hpp"
+
 
 extern std::string workingDirectory;
 extern bool caseAnalysis;
+extern bool verbose;
 
 void sObject::print() const {
     for (sAttribute s : attributeList)
@@ -394,4 +398,102 @@ void sObject::initializeAttributeCounters(const std::string &inputfile) {
     }
     
     csvResult.close();
+}
+//
+//  initialize the record type map for the current object from a REST query
+//
+//
+void sObject::parseRecordTypeBuffer(const std::string&buffer) {
+/* Example
+ {"totalSize":7,"done":true,"records":[{"attributes":{"type":"RecordType","url":"/services/data/v47.0/sobjects/RecordType/0120X0000009g6ZQAQ"},"Id":"0120X0000009g6ZQAQ","Name":"General"},{"attributes":{"type":"RecordType","url":"/services/data/v47.0/sobjects/RecordType/0120X0000009g6aQAA"},"Id":"0120X0000009g6aQAA","Name":"Person Referral"},{"attributes":{"type":"RecordType","url":"/services/data/v47.0/sobjects/RecordType/0120X0000009g6bQAA"},"Id":"0120X0000009g6bQAA","Name":"Retirement Planning"},{"attributes":{"type":"RecordType","url":"/services/data/v47.0/sobjects/RecordType/0120X0000009gDKQAY"},"Id":"0120X0000009gDKQAY","Name":"Business Referral"},{"attributes":{"type":"RecordType","url":"/services/data/v47.0/sobjects/RecordType/0120X000000sgJYQAY"},"Id":"0120X000000sgJYQAY","Name":"Personne connue"},{"attributes":{"type":"RecordType","url":"/services/data/v47.0/sobjects/RecordType/0120X000000sgJZQAY"},"Id":"0120X000000sgJZQAY","Name":"Silhouette Part"},{"attributes":{"type":"RecordType","url":"/services/data/v47.0/sobjects/RecordType/0120X000000sgJaQAI"},"Id":"0120X000000sgJaQAI","Name":"Silhouette Pro/Ent"}]}
+ */
+    bool terminated = false;
+    size_t cursor = 0;
+    while (!terminated) {
+        size_t idtoken = buffer.find("\"Id\":", cursor);
+        if (idtoken != std::string::npos) {
+            std::string currid = buffer.substr(idtoken+6,18);
+            size_t nametoken = buffer.find("\"Name\":",idtoken);
+            if (nametoken != std::string::npos) {
+                size_t endnametoken = buffer.find("\"}",nametoken);
+                if (endnametoken != std::string::npos) {
+                    std::string currname = buffer.substr(nametoken+8,endnametoken-nametoken-8);
+                    recordTypes.insert(std::pair<std::string,std::string>({currid},{currname}));
+                    cursor = endnametoken;
+                }
+                else {
+                    std::cerr << "parseRecordTypeBuffer error" << std::endl;
+                    terminated = true;
+                }
+            }
+            else {
+                std::cerr << "parseRecordTypeBuffer error" << std::endl;
+                terminated = true;
+            }
+        }
+        else {
+            terminated = true;
+        }
+    }   // end while
+    
+    //  output map
+    if (verbose) {
+        std::cout << "Record Type map from REST" << std::endl;
+        for (auto it=recordTypes.begin(); it != recordTypes.end(); ++it) {
+            std::cout << it->first << ":" << it->second << std::endl;
+        }
+    }
+}
+//
+//
+size_t sObject::WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
+{
+   ((std::string*)userp)->append((char*)contents, size * nmemb);
+    return size * nmemb;
+}
+//
+bool sObject::initializeRecordTypes() {
+    CURL *curl;
+    CURLcode res;
+    std::string readBuffer;
+
+    readBuffer.clear();
+    curl = curl_easy_init();
+    // /services/data/v47.0/query/?q=SELECT+ID+,+Name+FROM+RECORDTYPE+where+sobjecttype+=+'opportunity'
+    if(curl) {
+        std::string query = "?q=SELECT+ID+,+Name+FROM+RECORDTYPE+where+sobjecttype+=+'" + getName() + "'";
+        
+        curl_easy_setopt(curl, CURLOPT_URL, ("https://" + SalesforceSession::getDomain() + "/services/data/v" + config::getApiVersion() + "/query/" + query).c_str());
+        
+        struct curl_slist *chunk = NULL;
+        
+        chunk = curl_slist_append(chunk, ("Authorization: Bearer " + SalesforceSession::getConnectedAppToken()).c_str());
+        res = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
+        if(res != CURLE_OK)
+            fprintf(stderr, "curl_easy_setopt() failed: %s\n",
+                    curl_easy_strerror(res));
+        
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        res = curl_easy_perform(curl);
+        if(res != CURLE_OK)
+            fprintf(stderr, "curl_easy_perform() failed: %s\n",
+                    curl_easy_strerror(res));
+        
+        curl_easy_cleanup(curl);
+        
+        //buffer = readBuffer;
+    }
+    else
+        return false;
+
+    if (verbose) {
+        std::cout << "record types query: " << std::endl;
+        std::cout << readBuffer << std::endl;
+    }
+    
+    parseRecordTypeBuffer(readBuffer);
+    
+    return true;
 }

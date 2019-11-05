@@ -40,6 +40,11 @@ bool orchestrator::describeObject() {
     if (!getDescribeAttributesBuffer(theObject.getName(), rawAttributeList))
         return false;
     
+    // initialize record types
+    if (!theObject.initializeRecordTypes()) {
+        std::cerr << "orchestrator::describeObject : initializeRecordTypes error" << std::endl;
+    }
+    
     //std::cout << "raw describe object:\n" << rawAttributeList << std::endl;
     
     // parse each attribute in the buffer

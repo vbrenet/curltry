@@ -176,7 +176,7 @@ void exitWithSyntaxError() {
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 05 November 2019 V1" << std::endl;
+    std::cout << "curltry : version 05 November 2019 V2" << std::endl;
     
     expectedParameters ep {
         true,
@@ -225,7 +225,7 @@ int main(int argc, const char * argv[]) {
          else if (curr.getName().compare("-r") == 0) {
             restartManager::setRestartMode();
         }
-         else if (curr.getName().compare("-r") == 0) {
+         else if (curr.getName().compare("-v") == 0) {
              verbose = true;
          }
      }
