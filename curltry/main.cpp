@@ -171,15 +171,29 @@ void terminate() {
 //
 //
 void exitWithSyntaxError() {
-    std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-j <jobid>] [-r] [-v] workingDirectory" << std::endl;
+    std::cerr << "Syntax : curltry -o <object name> [-help] [-sz <chunksize>] [-j <jobid>] [-r] [-v] [-vv] workingDirectory" << std::endl;
     exit(-1);
 }
 //
+void exitWithHelp() {
+    std::cout << "SYNTAX : curltry -o <object name> [-help] [-sz <chunksize>] [-j <jobid>] [-r] [-v] [-vv] workingDirectory" << std::endl;
+    std::cout << "OPTIONS:" << std::endl;
+    std::cout << "-help : print this help on the standard output" << std::endl;
+    std::cout << "-o <object name> : specify the sObject to analyze, e.g. -o Opportunity" << std::endl;
+    std::cout << "-sz <chunksize> : use the pkchunking option and specify the chunsize (max : 250000)" << std::endl;
+    std::cout << "-j <jobid> : get results from a bulk job already run, e.g. -j 7503N00000009gn" << std::endl;
+    std::cout << "-r : restart from the last curltry run session - this option requires the -j option" << std::endl;
+    std::cout << "-v : verbose mode" << std::endl;
+    std::cout << "-vv : very verbose mode (trace level)" << std::endl;
+    std::cout << "workingDirectory (mandatory) : working directory which must contain the config file" << std::endl;
+    exit(0);
+    
+}
 //
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 06 November 2019 V4" << std::endl;
+    std::cout << "curltry : version 06 November 2019 V5" << std::endl;
     
     expectedParameters ep {
         true,
@@ -192,6 +206,7 @@ int main(int argc, const char * argv[]) {
             {"-r",{false,false}},
             {"-v",{false,false}},
             {"-vv",{false,false}},
+            {"-help",{false,false}},
             {"-j",{false,true}}
         }
     };
@@ -199,6 +214,11 @@ int main(int argc, const char * argv[]) {
     ActualParameters ap;
     
     if (!ap.set(argc, argv, ep)) {
+        const std::vector<NamedParameter> parameters = ap.getNamedParameters();
+        for (auto curr : parameters) {
+            if (curr.getName().compare("-help") == 0)
+                exitWithHelp();
+        }
         exitWithSyntaxError();
     }
 
@@ -211,6 +231,7 @@ int main(int argc, const char * argv[]) {
     const std::vector<NamedParameter> parameters = ap.getNamedParameters();
      
     for (auto curr : parameters) {
+        
          if (curr.getName().compare("-o") == 0)
              theObject = curr.getValue();
          else if (curr.getName().compare("-sz") == 0) {
