@@ -553,7 +553,7 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
 //
 //
 //
-bool bulkQuery::getResult(std::string& result, bool& allResultsRead) {
+bool bulkQuery::getResult(std::string& result, bool& allResultsRead, std::string& resultid) {
     bool moreResult {false};
 
     if (pkchunking) {
@@ -578,8 +578,7 @@ bool bulkQuery::getResult(std::string& result, bool& allResultsRead) {
                         }
                         
                         // save result id in case of a future restart
-                        if (!restartManager::isAlreadyRead(it2->first))
-                            restartManager::saveBatchId(it2->first);
+                        resultid = it2->first;
                         
                         it2->second = true;
                         break;

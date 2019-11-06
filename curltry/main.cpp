@@ -179,7 +179,7 @@ void exitWithSyntaxError() {
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 06 November 2019 V3" << std::endl;
+    std::cout << "curltry : version 06 November 2019 V4" << std::endl;
     
     expectedParameters ep {
         true,
@@ -233,6 +233,7 @@ int main(int argc, const char * argv[]) {
              verbose = true;
          }
         else if (curr.getName().compare("-vv") == 0) {
+            verbose = true;
             veryverbose = true;
         }
 

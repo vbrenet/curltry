@@ -42,6 +42,9 @@ void restartManager::init() {
 //
 //
 void restartManager::saveBatchId(const std::string batchid) {
+    if (verbose)
+        std::cout << "saveBatchId : " << batchid << std::endl;
+    
     std::ofstream ofs {workingDirectory + "/batchids", std::ofstream::app};
     ofs << batchid << std::endl;
     ofs.close();

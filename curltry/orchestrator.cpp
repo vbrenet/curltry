@@ -112,8 +112,10 @@ bool orchestrator::getObjectInfo() {
     }
     
     //
-    std::cout << "the query:" << std::endl;
-    std::cout << thequery << std::endl;
+    if (verbose) {
+        std::cout << "the query:" << std::endl;
+        std::cout << thequery << std::endl;
+    }
     
     return true;
 };
@@ -139,11 +141,13 @@ bool orchestrator::execute(int chunksize) {
         return false;
 
     std::string result;
+    std::string resultid;
+
     bool moreResult {false};
     bool allResultsRead {true};
 
     do {
-        moreResult = bulkQuery::getResult(result,allResultsRead);
+        moreResult = bulkQuery::getResult(result,allResultsRead, resultid);
             
             // treat result
         if ((moreResult && !allResultsRead)|| (chunksize == 0)) {
@@ -156,6 +160,10 @@ bool orchestrator::execute(int chunksize) {
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
                 theObject.outputAttributeCounters(workingDirectory + "/result.csv");
                 theObject.outputMatrixCounters(workingDirectory + "/matrix.csv");
+                
+                if (!restartManager::isAlreadyRead(resultid))
+                    restartManager::saveBatchId(resultid);
+
                 if (caseAnalysis) {
                     //theObject.outputTypeCounter(workingDirectory + "/caseTypes");
                     //theObject.outputTypeObjDemMap(workingDirectory + "/typeObjectMap");
@@ -205,10 +213,11 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
         return false;
 
     std::string result;
+    std::string resultid;
     bool moreResult {false};
     bool allResultsRead {true};
     do {
-        moreResult = bulkQuery::getResult(result,allResultsRead);
+        moreResult = bulkQuery::getResult(result,allResultsRead, resultid);
             
         // treat result
         if (moreResult && !allResultsRead) {
@@ -222,6 +231,10 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
                 theObject.outputAttributeCounters(workingDirectory + "/result.csv");
                 theObject.outputMatrixCounters(workingDirectory + "/matrix.csv");
+                
+                if (!restartManager::isAlreadyRead(resultid))
+                    restartManager::saveBatchId(resultid);
+
             }
         }
     } while (moreResult);
