@@ -149,13 +149,23 @@ void sObject::outputTypeObjDemMap(const std::string &outputfile) {
 
 //
 void sObject::outputAttributeCounters(const std::string &outputfile) {
+    
+    double nbRecords {0};
+    auto idit = attributeCounters.find("Id");
+    if (idit != attributeCounters.end()) {
+        nbRecords = idit->second;
+    }
+    
     std::ofstream ofs {outputfile};
     
     // header
-    ofs << "fieldName,fieldUsage" << std::endl;
+    ofs << "fieldName,fieldUsage,percentUsage" << std::endl;
     
-    for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++)
-        ofs << it->first << "," << it->second << std::endl;
+    for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++) {
+        ofs << it->first << "," << it->second << ",";
+        double percentUsage = ((nbRecords == 0) ? 0 : (((double)it->second / nbRecords)*100));
+        ofs << std::setprecision (2) << std::fixed << percentUsage << std::endl;
+    }
 
     ofs.close();
 }
