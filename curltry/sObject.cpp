@@ -384,8 +384,12 @@ void sObject::processCsvLine(const std::string &inputline) {
     size_t firstComma = inputline.find_first_of(',');
     if (firstComma != std::string::npos) {
         std::string attributeName = inputline.substr(0,firstComma);
-        std::string counterValue = inputline.substr(firstComma, std::string::npos);
+        std::string counterValue = inputline.substr(firstComma+1, std::string::npos);
         initializeCounter(attributeName,counterValue);
+        if (verbose) {
+            std::cout << "attribute counters initialization" << std::endl;
+            std::cout << "name: " << attributeName << " value: " << counterValue << std::endl;
+        }
     }
     
 }

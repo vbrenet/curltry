@@ -170,13 +170,13 @@ void terminate() {
 //
 //
 void exitWithSyntaxError() {
-    std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-j <jobid>] [-r] [-i] [-v] workingDirectory" << std::endl;
+    std::cerr << "Syntax : curltry -o <object name> [-sz <chunksize>] [-j <jobid>] [-r] [-v] workingDirectory" << std::endl;
     exit(-1);
 }
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 05 November 2019 V4" << std::endl;
+    std::cout << "curltry : version 06 November 2019 V1" << std::endl;
     
     expectedParameters ep {
         true,
