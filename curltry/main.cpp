@@ -32,6 +32,7 @@
 std::string workingDirectory;
 bool caseAnalysis {false};
 bool verbose {false};
+bool veryverbose {false};
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -190,6 +191,7 @@ int main(int argc, const char * argv[]) {
            // {"-c",{false,false}}, suppressed option
             {"-r",{false,false}},
             {"-v",{false,false}},
+            {"-vv",{false,false}},
             {"-j",{false,true}}
         }
     };
@@ -230,6 +232,10 @@ int main(int argc, const char * argv[]) {
          else if (curr.getName().compare("-v") == 0) {
              verbose = true;
          }
+        else if (curr.getName().compare("-vv") == 0) {
+            veryverbose = true;
+        }
+
      }
 
     const std::vector<std::string> values = ap.getValues();

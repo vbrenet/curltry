@@ -34,6 +34,7 @@ private:
 
     void initRecordTypeMatrixCounters();
     void processCsvLine(const std::string &inputline);
+    void processMatrixLine(const std::string &inputline);
     void initializeCounter(const std::string& attribute, const std::string& countervalue);
     void parseRecordTypeBuffer(const std::string&);
     std::string getnamebyid(const std::string id);
@@ -49,6 +50,7 @@ public:
     void printAttributeCounters();
     void initializeAttributeCounters(const std::string &inputfile);
     bool initializeRecordTypes();
+    void initializeMatrixCountersFromFile(const std::string &inputfile);
     void outputAttributeCounters(const std::string &);
     void outputMatrixCounters(const std::string &outputfile);
     void outputTypeCounter(const std::string &outputfile);

@@ -13,11 +13,14 @@
 #include "recordTypeMap.hpp"
 #include <curl/curl.h>
 #include "SalesforceSession.hpp"
+#include "restartManager.hpp"
 
 
 extern std::string workingDirectory;
 extern bool caseAnalysis;
 extern bool verbose;
+extern bool veryverbose;
+
 
 void sObject::print() const {
     for (sAttribute s : attributeList)
@@ -389,7 +392,7 @@ void sObject::processCsvLine(const std::string &inputline) {
         std::string attributeName = inputline.substr(0,firstComma);
         std::string counterValue = inputline.substr(firstComma+1, std::string::npos);
         initializeCounter(attributeName,counterValue);
-        if (verbose) {
+        if (veryverbose) {
             std::cout << "attribute counters initialization" << std::endl;
             std::cout << "name: " << attributeName << " value: " << counterValue << std::endl;
         }
@@ -513,7 +516,10 @@ bool sObject::initializeRecordTypes() {
     
     parseRecordTypeBuffer(readBuffer);
     
-    initRecordTypeMatrixCounters();
+    if (restartManager::isRestartMode())
+        initializeMatrixCountersFromFile(workingDirectory + "/matrix.csv");
+    else
+        initRecordTypeMatrixCounters();
     
     return true;
 }
@@ -561,5 +567,64 @@ void sObject::initRecordTypeMatrixCounters() {
         }
          */
     }
+
+}
+//
+//
+void sObject::processMatrixLine(const std::string &inputline) {
+  /* example:
+   ,null,AdressePostaleComplementDestinataire__c,0
+   0120X000000sgJaQAI,Silhouette Pro/Ent,TitrePersonneMoraleMMA__c,3
+   */
+
+    std::string recordTypeId, attributeName, counterValue;
+    
+    size_t firstcomma = inputline.find_first_of(',');
+    if (firstcomma != std::string::npos) {
+        if (firstcomma == 0) { // null record type
+            recordTypeId = "";
+        }
+        else {
+            recordTypeId = inputline.substr(0,firstcomma);
+        }
+    } // end firstcomma
+    else {
+        return; // ignore line without comma
+    }
+    size_t secondcomma = inputline.find_first_of(',',firstcomma+1);
+    size_t thirdcomma = inputline.find_last_of(',');
+    if (secondcomma == std::string::npos || thirdcomma == std::string::npos || secondcomma == thirdcomma) {
+        std::cerr << "sObject::processMatrixLine parsing error" << std::endl;
+        return;
+    }
+    else {
+        attributeName = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
+        counterValue = inputline.substr(thirdcomma+1);
+    }
+    
+    if (veryverbose) {
+        std::cout << "recordTypeId: "<< recordTypeId << " attributeName: " << attributeName << " counterValue: " << counterValue << std::endl;
+    }
+    
+    std::pair<std::string,std::string> key {recordTypeId,attributeName};
+    recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{std::stol(counterValue)}));
+}
+//
+//
+void sObject::initializeMatrixCountersFromFile(const std::string &inputfile) {
+    std::ifstream matrixFile {inputfile};
+    
+    std::string currentLine;
+    
+    int lineCounter = 0;
+    
+    while (getline(matrixFile,currentLine)) {
+        // skip header
+        if (++lineCounter == 1) continue;
+        
+        processMatrixLine(currentLine);
+    }
+    
+    matrixFile.close();
 
 }
