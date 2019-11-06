@@ -13,6 +13,7 @@ bool restartManager::restartMode = false;
 std::vector<std::string> restartManager::batchids;
 
 extern std::string workingDirectory;
+extern bool verbose;
 //
 //
 void restartManager::init() {
@@ -49,7 +50,9 @@ void restartManager::saveBatchId(const std::string batchid) {
 //
 bool restartManager::isAlreadyRead(const std::string theid)  {
     auto it = std::find(batchids.begin(), batchids.end(), theid);
-    std::cout << "isAlreadyRead ? " << theid << std::endl;
-    std::cout << (it != batchids.end() ? "Yes" : "No") << std::endl;
+    if (verbose) {
+        std::cout << "isAlreadyRead ? " << theid << std::endl;
+        std::cout << (it != batchids.end() ? "Yes" : "No") << std::endl;
+    }
     return (it != batchids.end());
 }

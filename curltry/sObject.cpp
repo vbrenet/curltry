@@ -181,6 +181,9 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
     
     std::ofstream ofs {outputfile};
     
+    // header
+    ofs << "RecordTypeId,RecordType,FieldName,FieldUsage" << std::endl;
+    
     for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
         std::string recordtypeid = it->first.first;
         std::string recordtypename;
@@ -188,7 +191,7 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
             recordtypename = "null";
         else
             recordtypename = getnamebyid(recordtypeid);
-        ofs << recordtypename << "," << it->first.second << " : " << it->second << std::endl;
+        ofs << recordtypeid << "," << recordtypename << "," << it->first.second << "," << it->second << std::endl;
     }
     
     ofs.close();

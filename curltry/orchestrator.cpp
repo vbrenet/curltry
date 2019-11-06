@@ -155,7 +155,7 @@ bool orchestrator::execute(int chunksize) {
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
                 theObject.outputAttributeCounters(workingDirectory + "/result.csv");
-                theObject.outputMatrixCounters(workingDirectory + "/matrix");
+                theObject.outputMatrixCounters(workingDirectory + "/matrix.csv");
                 if (caseAnalysis) {
                     //theObject.outputTypeCounter(workingDirectory + "/caseTypes");
                     //theObject.outputTypeObjDemMap(workingDirectory + "/typeObjectMap");
@@ -173,7 +173,7 @@ bool orchestrator::execute(int chunksize) {
         theObject.outputAttributeCounters(workingDirectory + "/result");
     else {
         theObject.outputAttributeCounters(workingDirectory + "/result.csv");
-        theObject.outputMatrixCounters(workingDirectory + "/matrix");
+        theObject.outputMatrixCounters(workingDirectory + "/matrix.csv");
         if (caseAnalysis) {
             theObject.outputTypeCounter(workingDirectory + "/caseTypes");
             theObject.outputTypeObjDemMap(workingDirectory + "/typeObjectMap");
@@ -221,7 +221,7 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
                 theObject.outputAttributeCounters(workingDirectory + "/result.csv");
-                theObject.outputMatrixCounters(workingDirectory + "/matrix");
+                theObject.outputMatrixCounters(workingDirectory + "/matrix.csv");
             }
         }
     } while (moreResult);
@@ -230,7 +230,7 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
         theObject.outputAttributeCounters(workingDirectory + "/result");
     else {
         theObject.outputAttributeCounters(workingDirectory + "/result.csv");
-        theObject.outputMatrixCounters(workingDirectory + "/matrix");
+        theObject.outputMatrixCounters(workingDirectory + "/matrix.csv");
     }
     
     if (verbose)
