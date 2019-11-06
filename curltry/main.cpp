@@ -179,7 +179,7 @@ void exitWithSyntaxError() {
 //
 int main(int argc, const char * argv[]) {
     
-    std::cout << "curltry : version 06 November 2019 V2" << std::endl;
+    std::cout << "curltry : version 06 November 2019 V3" << std::endl;
     
     expectedParameters ep {
         true,
