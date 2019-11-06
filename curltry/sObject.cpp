@@ -148,8 +148,11 @@ void sObject::outputTypeObjDemMap(const std::string &outputfile) {
 void sObject::outputAttributeCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
+    // header
+    ofs << "fieldName,fieldUsage" << std::endl;
+    
     for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++)
-        ofs << it->first << " : " << it->second << std::endl;
+        ofs << it->first << "," << it->second << std::endl;
 
     ofs.close();
 }
@@ -365,6 +368,7 @@ long sObject::computeCsvRecords(const std::string &csvString) {
 //
 //
 void sObject::initializeCounter(const std::string& attribute, const std::string& countervalue) {
+    
     auto it = attributeCounters.find(attribute);
     
     if (it != attributeCounters.end()) {
@@ -375,12 +379,12 @@ void sObject::initializeCounter(const std::string& attribute, const std::string&
 //
 void sObject::processCsvLine(const std::string &inputline) {
     // example:
-    //TECH_ResponsableIdSf__c : 0
-    //TECH_StructureVisibilite__c : 0
-    size_t firstColon = inputline.find_first_of(':');
-    if (firstColon != std::string::npos) {
-        std::string attributeName = inputline.substr(0,firstColon-1);
-        std::string counterValue = inputline.substr(firstColon+1, std::string::npos);
+    //TECH_ResponsableIdSf__c,0
+    //TECH_StructureVisibilite__c,0
+    size_t firstComma = inputline.find_first_of(',');
+    if (firstComma != std::string::npos) {
+        std::string attributeName = inputline.substr(0,firstComma);
+        std::string counterValue = inputline.substr(firstComma, std::string::npos);
         initializeCounter(attributeName,counterValue);
     }
     
@@ -392,7 +396,12 @@ void sObject::initializeAttributeCounters(const std::string &inputfile) {
     
     std::string currentLine;
     
+    int lineCounter = 0;
+    
     while (getline(csvResult,currentLine)) {
+        // skip header
+        if (++lineCounter == 1) continue;
+        
         processCsvLine(currentLine);
     }
     

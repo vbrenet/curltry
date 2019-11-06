@@ -108,7 +108,7 @@ bool orchestrator::getObjectInfo() {
     
     // if restart mode, initialize counters from csvResult file
     if (restartManager::isRestartMode()) {
-        theObject.initializeAttributeCounters(workingDirectory + "/csvResult");
+        theObject.initializeAttributeCounters(workingDirectory + "/result.csv");
     }
     
     //
@@ -154,7 +154,7 @@ bool orchestrator::execute(int chunksize) {
                 long nbrec = theObject.computeCsvRecords(result);
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
-                theObject.outputAttributeCounters(workingDirectory + "/csvResult");
+                theObject.outputAttributeCounters(workingDirectory + "/result.csv");
                 theObject.outputMatrixCounters(workingDirectory + "/matrix");
                 if (caseAnalysis) {
                     //theObject.outputTypeCounter(workingDirectory + "/caseTypes");
@@ -172,7 +172,7 @@ bool orchestrator::execute(int chunksize) {
     if (config::getFormat() == config::dataformat::XML)
         theObject.outputAttributeCounters(workingDirectory + "/result");
     else {
-        theObject.outputAttributeCounters(workingDirectory + "/csvResult");
+        theObject.outputAttributeCounters(workingDirectory + "/result.csv");
         theObject.outputMatrixCounters(workingDirectory + "/matrix");
         if (caseAnalysis) {
             theObject.outputTypeCounter(workingDirectory + "/caseTypes");
@@ -220,7 +220,7 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
                 long nbrec = theObject.computeCsvRecords(result);
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
-                theObject.outputAttributeCounters(workingDirectory + "/csvResult");
+                theObject.outputAttributeCounters(workingDirectory + "/result.csv");
                 theObject.outputMatrixCounters(workingDirectory + "/matrix");
             }
         }
@@ -229,7 +229,7 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
     if (config::getFormat() == config::dataformat::XML)
         theObject.outputAttributeCounters(workingDirectory + "/result");
     else {
-        theObject.outputAttributeCounters(workingDirectory + "/csvResult");
+        theObject.outputAttributeCounters(workingDirectory + "/result.csv");
         theObject.outputMatrixCounters(workingDirectory + "/matrix");
     }
     
