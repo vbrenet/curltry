@@ -401,19 +401,24 @@ void sObject::initializeCounter(const std::string& attribute, const std::string&
 //
 void sObject::processCsvLine(const std::string &inputline) {
     // example:
-    //TECH_ResponsableIdSf__c,0
-    //TECH_StructureVisibilite__c,0
+    //TitrePersonneMoraleMMA__c,3,0.9
+    //TypePersonneMorale__c,5,1.5
+
     size_t firstComma = inputline.find_first_of(',');
     if (firstComma != std::string::npos) {
         std::string attributeName = inputline.substr(0,firstComma);
-        std::string counterValue = inputline.substr(firstComma+1, std::string::npos);
+        size_t secondComma = inputline.find_first_of(',',firstComma);
+        if (secondComma == std::string::npos) {
+            std::cerr << "sObject::processCsvLine parsing error" << std::endl;
+            return;
+        }
+        std::string counterValue = inputline.substr(firstComma+1, secondComma-firstComma-1);
         initializeCounter(attributeName,counterValue);
         if (veryverbose) {
             std::cout << "attribute counters initialization" << std::endl;
             std::cout << "name: " << attributeName << " value: " << counterValue << std::endl;
         }
     }
-    
 }
 //
 //
@@ -561,36 +566,20 @@ void sObject::initRecordTypeMatrixCounters() {
                 continue;
             std::pair<std::string,std::string> key {it->first,itattr->getName()};
             recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
-            if (verbose) {
-                //std::cout << "initRecordTypeMatrixCounters: inserted value" << std::endl;
-                //std::cout << key.first << ":" << key.second << std::endl;
+            if (veryverbose) {
+                std::cout << "initRecordTypeMatrixCounters: inserted value" << std::endl;
+                std::cout << key.first << ":" << key.second << std::endl;
             }
         }
     }
     
-    //
-    if (verbose) {
-        /*
-        std::cout << "recordTypeMatrixCounters after initialization" << std::endl;
-        for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
-            std::string recordtypeid = it->first.first;
-            std::string recordtypename;
-            if (recordtypeid.size() == 0)
-                recordtypename = "null";
-            else
-                recordtypename = getnamebyid(recordtypeid);
-            std::cout << recordtypename << "," << it->first.second << " : " << it->second << std::endl;
-        }
-         */
-    }
-
 }
 //
 //
 void sObject::processMatrixLine(const std::string &inputline) {
   /* example:
-   ,null,AdressePostaleComplementDestinataire__c,0
-   0120X000000sgJaQAI,Silhouette Pro/Ent,TitrePersonneMoraleMMA__c,3
+   ,null,AdressePostaleComplementDestinataire__c,0,1.0
+   0120X000000sgJaQAI,Silhouette Pro/Ent,TitrePersonneMoraleMMA__c,3,23.4
    */
 
     std::string recordTypeId, attributeName, counterValue;
@@ -608,14 +597,19 @@ void sObject::processMatrixLine(const std::string &inputline) {
         return; // ignore line without comma
     }
     size_t secondcomma = inputline.find_first_of(',',firstcomma+1);
-    size_t thirdcomma = inputline.find_last_of(',');
+    size_t thirdcomma = inputline.find_first_of(',',secondcomma+1);
     if (secondcomma == std::string::npos || thirdcomma == std::string::npos || secondcomma == thirdcomma) {
         std::cerr << "sObject::processMatrixLine parsing error" << std::endl;
         return;
     }
     else {
+        size_t fourthcomma = inputline.find_first_of(',',thirdcomma+1);
+        if (fourthcomma == std::string::npos) {
+            std::cerr << "sObject::processMatrixLine parsing error" << std::endl;
+            return;
+        }
         attributeName = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
-        counterValue = inputline.substr(thirdcomma+1);
+        counterValue = inputline.substr(thirdcomma+1,fourthcomma-thirdcomma-1);
     }
     
     if (veryverbose) {
