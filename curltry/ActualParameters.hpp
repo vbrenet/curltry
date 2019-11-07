@@ -25,7 +25,7 @@ public:
     const std::vector<NamedParameter>& getNamedParameters() const {return namedParameters;}
     const std::vector<std::string>& getValues() const {return values;}
     const std::string getExecName() const {return  currExecName;}
-    bool set(int argc, const char * argv[], const expectedParameters&);
+    void set(int argc, const char * argv[], const expectedParameters&);
     bool areValid(const expectedParameters&) const;
     void print() const;
 };

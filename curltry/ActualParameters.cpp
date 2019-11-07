@@ -61,7 +61,7 @@ bool ActualParameters::areValid(const expectedParameters& expected) const {
 //
 //
 //
-bool ActualParameters::set(int argc, const char * argv[], const expectedParameters& expected) {
+void ActualParameters::set(int argc, const char * argv[], const expectedParameters& expected) {
     std::vector<std::string> parameters {};
     
     for (int i=0; i < argc; i++) {
@@ -116,7 +116,7 @@ bool ActualParameters::set(int argc, const char * argv[], const expectedParamete
                 break;
             case status::READ_VALUE_LOCKED:
                 if (isNamed) {
-                    return false;
+                    //return false;
                 } else {
                     values.push_back(curr);
                 }
@@ -134,7 +134,7 @@ bool ActualParameters::set(int argc, const char * argv[], const expectedParamete
     currExecName = *it;
     values.erase(it);
     
-    return areValid(expected);
+    //return areValid(expected);
 }
 //
 //
