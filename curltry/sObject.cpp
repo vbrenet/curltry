@@ -164,7 +164,7 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
     for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++) {
         ofs << it->first << "," << it->second << ",";
         double percentUsage = ((nbRecords == 0) ? 0 : (((double)it->second / nbRecords)*100));
-        ofs << std::setprecision (2) << std::fixed << percentUsage << std::endl;
+        ofs << std::setprecision (1) << std::fixed << percentUsage << std::endl;
     }
 
     ofs.close();
@@ -195,7 +195,7 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
     // header
-    ofs << "RecordTypeId,RecordType,FieldName,FieldUsage" << std::endl;
+    ofs << "RecordTypeId,RecordType,FieldName,FieldUsage,PercentRecordTypeUsage" << std::endl;
     
     for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
         std::string recordtypeid = it->first.first;
@@ -204,7 +204,13 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
             recordtypename = "null";
         else
             recordtypename = getnamebyid(recordtypeid);
-        ofs << recordtypeid << "," << recordtypename << "," << it->first.second << "," << it->second << std::endl;
+
+        double currNbRec = recordTypeMatrixCounters[std::pair<std::string,std::string>(recordtypeid,"Id")];
+        double percentUsage = ((currNbRec == 0) ? 0 : (((double)it->second / currNbRec)*100));
+        
+        ofs << recordtypeid << "," << recordtypename << "," << it->first.second << "," << it->second << ",";
+        ofs << std::setprecision (1) << std::fixed << percentUsage << std::endl;
+
     }
     
     ofs.close();
