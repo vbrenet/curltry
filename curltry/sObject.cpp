@@ -538,7 +538,7 @@ bool sObject::initializeRecordTypes() {
     parseRecordTypeBuffer(readBuffer);
     
     if (restartManager::isRestartMode())
-        initializeMatrixCountersFromFile(workingDirectory + "/matrix.csv");
+        initializeMatrixCountersFromFile(workingDirectory + "/matrix" + getName() + ".csv");
     else
         initRecordTypeMatrixCounters();
     

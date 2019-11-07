@@ -108,7 +108,7 @@ bool orchestrator::getObjectInfo() {
     
     // if restart mode, initialize counters from csvResult file
     if (restartManager::isRestartMode()) {
-        theObject.initializeAttributeCounters(workingDirectory + "/result.csv");
+        theObject.initializeAttributeCounters(workingDirectory + "/result" + theObject.getName() + ".csv");
     }
     
     //
@@ -158,8 +158,8 @@ bool orchestrator::execute(int chunksize) {
                 long nbrec = theObject.computeCsvRecords(result);
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
-                theObject.outputAttributeCounters(workingDirectory + "/result.csv");
-                theObject.outputMatrixCounters(workingDirectory + "/matrix.csv");
+                theObject.outputAttributeCounters(workingDirectory + "/result" + theObject.getName() + ".csv");
+                theObject.outputMatrixCounters(workingDirectory + "/matrix" + theObject.getName() + ".csv");
                 
                 if (!restartManager::isAlreadyRead(resultid))
                     restartManager::saveBatchId(resultid);
@@ -180,8 +180,8 @@ bool orchestrator::execute(int chunksize) {
     if (config::getFormat() == config::dataformat::XML)
         theObject.outputAttributeCounters(workingDirectory + "/result");
     else {
-        theObject.outputAttributeCounters(workingDirectory + "/result.csv");
-        theObject.outputMatrixCounters(workingDirectory + "/matrix.csv");
+        theObject.outputAttributeCounters(workingDirectory + "/result" + theObject.getName() + ".csv");
+        theObject.outputMatrixCounters(workingDirectory + "/matrix" + theObject.getName() + ".csv");
         if (caseAnalysis) {
             theObject.outputTypeCounter(workingDirectory + "/caseTypes");
             theObject.outputTypeObjDemMap(workingDirectory + "/typeObjectMap");
@@ -229,8 +229,8 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
                 long nbrec = theObject.computeCsvRecords(result);
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
-                theObject.outputAttributeCounters(workingDirectory + "/result.csv");
-                theObject.outputMatrixCounters(workingDirectory + "/matrix.csv");
+                theObject.outputAttributeCounters(workingDirectory + "/result" + theObject.getName() + ".csv");
+                theObject.outputMatrixCounters(workingDirectory + "/matrix" + theObject.getName() + ".csv");
                 
                 if (!restartManager::isAlreadyRead(resultid))
                     restartManager::saveBatchId(resultid);
@@ -242,8 +242,8 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
     if (config::getFormat() == config::dataformat::XML)
         theObject.outputAttributeCounters(workingDirectory + "/result");
     else {
-        theObject.outputAttributeCounters(workingDirectory + "/result.csv");
-        theObject.outputMatrixCounters(workingDirectory + "/matrix.csv");
+        theObject.outputAttributeCounters(workingDirectory + "/result" + theObject.getName() + ".csv");
+        theObject.outputMatrixCounters(workingDirectory + "/matrix" + theObject.getName() + ".csv");
     }
     
     if (verbose)
