@@ -7,6 +7,7 @@
 //
 
 #include <string>
+#include <ctime>
 #include "utils.hpp"
 
 /*
@@ -122,4 +123,22 @@ std::string getBucket(double d) {
     if (d < 0 || d > 100)
         return ("undefined");
     return (buckets[(int)d]);
+}
+//
+// produce current date in the format JJ/MM/AAAA
+//
+std::string getDateString() {
+    time_t rawtime;
+    struct tm * timeinfo;
+    char buffer [80];
+
+    time (&rawtime);
+    timeinfo = localtime (&rawtime);
+
+    strftime (buffer,80,"%d/%m/%Y",timeinfo);
+    
+    std::string ret(buffer, 10);
+
+    return ret;
+    
 }

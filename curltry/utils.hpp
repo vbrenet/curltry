@@ -12,5 +12,6 @@
 #include <stdio.h>
 
 std::string getBucket(double d);
+std::string getDateString();
 
 #endif /* utils_hpp */
