@@ -116,7 +116,7 @@ void ActualParameters::set(int argc, const char * argv[], const expectedParamete
                 break;
             case status::READ_VALUE_LOCKED:
                 if (isNamed) {
-                    //return false;
+                    return ; // formerly return false
                 } else {
                     values.push_back(curr);
                 }

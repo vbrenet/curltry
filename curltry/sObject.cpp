@@ -220,6 +220,9 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
 //
 long sObject::computeCsvRecords(const std::string &csvString) {
     
+    if (verbose)
+        std::cout << "Processing records ..." << std::endl;
+    
     bool firstRecord {true};
     bool errorFound {false};
 
