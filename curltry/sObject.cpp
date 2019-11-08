@@ -130,9 +130,13 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
     // header
-    ofs << "fieldName,fieldUsage,percentUsage,usageBucket,fromPackage" << std::endl;
+    ofs << "date,sobject,fieldName,fieldUsage,percentUsage,usageBucket,fromPackage" << std::endl;
+    
+    std::string dateString = getDateString();
     
     for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++) {
+        
+        ofs << dateString << "," << getName() << ",";
         ofs << it->first << "," << it->second << ",";
         double percentUsage = ((nbRecords == 0) ? 0 : (((double)it->second / nbRecords)*100));
         ofs << std::setprecision (1) << std::fixed << percentUsage ;
@@ -172,7 +176,9 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
     // header
-    ofs << "RecordTypeId,RecordType,Field,NbRecords,PercentRecordTypeUsage,UsageBucket,FromPackage" << std::endl;
+    ofs << "Date,sObject,RecordTypeId,RecordType,Field,NbRecords,PercentRecordTypeUsage,UsageBucket,FromPackage" << std::endl;
+    
+    std::string dateString = getDateString();
     
     for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
         std::string recordtypeid = it->first.first;
@@ -185,7 +191,8 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
         double currNbRec = recordTypeMatrixCounters[std::pair<std::string,std::string>(recordtypeid,"Id")];
         double percentUsage = ((currNbRec == 0) ? 0 : (((double)it->second / currNbRec)*100));
         
-        ofs << recordtypeid << "," << recordtypename << "," << it->first.second << "," << it->second << ",";
+        ofs << dateString << "," << getName() << ",";
+        ofs << recordtypeid << "," << removeCommas(recordtypename) << "," << it->first.second << "," << it->second << ",";
         ofs << std::setprecision (1) << std::fixed << percentUsage;
         ofs << "," << getBucket(percentUsage);
         

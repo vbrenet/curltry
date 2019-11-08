@@ -27,6 +27,7 @@
 #include "expectedParameters.hpp"
 #include "ActualParameters.hpp"
 #include "restartManager.hpp"
+#include "utils.hpp"
 
 std::string workingDirectory;
 bool verbose {false};
@@ -175,7 +176,7 @@ void exitWithSyntaxError() {
 //
 //
 void exitWithVersion() {
-    std::cout << "curltry v1.1.0" << std::endl;
+    std::cout << "curltry v1.1.1" << std::endl;
     exit(0);
 }
 //
@@ -197,8 +198,9 @@ void exitWithHelp() {
 }
 //
 //
+//
 int main(int argc, const char * argv[]) {
-        
+    
     expectedParameters ep {
         true,
         1,
