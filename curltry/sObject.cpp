@@ -350,24 +350,32 @@ void sObject::initializeCounter(const std::string& attribute, const std::string&
 //
 void sObject::processCsvLine(const std::string &inputline) {
     // example:
-    //TitrePersonneMoraleMMA__c,3,0.9
-    //TypePersonneMorale__c,5,1.5
+    //date,sobject,fieldName,fieldUsage,percentUsage,usageBucket,fromPackage
+    //08/11/2019,Lead,Aconvertir__c,331,100.0,All,Custom
+    //08/11/2019,Lead,AdressePostaleComplementDestinataire__c,0,0.0,00,Custom
 
-    size_t firstComma = inputline.find_first_of(',');
-    if (firstComma != std::string::npos) {
-        std::string attributeName = inputline.substr(0,firstComma);
-        size_t secondComma = inputline.find_first_of(',',firstComma);
-        if (secondComma == std::string::npos) {
-            std::cerr << "sObject::processCsvLine parsing error" << std::endl;
-            return;
-        }
-        std::string counterValue = inputline.substr(firstComma+1, secondComma-firstComma-1);
-        initializeCounter(attributeName,counterValue);
-        if (veryverbose) {
-            std::cout << "attribute counters initialization" << std::endl;
-            std::cout << "name: " << attributeName << " value: " << counterValue << std::endl;
-        }
+    size_t firstcomma = inputline.find_first_of(',');
+    size_t secondcomma = inputline.find_first_of(',',firstcomma+1);
+    size_t thirdcomma = inputline.find_first_of(',',secondcomma+1);
+    size_t fourthcomma = inputline.find_first_of(',',thirdcomma+1);
+
+    if (firstcomma == std::string::npos ||
+        secondcomma == std::string::npos ||
+        thirdcomma == std::string::npos ||
+        fourthcomma == std::string::npos) {
+        std::cerr << "sObject::processCsvLine parsing error" << std::endl;
+        return;
     }
+
+    std::string attributeName = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
+    std::string counterValue = inputline.substr(thirdcomma+1,fourthcomma-thirdcomma-1);
+
+    initializeCounter(attributeName,counterValue);
+    
+    if (veryverbose) {
+        std::cout << "attribute counters initialization" << std::endl;
+        std::cout << "name: " << attributeName << " value: " << counterValue << std::endl;
+        }
 }
 //
 //
@@ -527,39 +535,37 @@ void sObject::initRecordTypeMatrixCounters() {
 //
 void sObject::processMatrixLine(const std::string &inputline) {
   /* example:
-   ,null,AdressePostaleComplementDestinataire__c,0,1.0
-   0120X000000sgJaQAI,Silhouette Pro/Ent,TitrePersonneMoraleMMA__c,3,23.4
+   Date,sObject,RecordTypeId,RecordType,Field,NbRecords,PercentRecordTypeUsage,UsageBucket,FromPackage
+   08/11/2019,Lead,,null,Aconvertir__c,17,100.0,All,Custom
+   08/11/2019,Lead,,null,AdressePostaleComplementDestinataire__c,0,0.0,00,Custom
    */
 
     std::string recordTypeId, attributeName, counterValue;
     
     size_t firstcomma = inputline.find_first_of(',');
-    if (firstcomma != std::string::npos) {
-        if (firstcomma == 0) { // null record type
-            recordTypeId = "";
-        }
-        else {
-            recordTypeId = inputline.substr(0,firstcomma);
-        }
-    } // end firstcomma
-    else {
-        return; // ignore line without comma
-    }
     size_t secondcomma = inputline.find_first_of(',',firstcomma+1);
     size_t thirdcomma = inputline.find_first_of(',',secondcomma+1);
-    if (secondcomma == std::string::npos || thirdcomma == std::string::npos || secondcomma == thirdcomma) {
+    size_t fourthcomma = inputline.find_first_of(',',thirdcomma+1);
+    size_t fifthcomma = inputline.find_first_of(',',fourthcomma+1);
+    size_t sixthcomma = inputline.find_first_of(',',fifthcomma+1);
+
+    if (firstcomma == std::string::npos ||
+        secondcomma == std::string::npos ||
+        thirdcomma == std::string::npos ||
+        fourthcomma == std::string::npos ||
+        fifthcomma == std::string::npos ||
+        sixthcomma == std::string::npos) {
         std::cerr << "sObject::processMatrixLine parsing error" << std::endl;
         return;
     }
-    else {
-        size_t fourthcomma = inputline.find_first_of(',',thirdcomma+1);
-        if (fourthcomma == std::string::npos) {
-            std::cerr << "sObject::processMatrixLine parsing error" << std::endl;
-            return;
-        }
-        attributeName = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
-        counterValue = inputline.substr(thirdcomma+1,fourthcomma-thirdcomma-1);
-    }
+        
+        if ((thirdcomma-secondcomma) == 1)
+            recordTypeId = "";
+        else
+            recordTypeId = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
+
+        attributeName = inputline.substr(fourthcomma+1,fifthcomma-fourthcomma-1);
+        counterValue = inputline.substr(fifthcomma+1,sixthcomma-fifthcomma-1);
     
     if (veryverbose) {
         std::cout << "recordTypeId: "<< recordTypeId << " attributeName: " << attributeName << " counterValue: " << counterValue << std::endl;
