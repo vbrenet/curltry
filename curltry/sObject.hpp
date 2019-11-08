@@ -28,9 +28,6 @@ private:
     std::map<std::string,std::string> recordTypes {}; // key : id, value : name
     
     void computeAttributes(const std::string &record, int);
-    std::map<std::string,long> typeFieldMap;    // used if caseAnalysis, to count type values
-    std::map<std::pair<std::string,std::string>,long> typeObjDemMap;     // used if caseAnalysis, to count type and objdem values
-    std::map<std::tuple<std::string,std::string,std::string>,long> tupleMap;
 
     void initRecordTypeMatrixCounters();
     void processCsvLine(const std::string &inputline);
@@ -53,9 +50,6 @@ public:
     void initializeMatrixCountersFromFile(const std::string &inputfile);
     void outputAttributeCounters(const std::string &);
     void outputMatrixCounters(const std::string &outputfile);
-    void outputTypeCounter(const std::string &outputfile);
-    void outputTypeObjDemMap(const std::string &outputfile);
-    void outputTupleMap(const std::string &outputfile);
 
 };
 

@@ -15,7 +15,6 @@
 //
 extern bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer);
 extern std::string workingDirectory;
-extern bool caseAnalysis;
 extern bool verbose;
 
 //
@@ -163,12 +162,6 @@ bool orchestrator::execute(int chunksize) {
                 
                 if (!restartManager::isAlreadyRead(resultid))
                     restartManager::saveBatchId(resultid);
-
-                if (caseAnalysis) {
-                    //theObject.outputTypeCounter(workingDirectory + "/caseTypes");
-                    //theObject.outputTypeObjDemMap(workingDirectory + "/typeObjectMap");
-                    //theObject.outputTupleMap(workingDirectory + "/tupleMap");
-                }
             }
         }
     } while (moreResult);
@@ -182,12 +175,6 @@ bool orchestrator::execute(int chunksize) {
     else {
         theObject.outputAttributeCounters(workingDirectory + "/result" + theObject.getName() + ".csv");
         theObject.outputMatrixCounters(workingDirectory + "/matrix" + theObject.getName() + ".csv");
-        if (caseAnalysis) {
-            theObject.outputTypeCounter(workingDirectory + "/caseTypes");
-            theObject.outputTypeObjDemMap(workingDirectory + "/typeObjectMap");
-            theObject.outputTupleMap(workingDirectory + "/tupleMap");
-
-        }
     }
 
     if (verbose)

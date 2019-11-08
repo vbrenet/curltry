@@ -24,13 +24,11 @@
 #include "picklistAttribute.hpp"
 #include "recordGenerator.hpp"
 #include "injectionOrchestrator.hpp"
-#include "injectionOrchestratorV1.hpp"
 #include "expectedParameters.hpp"
 #include "ActualParameters.hpp"
 #include "restartManager.hpp"
 
 std::string workingDirectory;
-bool caseAnalysis {false};
 bool verbose {false};
 bool veryverbose {false};
 
