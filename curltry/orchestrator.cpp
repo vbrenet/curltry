@@ -80,7 +80,7 @@ bool orchestrator::describeObject() {
                     if (begincustom != std::string::npos) {
                         size_t endcustom = rawAttributeList.find("\"defaultValue\"", begincustom);
                         if (endcustom != std::string::npos) {
-                            size_t begintrue = rawAttributeList.rfind ("true", begincustom);
+                            size_t begintrue = rawAttributeList.find ("true", begincustom);
                             if (begintrue != std::string::npos && begintrue < endcustom) {
                                 isCustom = true;
                             }
