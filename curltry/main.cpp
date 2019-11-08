@@ -206,7 +206,6 @@ int main(int argc, const char * argv[]) {
             {"-o",{true,true}},     // ismandatory, isvalued
             {"-sz",{false,true}},
             {"-i",{false,false}},
-           // {"-c",{false,false}}, suppressed option
             {"-r",{false,false}},
             {"-v",{false,false}},
             {"-vv",{false,false}},

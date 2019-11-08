@@ -11,6 +11,7 @@
 		6F246B9823703A5E0044A2F4 /* restartManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F246B9623703A5E0044A2F4 /* restartManager.cpp */; };
 		6F31AE71216242680008332E /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F31AE70216242680008332E /* libcurl.tbd */; };
 		6F47C29F21763AFE003A25D5 /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F47C29D21763AFE003A25D5 /* config.cpp */; };
+		6F4EC95D2375652F00CCA515 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F4EC95B2375652F00CCA515 /* utils.cpp */; };
 		6F5F36A1219FF1D700F02B20 /* genericAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5F369F219FF1D700F02B20 /* genericAttribute.cpp */; };
 		6F5F36A4219FF47100F02B20 /* nameAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5F36A2219FF47100F02B20 /* nameAttribute.cpp */; };
 		6F5F36A7219FF63500F02B20 /* integerAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5F36A5219FF63500F02B20 /* integerAttribute.cpp */; };
@@ -55,6 +56,8 @@
 		6F31AE70216242680008332E /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
 		6F47C29D21763AFE003A25D5 /* config.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = config.cpp; sourceTree = "<group>"; };
 		6F47C29E21763AFE003A25D5 /* config.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = config.hpp; sourceTree = "<group>"; };
+		6F4EC95B2375652F00CCA515 /* utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = utils.cpp; sourceTree = "<group>"; };
+		6F4EC95C2375652F00CCA515 /* utils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utils.hpp; sourceTree = "<group>"; };
 		6F5F369F219FF1D700F02B20 /* genericAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = genericAttribute.cpp; sourceTree = "<group>"; };
 		6F5F36A0219FF1D700F02B20 /* genericAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = genericAttribute.hpp; sourceTree = "<group>"; };
 		6F5F36A2219FF47100F02B20 /* nameAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nameAttribute.cpp; sourceTree = "<group>"; };
@@ -142,6 +145,8 @@
 			isa = PBXGroup;
 			children = (
 				6FF4C266215A6BCA002D89F7 /* main.cpp */,
+				6F4EC95B2375652F00CCA515 /* utils.cpp */,
+				6F4EC95C2375652F00CCA515 /* utils.hpp */,
 				6F246B9623703A5E0044A2F4 /* restartManager.cpp */,
 				6F246B9723703A5E0044A2F4 /* restartManager.hpp */,
 				6FC5AE5D21EF2EFE003A632F /* ActualParameters.cpp */,
@@ -255,6 +260,7 @@
 				6F5F36A1219FF1D700F02B20 /* genericAttribute.cpp in Sources */,
 				6F5F36B321A061EC00F02B20 /* recordGenerator.cpp in Sources */,
 				6FC5AE6521EF2EFE003A632F /* expectedParameters.cpp in Sources */,
+				6F4EC95D2375652F00CCA515 /* utils.cpp in Sources */,
 				6F709E5C216F935000D9668A /* sessionCredentials.cpp in Sources */,
 				6F0764AC2164A46400C26AFB /* SalesforceSession.cpp in Sources */,
 				6F5F36AD21A05D2900F02B20 /* textGenerator.cpp in Sources */,

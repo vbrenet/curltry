@@ -13,7 +13,7 @@
 #include <curl/curl.h>
 #include "SalesforceSession.hpp"
 #include "restartManager.hpp"
-
+#include "utils.hpp"
 
 extern std::string workingDirectory;
 extern bool verbose;
@@ -148,7 +148,7 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
     // header
-    ofs << "RecordTypeId,RecordType,FieldName,FieldUsage,PercentRecordTypeUsage" << std::endl;
+    ofs << "RecordTypeId,RecordType,Field,NbRecords,PercentRecordTypeUsage,UsageBucket" << std::endl;
     
     for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
         std::string recordtypeid = it->first.first;
@@ -162,7 +162,8 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
         double percentUsage = ((currNbRec == 0) ? 0 : (((double)it->second / currNbRec)*100));
         
         ofs << recordtypeid << "," << recordtypename << "," << it->first.second << "," << it->second << ",";
-        ofs << std::setprecision (1) << std::fixed << percentUsage << std::endl;
+        ofs << std::setprecision (1) << std::fixed << percentUsage;
+        ofs << "," << getBucket(percentUsage) << std::endl;
 
     }
     
