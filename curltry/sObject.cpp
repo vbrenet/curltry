@@ -130,12 +130,25 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
     // header
-    ofs << "fieldName,fieldUsage,percentUsage" << std::endl;
+    ofs << "fieldName,fieldUsage,percentUsage,usageBucket,fromPackage" << std::endl;
     
     for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++) {
         ofs << it->first << "," << it->second << ",";
         double percentUsage = ((nbRecords == 0) ? 0 : (((double)it->second / nbRecords)*100));
-        ofs << std::setprecision (1) << std::fixed << percentUsage << std::endl;
+        ofs << std::setprecision (1) << std::fixed << percentUsage ;
+        
+        ofs << "," << getBucket(percentUsage);
+        
+        std::string fromPackage {};
+        if (isAttributeCustom(it->first))
+            fromPackage = "Custom";
+        else
+            fromPackage = "Standard";
+        
+        ofs << "," << fromPackage << std::endl;
+
+        
+        
     }
 
     ofs.close();
