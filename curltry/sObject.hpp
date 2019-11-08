@@ -36,6 +36,7 @@ private:
     void parseRecordTypeBuffer(const std::string&);
     std::string getnamebyid(const std::string id);
     static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
+    bool isAttributeCustom(const std::string) const;
 public:
     sObject (const std::string objname)  : name {objname} {}
     const std::string& getName() {return name;};

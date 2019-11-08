@@ -73,8 +73,21 @@ bool orchestrator::describeObject() {
                             break;
                         }
                     }
-                    theObject.addAttribute({rawAttributeList.substr(beginName+7+1,endName-beginName-7-2),excluded});
-                } // end endName fournd
+                    
+                    // get the custom attribute
+                    bool isCustom {false};
+                    size_t begincustom = rawAttributeList.rfind("\"custom\"", endName);
+                    if (begincustom != std::string::npos) {
+                        size_t endcustom = rawAttributeList.find("\"defaultValue\"", begincustom);
+                        if (endcustom != std::string::npos) {
+                            size_t begintrue = rawAttributeList.rfind ("true", begincustom);
+                            if (begintrue != std::string::npos && begintrue < endcustom) {
+                                isCustom = true;
+                            }
+                        }
+                    } // end begincustom found
+                    theObject.addAttribute({rawAttributeList.substr(beginName+7+1,endName-beginName-7-2),excluded, isCustom});
+                } // end endName found
                 else {
                     terminated = true;
                 }

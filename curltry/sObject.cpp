@@ -142,13 +142,24 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
 }
 //
 //
+bool sObject::isAttributeCustom(const std::string name) const {
+    
+    for (auto it = attributeList.begin(); it != attributeList.end(); ++it) {
+        if (it->getName().compare(name) == 0) {
+            return it->isCustom();
+        }
+    }
+
+    return false;
+}
+//
 //
 void sObject::outputMatrixCounters(const std::string &outputfile) {
     
     std::ofstream ofs {outputfile};
     
     // header
-    ofs << "RecordTypeId,RecordType,Field,NbRecords,PercentRecordTypeUsage,UsageBucket" << std::endl;
+    ofs << "RecordTypeId,RecordType,Field,NbRecords,PercentRecordTypeUsage,UsageBucket,FromPackage" << std::endl;
     
     for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
         std::string recordtypeid = it->first.first;
@@ -163,8 +174,15 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
         
         ofs << recordtypeid << "," << recordtypename << "," << it->first.second << "," << it->second << ",";
         ofs << std::setprecision (1) << std::fixed << percentUsage;
-        ofs << "," << getBucket(percentUsage) << std::endl;
-
+        ofs << "," << getBucket(percentUsage);
+        
+        std::string fromPackage {};
+        if (isAttributeCustom(it->first.second))
+            fromPackage = "Custom";
+        else
+            fromPackage = "Standard";
+        
+        ofs << "," << fromPackage << std::endl;
     }
     
     ofs.close();
