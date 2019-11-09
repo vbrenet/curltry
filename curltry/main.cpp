@@ -73,6 +73,9 @@ bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer)
     if(curl) {
         curl_easy_setopt(curl, CURLOPT_URL, ("https://" + SalesforceSession::getDomain() + "/services/data/v43.0/sobjects/" + objName + "/describe").c_str());
         
+        if (veryverbose)
+            std::cout << "getDescribeAttributesBuffer: " << "https://" <<  SalesforceSession::getDomain() << "/services/data/v43.0/sobjects/" << objName << "/describe" << std::endl;
+        
         struct curl_slist *chunk = NULL;
         
         chunk = curl_slist_append(chunk, ("Authorization: Bearer " + SalesforceSession::getConnectedAppToken()).c_str());
@@ -176,7 +179,7 @@ void exitWithSyntaxError() {
 //
 //
 void exitWithVersion() {
-    std::cout << "curltry v1.1.1" << std::endl;
+    std::cout << "curltry v1.1.2" << std::endl;
     exit(0);
 }
 //

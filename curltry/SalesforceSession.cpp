@@ -15,6 +15,8 @@ std::string SalesforceSession::connectedAppToken;
 std::string SalesforceSession::domain;
 
 extern size_t WriteCallback(void *, size_t , size_t , void *);
+extern bool veryverbose;
+
 //
 //  extract token to be used to authenticate further calls
 //
@@ -35,6 +37,9 @@ bool SalesforceSession::openSession(const std::string thedomain, const std::stri
     domain = thedomain;
     
     std::string urlParameters = "grant_type=password&client_id=" + client_id + "&client_secret=" + client_secret + "&username=" + username + "&password=" + password;
+    
+    if (veryverbose)
+        std::cout << "OpenSession: " << urlParameters << std::endl;
     
     curl = curl_easy_init();
     
