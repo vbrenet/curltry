@@ -29,7 +29,7 @@
 #include "restartManager.hpp"
 #include "utils.hpp"
 
-const std::string curltryVersion = "curltry v1.1.6";
+const std::string curltryVersion = "curltry v1.1.7";
 std::string workingDirectory;
 bool verbose {false};
 bool veryverbose {false};

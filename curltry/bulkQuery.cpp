@@ -16,7 +16,7 @@
 #include "restartManager.hpp"
 //
 bool bulkQuery::firstTime = true;
-bool bulkQuery::pkchunking = false;
+bool bulkQuery::pkchunking = true;
 std::string bulkQuery::body;
 std::string bulkQuery::jobId;
 std::string bulkQuery::mainBatchId;
@@ -563,11 +563,6 @@ bool bulkQuery::getResult(std::string& result, bool& allResultsRead, std::string
                 if (!getBatchResultIdNew(it->first, it->second.resultMap))
                     return false;
                 
-                // output map
-//                for (auto it2 = it->second.resultMap.begin(); it2!= it->second.resultMap.end(); ++it2){
-//                    std::cout << "result id: " << it2->first << " status : " << it2->second << std::endl;
-//                 }
-
                 allResultsRead = true;
                 for (auto it2 = it->second.resultMap.begin(); it2!= it->second.resultMap.end(); ++it2){
                     if (it2->second == false) {
@@ -592,15 +587,6 @@ bool bulkQuery::getResult(std::string& result, bool& allResultsRead, std::string
                 break;
             }
         }
-    }
-    else {
-        // !!! TO BE REWRITED
-        std::string resultId {};
-        if (!getBatchResultId(mainBatchId, resultId))
-            return false;
-        // getBatchResult(batch id, batch result id, result)
-        if (!getBatchResult(mainBatchId, resultId, result))
-            return false;
     }
     
     return moreResult;
