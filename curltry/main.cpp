@@ -29,7 +29,7 @@
 #include "restartManager.hpp"
 #include "utils.hpp"
 
-const std::string curltryVersion = "curltry v1.1.4";
+const std::string curltryVersion = "curltry v1.1.6";
 std::string workingDirectory;
 bool verbose {false};
 bool veryverbose {false};
@@ -242,18 +242,20 @@ int main(int argc, const char * argv[]) {
     bool getResultFromJobId {false};
     std::string paramJobId {};
     std::string theObject {};
-    int chunksize {0};
-         
+    int chunksize {10000};
+    
+    bool chunksizeProvided {false};
     for (auto curr : parameters) {
         
          if (curr.getName().compare("-o") == 0)
              theObject = curr.getValue();
          else if (curr.getName().compare("-sz") == 0) {
             chunksize = std::stoi(curr.getValue());
-             if (chunksize < 0) {
+             if (chunksize < 0 || chunksize > 250000) {
                  std::cerr << "Error : chunksize invalid" << std::endl;
                  exit(-1);
              }
+            chunksizeProvided = true;
          }
          else if (curr.getName().compare("-i") == 0)
              injection = true;
@@ -272,7 +274,7 @@ int main(int argc, const char * argv[]) {
             veryverbose = true;
         }
 
-     }
+     }  // end for parameters
 
     const std::vector<std::string> values = ap.getValues();
     if (values.size() != 1) {
@@ -284,6 +286,9 @@ int main(int argc, const char * argv[]) {
         std::cerr << "Restart mode not allowed without option -j <jobid>" << std::endl;
         exitWithSyntaxError();
     }
+    
+    if (!chunksizeProvided)
+        std::cout << "chunksize defaulted to " << chunksize << std::endl;
     
     workingDirectory = values[0];
     

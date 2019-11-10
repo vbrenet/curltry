@@ -23,6 +23,9 @@ bool ActualParameters::areValid(const expectedParameters& expected) const {
     const std::map<std::string, expectedParameters::descriptor> descriptors = expected.getDescriptors();
     
     // scan parameters to check if they are defined in the descriptor
+    
+    std::map<std::string,int> parameterCounters{}; // used to check parameter unicity
+    
     for (NamedParameter n : namedParameters) {
         
         auto d = descriptors.find(n.getName());
@@ -34,6 +37,14 @@ bool ActualParameters::areValid(const expectedParameters& expected) const {
         }
         else {
             std::cerr << "parameter " << n.getName() << " not allowed" << std::endl;
+            return false;
+        }
+        
+        // check unicity
+        parameterCounters.insert(std::pair<std::string,int>(n.getName(),0));
+        parameterCounters[n.getName()]++;
+        if (parameterCounters[n.getName()] > 1) {
+            std::cerr << "parameter " << n.getName() << " mentionned more than once" << std::endl;
             return false;
         }
         
