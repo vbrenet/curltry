@@ -27,7 +27,7 @@ public:
     static bool firstTime;
     static std::string body;
 
-    static bool openBulkSession(bool isSandbox, const std::string username, const std::string password, const std::string apiversion);
+    static bool openBulkSession(bool isSandbox, const std::string username, const std::string password, const std::string apiversion, const std::string securitytoken);
     //
     //  accessors
     static std::string &getSessionId() {return sessionId;}

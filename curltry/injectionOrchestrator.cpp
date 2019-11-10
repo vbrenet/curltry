@@ -17,7 +17,7 @@ extern std::string workingDirectory;
 bool injectionOrchestrator::execute(int nbrec) {
     
     // open bulk session bulkSession::openBulkSession
-    if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password,config::getApiVersion()))
+    if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password,config::getApiVersion(), config::getSecurityToken()))
         return false;
     
     // bulkQuery::createJob(const std::string objectName, int chunksize)

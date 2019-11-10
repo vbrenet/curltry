@@ -16,13 +16,13 @@ std::string config::clientsecret;    // REST connected app secret
 std::string config::domain;
 std::string config::username;
 std::string config::password;
+std::string config::securitytoken {};
 std::string config::apiversion;
 
 bool config::isASandbox {false};
 bool config::useFileForAttributeList {false};
 
 config::dataformat config::theformat {dataformat::CSV};
-
 
 std::map<std::string,std::vector<std::string>> config::excludedAttributesByObj;
 
@@ -32,6 +32,7 @@ const std::vector<config::tokenDesc> config::tokenDescriptions = {
     {config::token::CLIENTSECRET, "_clientsecret_:"},
     {config::token::USERNAME, "_username_:"},
     {config::token::PASSWORD, "_password_:"},
+    {config::token::SECURITYTOKEN, "_token_:"},
     {config::token::SOBJECT, "_object_:"},
     {config::token::ISPROD, "_isprod_:"},
     {config::token::DATAFORMAT, "_dataformat_:"},
@@ -139,6 +140,9 @@ void config::processLine(const std::string& line) {
             break;
         case token::APIVERSION:
             apiversion = value;
+            break;
+        case token::SECURITYTOKEN:
+            securitytoken = value;
             break;
         case token::SOBJECT:
             updateExcludedAttributes(line);

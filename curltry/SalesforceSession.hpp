@@ -23,7 +23,7 @@ private:
     static std::string extractToken(const std::string buffer);
 
 public:
-    static bool openSession(const std::string , const std::string , const std::string , const std::string , const std::string );
+    static bool openSession(const std::string , const std::string , const std::string , const std::string , const std::string, const std::string securitytoken);
     static bool openSession(const sessionCredentials&);
 
     // accessors

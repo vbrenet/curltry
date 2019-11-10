@@ -54,7 +54,7 @@ void bulkSession::processResponse(const std::string& response) {
 //
 //  open a bulk session with Salesforce
 //
-bool bulkSession::openBulkSession(bool isSandbox, const std::string username, const std::string password, const std::string theapiversion) {
+bool bulkSession::openBulkSession(bool isSandbox, const std::string username, const std::string password, const std::string theapiversion, const std::string securitytoken) {
     bool result {true};
     
     apiversion = theapiversion;
@@ -72,7 +72,7 @@ bool bulkSession::openBulkSession(bool isSandbox, const std::string username, co
     << "<env:Body>\n"
     << "<n1:login xmlns:n1=\"urn:partner.soap.sforce.com\">\n"
     << "<n1:username>" << username << "</n1:username>\n"
-    << "<n1:password>" << password << "</n1:password>\n"
+    << "<n1:password>" << password << securitytoken << "</n1:password>\n"
     <<  "</n1:login>\n"
     <<  "</env:Body>\n"
     <<  "</env:Envelope>\n";

@@ -10,6 +10,7 @@
 #include <curl/curl.h>
 
 #include "SalesforceSession.hpp"
+#include "config.hpp"
 
 std::string SalesforceSession::connectedAppToken;
 std::string SalesforceSession::domain;
@@ -29,14 +30,14 @@ std::string SalesforceSession::extractToken(const std::string buffer) {
 //
 //  open connected app session
 //
-bool SalesforceSession::openSession(const std::string thedomain, const std::string client_id, const std::string client_secret, const std::string username, const std::string password) {
+bool SalesforceSession::openSession(const std::string thedomain, const std::string client_id, const std::string client_secret, const std::string username, const std::string password, const std::string securitytoken) {
     CURL *curl;
     CURLcode res;
     std::string readBuffer;
     
     domain = thedomain;
     
-    std::string urlParameters = "grant_type=password&client_id=" + client_id + "&client_secret=" + client_secret + "&username=" + username + "&password=" + password;
+    std::string urlParameters = "grant_type=password&client_id=" + client_id + "&client_secret=" + client_secret + "&username=" + username + "&password=" + password + securitytoken;
     
     if (veryverbose)
         std::cout << "OpenSession: " << urlParameters << std::endl;
@@ -79,5 +80,6 @@ bool SalesforceSession::openSession(const sessionCredentials &credentials) {
                        credentials.clientId,
                        credentials.clientSecret,
                        credentials.username,
-                       credentials.password);
+                       credentials.password,
+                       config::getSecurityToken());
 }

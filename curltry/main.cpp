@@ -179,7 +179,7 @@ void exitWithSyntaxError() {
 //
 //
 void exitWithVersion() {
-    std::cout << "curltry v1.1.2" << std::endl;
+    std::cout << "curltry v1.1.3" << std::endl;
     exit(0);
 }
 //
