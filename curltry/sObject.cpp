@@ -593,3 +593,8 @@ void sObject::initializeMatrixCountersFromFile(const std::string &inputfile) {
     matrixFile.close();
 
 }
+//
+//
+void sObject::addPicklistDescriptor (std::string picklistName, std::string value, std::string label) {
+    picklistDescriptors.insert(std::make_pair(picklistName, std::map<std::string,std::string>{std::make_pair(value,label)}));
+}

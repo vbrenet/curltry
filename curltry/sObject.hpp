@@ -27,6 +27,9 @@ private:
     std::map<int,std::string> csvAttributeMap {};
     std::map<std::string,std::string> recordTypes {}; // key : id, value : name
     
+    std::map<std::string, std::map<std::string,std::string>> picklistDescriptors;   // value: map of picklist value, picklist label
+    std::map<std::string, std::map<std::string, long>> picklistCounters;  // key : picklist att. name, value : map of {value, counter}
+    
     void computeAttributes(const std::string &record, int);
 
     void initRecordTypeMatrixCounters();
@@ -52,6 +55,7 @@ public:
     void outputAttributeCounters(const std::string &);
     void outputMatrixCounters(const std::string &outputfile);
 
+    void addPicklistDescriptor (std::string picklistName, std::string value, std::string label);
 };
 
 #endif /* sObject_hpp */
