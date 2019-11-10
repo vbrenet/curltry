@@ -29,6 +29,7 @@
 #include "restartManager.hpp"
 #include "utils.hpp"
 
+const std::string curltryVersion = "curltry v1.1.4";
 std::string workingDirectory;
 bool verbose {false};
 bool veryverbose {false};
@@ -71,10 +72,10 @@ bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer)
     curl = curl_easy_init();
     
     if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, ("https://" + SalesforceSession::getDomain() + "/services/data/v43.0/sobjects/" + objName + "/describe").c_str());
+        curl_easy_setopt(curl, CURLOPT_URL, ("https://" + SalesforceSession::getDomain() + "/services/data/v" + config::getApiVersion() + "/sobjects/" + objName + "/describe").c_str());
         
         if (veryverbose)
-            std::cout << "getDescribeAttributesBuffer: " << "https://" <<  SalesforceSession::getDomain() << "/services/data/v43.0/sobjects/" << objName << "/describe" << std::endl;
+            std::cout << "getDescribeAttributesBuffer: " << "https://" <<  SalesforceSession::getDomain() << "/services/data/v" + config::getApiVersion() + "/sobjects/" << objName << "/describe" << std::endl;
         
         struct curl_slist *chunk = NULL;
         
@@ -179,7 +180,7 @@ void exitWithSyntaxError() {
 //
 //
 void exitWithVersion() {
-    std::cout << "curltry v1.1.3" << std::endl;
+    std::cout << curltryVersion << std::endl;
     exit(0);
 }
 //
