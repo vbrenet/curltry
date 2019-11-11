@@ -42,7 +42,7 @@ private:
     bool isAttributeCustom(const std::string) const;
 public:
     sObject (const std::string objname)  : name {objname} {}
-    const std::string& getName() {return name;};
+    const std::string& getName() const {return name;} ;
     void addAttribute(sAttribute a) {attributeList.push_back({a});}
     std::string makeAllAttributeQuery();
     void print() const;
@@ -56,6 +56,8 @@ public:
     void outputMatrixCounters(const std::string &outputfile);
 
     void addPicklistDescriptor (std::string picklistName, std::string value, std::string label);
+    void outputPicklistCounters(const std::string &dirfile) const;
+
 };
 
 #endif /* sObject_hpp */

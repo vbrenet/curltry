@@ -90,7 +90,9 @@ bool orchestrator::describeObject() {
                             }
                         }
                     } // end begincustom found
-                    theObject.addAttribute({rawAttributeList.substr(beginName+7+1,endName-beginName-7-2),excluded, isCustom});
+                    
+                    std::string currentAttributeName = rawAttributeList.substr(beginName+7+1,endName-beginName-7-2);
+                    theObject.addAttribute({currentAttributeName,excluded, isCustom, picklist});
                     
                     if (picklist && globals::picklistAnalysis) {
                         /* example:
@@ -114,21 +116,26 @@ bool orchestrator::describeObject() {
                         size_t endArray = rawAttributeList.find_first_of(']',beginArray);
                         bool picklistTerminated {false};
                         size_t picklistOffset = beginArray;
+                        std::string picklistValue {};
+                        std::string picklistLabel {};
                         
                         while (!picklistTerminated) {
                             size_t beginlabel = rawAttributeList.find("\"label\"", picklistOffset);
                             if (beginlabel == std::string::npos || beginlabel > endArray)
                                 break;
                             size_t endLabel = rawAttributeList.find("\"validFor\"", beginlabel);
-                            std::string picklistLabel = rawAttributeList.substr(beginlabel+9,endLabel-beginlabel-9-2);
+                            picklistLabel = rawAttributeList.substr(beginlabel+9,endLabel-beginlabel-9-2);
                             size_t beginvalue = rawAttributeList.find("\"value\"", endLabel);
                             size_t endvalue = rawAttributeList.find_first_of('}',beginvalue);
-                            std::string picklistValue = rawAttributeList.substr(beginvalue+9,endvalue-beginvalue-9-1);
+                            picklistValue = rawAttributeList.substr(beginvalue+9,endvalue-beginvalue-9-1);
                             if (globals::veryverbose) {
-                                std::cout << "picklistLabel :'" << picklistLabel << "' picklistValue : '" << picklistValue << "'" << std::endl;
+                                std::cout << currentAttributeName << " : picklistLabel :'" << picklistLabel << "' picklistValue : '" << picklistValue << "'" << std::endl;
                             }
                             picklistOffset = endvalue;
                         }   // end !picklistTerminated
+                        
+                        theObject.addPicklistDescriptor (currentAttributeName, picklistValue, picklistLabel);
+                                               
                     }   // end picklist and picklistAnalysis
                 } // end endName found
                 else {
@@ -215,6 +222,8 @@ bool orchestrator::execute(int chunksize) {
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
                 theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
                 theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
+                if (globals::picklistAnalysis)
+                    theObject.outputPicklistCounters(globals::workingDirectory + "/" + theObject.getName() + "picklists");
                 
                 if (!restartManager::isAlreadyRead(resultid))
                     restartManager::saveBatchId(resultid);
@@ -231,6 +240,8 @@ bool orchestrator::execute(int chunksize) {
     else {
         theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
         theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
+        if (globals::picklistAnalysis)
+            theObject.outputPicklistCounters(globals::workingDirectory + "/" + theObject.getName() + "picklists");
     }
 
     if (globals::verbose)

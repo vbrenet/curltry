@@ -20,11 +20,13 @@ private:
     std::string name;
     bool excluded {false};
     bool custom {false};
+    bool picklist {false};
 public:
     sAttribute (const std::string attr, bool excl) : name {attr}, excluded{excl} {}
     sAttribute (const std::string attr, bool excl, bool cust) : name {attr}, excluded{excl}, custom{cust} {}
+    sAttribute (const std::string attr, bool excl, bool cust, bool pick) : name {attr}, excluded{excl}, custom{cust}, picklist{pick} {}
     const std::string &getName() const {return name;};
     bool isExcluded() const {return excluded;};
     bool isCustom() const {return custom;};
-
+    bool isPicklist() const {return picklist;};
 };

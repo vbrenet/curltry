@@ -11,6 +11,7 @@
 #include "sObject.hpp"
 #include "config.hpp"
 #include <curl/curl.h>
+#include <sys/stat.h>
 #include "SalesforceSession.hpp"
 #include "restartManager.hpp"
 #include "utils.hpp"
@@ -263,7 +264,9 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                             std::pair<std::string,std::string> key {{currentRecordTypeId},{csvAttributeMap[counter]}};
                             recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
                             recordTypeMatrixCounters[key]++;
-                            
+                            if (globals::picklistAnalysis) {
+                                picklistCounters[csvAttributeMap[counter]][token]++;
+                            }
                         }
                         token.clear();
                     }
@@ -291,6 +294,9 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                             std::pair<std::string,std::string> key {{currentRecordTypeId},{csvAttributeMap[counter]}};
                             recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
                             recordTypeMatrixCounters[key]++;
+                            if (globals::picklistAnalysis) {
+                                picklistCounters[csvAttributeMap[counter]][token]++;
+                            }
                         }
                         counter = 0;
                         token.clear();
@@ -593,4 +599,20 @@ void sObject::initializeMatrixCountersFromFile(const std::string &inputfile) {
 //
 void sObject::addPicklistDescriptor (std::string picklistName, std::string value, std::string label) {
     picklistDescriptors.insert(std::make_pair(picklistName, std::map<std::string,std::string>{std::make_pair(value,label)}));
+    picklistCounters.insert(std::make_pair(picklistName, std::map<std::string,long>{std::make_pair(value,0L)}));
+}
+//
+//
+void sObject::outputPicklistCounters(const std::string &dirfile) const {
+    int status = mkdir(dirfile.c_str(),S_IRWXU|S_IRWXG);
+    if (status != 0 && status != EEXIST) {
+        std::cerr << "picklist counters directory creation error: " << status << std::endl;
+        return;
+    }
+    for (auto it = picklistCounters.begin(); it != picklistCounters.end(); ++it) {
+        std::ofstream ofs {dirfile + "/" + getName() + "_" + it->first};
+        for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
+            ofs << it2->first << "," << it2->second << std::endl;
+        }
+    }
 }
