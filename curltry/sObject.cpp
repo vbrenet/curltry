@@ -168,6 +168,19 @@ bool sObject::isAttributeCustom(const std::string name) const {
 }
 //
 //
+bool sObject::isAttributePicklist(const std::string name) const {
+    
+    for (auto it = attributeList.begin(); it != attributeList.end(); ++it) {
+        if (it->getName().compare(name) == 0) {
+            return it->isPicklist();
+        }
+    }
+
+    return false;
+}
+
+//
+//
 void sObject::outputMatrixCounters(const std::string &outputfile) {
     
     std::ofstream ofs {outputfile};
@@ -265,7 +278,8 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                             recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
                             recordTypeMatrixCounters[key]++;
                             if (globals::picklistAnalysis) {
-                                picklistCounters[csvAttributeMap[counter]][token]++;
+                                if (isAttributePicklist(csvAttributeMap[counter]))
+                                    picklistCounters[csvAttributeMap[counter]][token]++;
                             }
                         }
                         token.clear();
@@ -295,7 +309,8 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                             recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
                             recordTypeMatrixCounters[key]++;
                             if (globals::picklistAnalysis) {
-                                picklistCounters[csvAttributeMap[counter]][token]++;
+                                if (isAttributePicklist(csvAttributeMap[counter]))
+                                    picklistCounters[csvAttributeMap[counter]][token]++;
                             }
                         }
                         counter = 0;
@@ -605,6 +620,9 @@ void sObject::addPicklistDescriptor (std::string picklistName, std::string value
 //
 void sObject::outputPicklistCounters(const std::string &dirfile) const {
     int status = mkdir(dirfile.c_str(),S_IRWXU|S_IRWXG);
+    if (globals::veryverbose) {
+        std::cout << "outputPicklistCounters : dirfile= " << dirfile << " status = " << status << std::endl;
+    }
     if (status != 0 && status != EEXIST) {
         std::cerr << "picklist counters directory creation error: " << status << std::endl;
         return;

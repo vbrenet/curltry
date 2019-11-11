@@ -285,7 +285,9 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
                 theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
                 theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
-                
+                if (globals::picklistAnalysis)
+                    theObject.outputPicklistCounters(globals::workingDirectory + "/" + theObject.getName() + "picklists");
+
                 if (!restartManager::isAlreadyRead(resultid))
                     restartManager::saveBatchId(resultid);
 
@@ -298,6 +300,8 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
     else {
         theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
         theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
+        if (globals::picklistAnalysis)
+            theObject.outputPicklistCounters(globals::workingDirectory + "/" + theObject.getName() + "picklists");
     }
     
     if (globals::verbose)
