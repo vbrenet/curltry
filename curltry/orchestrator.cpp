@@ -47,8 +47,10 @@ bool orchestrator::describeObject() {
     if (beginFields != std::string::npos) {
         // chercher       "name":"curren__c","nameField":
         bool terminated {false};
+        bool picklist {false};
         size_t offset = beginFields;
         do {
+            picklist = false;
             size_t beginName = rawAttributeList.find("\"name\":",offset);
             if (beginName != std::string::npos) {
                 bool excluded {false};
@@ -63,6 +65,8 @@ bool orchestrator::describeObject() {
                             std::string attributeType = rawAttributeList.substr(beginType+7+1,endType-beginType-7-2);
                             if ((attributeType.compare("address") == 0) || (attributeType.compare("location") ==0))
                                 excluded = true;
+                            if (attributeType.compare("picklist") == 0)
+                                picklist = true;
                         }   // end endType found
                     }   // end beginType found
                     // also check if the attribute is excluded in the configuration
@@ -87,6 +91,45 @@ bool orchestrator::describeObject() {
                         }
                     } // end begincustom found
                     theObject.addAttribute({rawAttributeList.substr(beginName+7+1,endName-beginName-7-2),excluded, isCustom});
+                    
+                    if (picklist && globals::picklistAnalysis) {
+                        /* example:
+                         "picklistValues" : [ {
+                           "active" : true,
+                           "defaultValue" : false,
+                           "label" : "Artisan-commerçant",
+                           "validFor" : null,
+                           "value" : "11"
+                         }, {
+                           "active" : true,
+                           "defaultValue" : false,
+                           "label" : "Commerçant",
+                           "validFor" : null,
+                           "value" : "12"
+                         }, {
+
+                         */
+                        size_t beginPicklistValues = rawAttributeList.find("picklistValues", endName);
+                        size_t beginArray = rawAttributeList.find_first_of('[', beginPicklistValues);
+                        size_t endArray = rawAttributeList.find_first_of(']',beginArray);
+                        bool picklistTerminated {false};
+                        size_t picklistOffset = beginArray;
+                        
+                        while (!picklistTerminated) {
+                            size_t beginlabel = rawAttributeList.find("\"label\"", picklistOffset);
+                            if (beginlabel == std::string::npos || beginlabel > endArray)
+                                break;
+                            size_t endLabel = rawAttributeList.find("\"validFor\"", beginlabel);
+                            std::string picklistLabel = rawAttributeList.substr(beginlabel+9,endLabel-beginlabel-9-2);
+                            size_t beginvalue = rawAttributeList.find("\"value\"", endLabel);
+                            size_t endvalue = rawAttributeList.find_first_of('}',beginvalue);
+                            std::string picklistValue = rawAttributeList.substr(beginvalue+9,endvalue-beginvalue-9-1);
+                            if (globals::veryverbose) {
+                                std::cout << "picklistLabel :'" << picklistLabel << "' picklistValue : '" << picklistValue << "'" << std::endl;
+                            }
+                            picklistOffset = endvalue;
+                        }   // end !picklistTerminated
+                    }   // end picklist and picklistAnalysis
                 } // end endName found
                 else {
                     terminated = true;

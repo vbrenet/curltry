@@ -30,7 +30,7 @@
 #include "utils.hpp"
 #include "globals.hpp"
 
-const std::string curltryVersion = "curltry v1.1.9";
+const std::string curltryVersion = "curltry v1.2.0";
 //std::string workingDirectory;
 //bool verbose {false};
 //bool veryverbose {false};
@@ -218,6 +218,7 @@ int main(int argc, const char * argv[]) {
             {"-vv",{false,false}},
             {"-help",{false,false}},
             {"-version",{false,false}},
+            {"-picklists",{false,false}},
             {"-j",{false,true}}
         }
     };
@@ -278,6 +279,10 @@ int main(int argc, const char * argv[]) {
             globals::verbose = true;
             globals::veryverbose = true;
         }
+        else if (curr.getName().compare("-picklists") == 0) {
+            globals::picklistAnalysis = true;
+        }
+
 
      }  // end for parameters
 

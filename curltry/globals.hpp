@@ -17,6 +17,7 @@ public:
     static std::string workingDirectory;
     static bool verbose;
     static bool veryverbose;
+    static bool picklistAnalysis;
 };
 
 #endif /* globals_hpp */
