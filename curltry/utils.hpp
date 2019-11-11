@@ -14,5 +14,6 @@
 std::string getBucket(double d);
 std::string getDateString();
 std::string removeCommas (const std::string& input);
+bool isStringNumeric (const std::string input);
 
 #endif /* utils_hpp */

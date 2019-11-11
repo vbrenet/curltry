@@ -30,7 +30,7 @@
 #include "utils.hpp"
 #include "globals.hpp"
 
-const std::string curltryVersion = "curltry v1.1.7";
+const std::string curltryVersion = "curltry v1.1.8";
 //std::string workingDirectory;
 //bool verbose {false};
 //bool veryverbose {false};
@@ -251,7 +251,11 @@ int main(int argc, const char * argv[]) {
          if (curr.getName().compare("-o") == 0)
              theObject = curr.getValue();
          else if (curr.getName().compare("-sz") == 0) {
-            chunksize = std::stoi(curr.getValue());
+             if (!isStringNumeric(curr.getValue())) {
+                 std::cerr << "Error : chunksize must be numeric" << std::endl;
+                 exit(-1);
+             }
+             chunksize = std::stoi(curr.getValue());
              if (chunksize < 0 || chunksize > 250000) {
                  std::cerr << "Error : chunksize invalid" << std::endl;
                  exit(-1);

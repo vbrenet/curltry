@@ -154,3 +154,8 @@ std::string removeCommas (const std::string& input) {
 
     return result;
 }
+//
+//
+bool isStringNumeric (const std::string input) {
+    return (input.find_first_not_of( "0123456789" ) == std::string::npos);
+}
