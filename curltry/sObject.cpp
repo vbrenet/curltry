@@ -14,11 +14,7 @@
 #include "SalesforceSession.hpp"
 #include "restartManager.hpp"
 #include "utils.hpp"
-
-extern std::string workingDirectory;
-extern bool verbose;
-extern bool veryverbose;
-
+#include "globals.hpp"
 
 void sObject::print() const {
     for (sAttribute s : attributeList)
@@ -45,7 +41,7 @@ std::string sObject::makeAllAttributeQuery() {
 
     if (actualList.size() == 0) {
         // try to get attribute list from file (RecordTypeId must be in first)
-        config::getAttributeList(workingDirectory + "/", name, actualList);
+        config::getAttributeList(globals::workingDirectory + "/", name, actualList);
         std::cout <<  "makeAllAttributeQuery: actualList from file = " << actualList.size() << std::endl;
         if (actualList.size() > 0) {
             for (auto it = actualList.begin(); it != actualList.end(); it++) {
@@ -212,7 +208,7 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
 //
 long sObject::computeCsvRecords(const std::string &csvString) {
     
-    if (verbose)
+    if (globals::verbose)
         std::cout << "Processing records (buffer size: " << csvString.length() << ") ..." << std::endl;
     
     bool firstRecord {true};
@@ -372,7 +368,7 @@ void sObject::processCsvLine(const std::string &inputline) {
 
     initializeCounter(attributeName,counterValue);
     
-    if (veryverbose) {
+    if (globals::veryverbose) {
         std::cout << "attribute counters initialization" << std::endl;
         std::cout << "name: " << attributeName << " value: " << counterValue << std::endl;
         }
@@ -436,7 +432,7 @@ void sObject::parseRecordTypeBuffer(const std::string&buffer) {
     recordTypes.insert(std::pair<std::string,std::string>({"","null"}));
     
     //  output map
-    if (verbose) {
+    if (globals::verbose) {
         std::cout << "Record Type map from REST" << std::endl;
         for (auto it=recordTypes.begin(); it != recordTypes.end(); ++it) {
             std::cout << it->first << ":" << it->second << std::endl;
@@ -487,7 +483,7 @@ bool sObject::initializeRecordTypes() {
     else
         return false;
 
-    if (verbose) {
+    if (globals::verbose) {
         std::cout << "record types query: " << std::endl;
         std::cout << readBuffer << std::endl;
     }
@@ -495,7 +491,7 @@ bool sObject::initializeRecordTypes() {
     parseRecordTypeBuffer(readBuffer);
     
     if (restartManager::isRestartMode())
-        initializeMatrixCountersFromFile(workingDirectory + "/matrix" + getName() + ".csv");
+        initializeMatrixCountersFromFile(globals::workingDirectory + "/matrix" + getName() + ".csv");
     else
         initRecordTypeMatrixCounters();
     
@@ -523,7 +519,7 @@ void sObject::initRecordTypeMatrixCounters() {
                 continue;
             std::pair<std::string,std::string> key {it->first,itattr->getName()};
             recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
-            if (veryverbose) {
+            if (globals::veryverbose) {
                 std::cout << "initRecordTypeMatrixCounters: inserted value" << std::endl;
                 std::cout << key.first << ":" << key.second << std::endl;
             }
@@ -567,7 +563,7 @@ void sObject::processMatrixLine(const std::string &inputline) {
         attributeName = inputline.substr(fourthcomma+1,fifthcomma-fourthcomma-1);
         counterValue = inputline.substr(fifthcomma+1,sixthcomma-fifthcomma-1);
     
-    if (veryverbose) {
+    if (globals::veryverbose) {
         std::cout << "recordTypeId: "<< recordTypeId << " attributeName: " << attributeName << " counterValue: " << counterValue << std::endl;
     }
     

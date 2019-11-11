@@ -11,8 +11,7 @@
 #include "bulkSession.hpp"
 #include "recordGenerator.hpp"
 #include "config.hpp"
-
-extern std::string workingDirectory;
+#include "globals.hpp"
 
 bool injectionOrchestrator::execute(int nbrec) {
     
@@ -25,7 +24,7 @@ bool injectionOrchestrator::execute(int nbrec) {
         return false;
 
     // prepare records
-    recordGenerator recgen (workingDirectory + "/" + theObject.getName() + ".inject");
+    recordGenerator recgen (globals::workingDirectory + "/" + theObject.getName() + ".inject");
     
     char lf = 10;
     std::string content = recgen.getCsvHeader();
@@ -36,7 +35,7 @@ bool injectionOrchestrator::execute(int nbrec) {
         content += lf;
     }
     
-    std::ofstream csvlog {workingDirectory + "/output.csv"};
+    std::ofstream csvlog {globals::workingDirectory + "/output.csv"};
     csvlog << content;
 
     // put records

@@ -9,8 +9,7 @@
 #include "bulkSession.hpp"
 #include <iostream>
 #include <sstream>
-
-extern bool veryverbose;
+#include "globals.hpp"
 
 extern size_t WriteCallback(void *, size_t , size_t , void *);
 extern std::string extractXmlToken(const std::string& inputbuffer, const std::string& token);
@@ -140,7 +139,7 @@ bool bulkSession::openBulkSession(bool isSandbox, const std::string username, co
 
     processResponse(readBuffer);
     
-    if (veryverbose) {
+    if (globals::veryverbose) {
         std::cout <<  "sessionid: " << sessionId << std::endl;
         std::cout <<  "serverurl: " << serverUrl << std::endl;
         std::cout <<  "injecturl: " << injectUrl << std::endl;

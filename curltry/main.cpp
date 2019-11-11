@@ -28,11 +28,12 @@
 #include "ActualParameters.hpp"
 #include "restartManager.hpp"
 #include "utils.hpp"
+#include "globals.hpp"
 
 const std::string curltryVersion = "curltry v1.1.7";
-std::string workingDirectory;
-bool verbose {false};
-bool veryverbose {false};
+//std::string workingDirectory;
+//bool verbose {false};
+//bool veryverbose {false};
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -74,7 +75,7 @@ bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer)
     if(curl) {
         curl_easy_setopt(curl, CURLOPT_URL, ("https://" + SalesforceSession::getDomain() + "/services/data/v" + config::getApiVersion() + "/sobjects/" + objName + "/describe").c_str());
         
-        if (veryverbose)
+        if (globals::veryverbose)
             std::cout << "getDescribeAttributesBuffer: " << "https://" <<  SalesforceSession::getDomain() << "/services/data/v" + config::getApiVersion() + "/sobjects/" << objName << "/describe" << std::endl;
         
         struct curl_slist *chunk = NULL;
@@ -267,11 +268,11 @@ int main(int argc, const char * argv[]) {
             restartManager::setRestartMode();
         }
          else if (curr.getName().compare("-v") == 0) {
-             verbose = true;
+             globals::verbose = true;
          }
         else if (curr.getName().compare("-vv") == 0) {
-            verbose = true;
-            veryverbose = true;
+            globals::verbose = true;
+            globals::veryverbose = true;
         }
 
      }  // end for parameters
@@ -290,13 +291,13 @@ int main(int argc, const char * argv[]) {
     if (!chunksizeProvided)
         std::cout << "chunksize defaulted to " << chunksize << std::endl;
     
-    workingDirectory = values[0];
+    globals::workingDirectory = values[0];
     
     corpNameGenerator::init();
     
     textGenerator::init();
         
-    config::getConfig(workingDirectory + "/config");
+    config::getConfig(globals::workingDirectory + "/config");
 
     restartManager::init();
     

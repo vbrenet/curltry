@@ -8,24 +8,23 @@
 #include <iostream>
 #include <fstream>
 #include "restartManager.hpp"
+#include "globals.hpp"
 
 bool restartManager::restartMode = false;
 std::vector<std::string> restartManager::batchids;
 
-extern std::string workingDirectory;
-extern bool verbose;
 //
 //
 void restartManager::init() {
     if (!restartMode) {
         // if not restart mode, clear batchids file
-        std::ofstream batchesFile {workingDirectory + "/batchids", std::ofstream::out};
+        std::ofstream batchesFile {globals::workingDirectory + "/batchids", std::ofstream::out};
         batchesFile.close();
         return;
     }
     
     // if restart mode then initialize batchids vector from batchids file
-    std::ifstream batchesFile {workingDirectory + "/batchids"};
+    std::ifstream batchesFile {globals::workingDirectory + "/batchids"};
     std::string currentLine;
     
     while (getline(batchesFile,currentLine)) {
@@ -42,10 +41,10 @@ void restartManager::init() {
 //
 //
 void restartManager::saveBatchId(const std::string batchid) {
-    if (verbose)
+    if (globals::verbose)
         std::cout << "saveBatchId : " << batchid << std::endl;
     
-    std::ofstream ofs {workingDirectory + "/batchids", std::ofstream::app};
+    std::ofstream ofs {globals::workingDirectory + "/batchids", std::ofstream::app};
     ofs << batchid << std::endl;
     ofs.close();
 }
@@ -53,7 +52,7 @@ void restartManager::saveBatchId(const std::string batchid) {
 //
 bool restartManager::isAlreadyRead(const std::string theid)  {
     auto it = std::find(batchids.begin(), batchids.end(), theid);
-    if (verbose) {
+    if (globals::verbose) {
         std::cout << "isAlreadyRead ? " << theid << std::endl;
         std::cout << (it != batchids.end() ? "Yes" : "No") << std::endl;
     }
