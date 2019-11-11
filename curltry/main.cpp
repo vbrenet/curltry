@@ -30,7 +30,7 @@
 #include "utils.hpp"
 #include "globals.hpp"
 
-const std::string curltryVersion = "curltry v1.1.8";
+const std::string curltryVersion = "curltry v1.1.9";
 //std::string workingDirectory;
 //bool verbose {false};
 //bool veryverbose {false};
