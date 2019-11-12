@@ -5,8 +5,6 @@
 //  Created by Vincent Brenet on 25/09/2018.
 //  Copyright © 2018 Vincent Brenet. All rights reserved.
 //
-//  Updated comment for jenkins
-
 
 #include <iostream>
 #include <string>
@@ -30,10 +28,7 @@
 #include "utils.hpp"
 #include "globals.hpp"
 
-const std::string curltryVersion = "curltry v1.2.4";
-//std::string workingDirectory;
-//bool verbose {false};
-//bool veryverbose {false};
+const std::string curltryVersion = "curltry v1.2.5";
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -187,7 +182,7 @@ void exitWithVersion() {
 //
 //
 void exitWithHelp() {
-    std::cout << "SYNTAX : curltry -o <object name> [-sz <chunksize>] [-j <jobid>] [-r] [-v] [-vv] workingDirectory" << std::endl;
+    std::cout << "SYNTAX : curltry -o <object name> [-sz <chunksize>] [-j <jobid>] [-picklists] [-r] [-v] [-vv] workingDirectory" << std::endl;
     std::cout << "curltry -help" << std::endl;
     std::cout << "curltry -version" << std::endl << std::endl;
     std::cout << "OPTIONS:" << std::endl;
