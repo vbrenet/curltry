@@ -113,7 +113,7 @@ bool orchestrator::describeObject() {
                          */
                         size_t beginPicklistValues = rawAttributeList.find("picklistValues", endName);
                         size_t beginArray = rawAttributeList.find_first_of('[', beginPicklistValues);
-                        size_t endArray = rawAttributeList.find_first_of(']',beginArray);
+                        size_t endArray = rawAttributeList.find("],",beginArray);
                         bool picklistTerminated {false};
                         size_t picklistOffset = beginArray;
                         std::string picklistValue {};
@@ -144,8 +144,10 @@ bool orchestrator::describeObject() {
         } while (terminated == false);
     }
     
-    if (globals::veryverbose)
+    if (globals::veryverbose) {
         theObject.printPicklistCounters();
+        theObject.printPicklistDescriptors();
+    }
     
     // initialize record types
     if (!theObject.initializeRecordTypes()) {
@@ -223,7 +225,7 @@ bool orchestrator::execute(int chunksize) {
                 theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
                 theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
                 if (globals::picklistAnalysis)
-                    theObject.outputPicklistCounters(globals::workingDirectory + "/" + theObject.getName() + "picklists");
+                    theObject.outputPicklistCounters();
                 
                 if (!restartManager::isAlreadyRead(resultid))
                     restartManager::saveBatchId(resultid);
@@ -241,7 +243,7 @@ bool orchestrator::execute(int chunksize) {
         theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
         theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
         if (globals::picklistAnalysis)
-            theObject.outputPicklistCounters(globals::workingDirectory + "/" + theObject.getName() + "picklists");
+            theObject.outputPicklistCounters();
     }
 
     if (globals::verbose)
@@ -286,7 +288,7 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
                 theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
                 theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
                 if (globals::picklistAnalysis)
-                    theObject.outputPicklistCounters(globals::workingDirectory + "/" + theObject.getName() + "picklists");
+                    theObject.outputPicklistCounters();
 
                 if (!restartManager::isAlreadyRead(resultid))
                     restartManager::saveBatchId(resultid);
@@ -301,7 +303,7 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
         theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
         theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
         if (globals::picklistAnalysis)
-            theObject.outputPicklistCounters(globals::workingDirectory + "/" + theObject.getName() + "picklists");
+            theObject.outputPicklistCounters();
     }
     
     if (globals::verbose)

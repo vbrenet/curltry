@@ -58,8 +58,9 @@ public:
     void outputMatrixCounters(const std::string &outputfile);
 
     void addPicklistDescriptor (std::string picklistName, std::string value, std::string label);
-    void outputPicklistCounters(const std::string &dirfile) const;
+    void outputPicklistCounters() ;
     void printPicklistCounters() const;
+    void printPicklistDescriptors() const;
 
 };
 

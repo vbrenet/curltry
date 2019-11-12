@@ -624,19 +624,18 @@ void sObject::addPicklistDescriptor (std::string picklistName, std::string value
 }
 //
 //
-void sObject::outputPicklistCounters(const std::string &dirfile) const {
-    int status = mkdir(dirfile.c_str(),S_IRWXU|S_IRWXG);
-    if (globals::veryverbose) {
-        std::cout << "outputPicklistCounters : dirfile= " << dirfile << " status = " << status << std::endl;
-    }
-    if (status != 0 && status != EEXIST) {
-        std::cerr << "picklist counters directory creation error: " << status << std::endl;
-        return;
-    }
+void sObject::outputPicklistCounters()  {
+    std::ofstream ofs { getName() + "picklists.csv"};
+    
+    // header
+    ofs << "Date,sObject,PicklistName,PicklistLabel,PicklistValue,Usage" << std::endl;
+
     for (auto it = picklistCounters.begin(); it != picklistCounters.end(); ++it) {
-        std::ofstream ofs {dirfile + "/" + getName() + "_" + it->first};
         for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
-            ofs << it2->first << "," << it2->second << std::endl;
+            
+            std::string label = picklistDescriptors[it->first][it2->first] ;
+                        
+            ofs << getDateString() << "," << getName() << "," << it->first << "," << label << "," << it2->first << "," << it2->second << std::endl;
         }
     }
 }
@@ -645,6 +644,15 @@ void sObject::outputPicklistCounters(const std::string &dirfile) const {
 void sObject::printPicklistCounters() const {
     std::cout << "**printPicklistCounters**" << std::endl;
     for (auto it = picklistCounters.begin(); it != picklistCounters.end(); ++it) {
+        for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
+            std::cout << it->first << ":" << it2->first << "," << it2->second << std::endl;
+        }
+    }
+}
+//
+void sObject::printPicklistDescriptors() const {
+    std::cout << "**printPicklistDescriptors**" << std::endl;
+    for (auto it = picklistDescriptors.begin(); it != picklistDescriptors.end(); ++it) {
         for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
             std::cout << it->first << ":" << it2->first << "," << it2->second << std::endl;
         }
