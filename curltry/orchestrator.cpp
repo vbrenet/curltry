@@ -128,13 +128,10 @@ bool orchestrator::describeObject() {
                             size_t beginvalue = rawAttributeList.find("\"value\"", endLabel);
                             size_t endvalue = rawAttributeList.find_first_of('}',beginvalue);
                             picklistValue = rawAttributeList.substr(beginvalue+9,endvalue-beginvalue-9-1);
-                            if (globals::veryverbose) {
-                                std::cout << currentAttributeName << " : picklistLabel :'" << picklistLabel << "' picklistValue : '" << picklistValue << "'" << std::endl;
-                            }
+                            theObject.addPicklistDescriptor (currentAttributeName, picklistValue, picklistLabel);
+
                             picklistOffset = endvalue;
-                        }   // end !picklistTerminated
-                        
-                        theObject.addPicklistDescriptor (currentAttributeName, picklistValue, picklistLabel);
+                        }   // end !picklistTerminated                        
                                                
                     }   // end picklist and picklistAnalysis
                 } // end endName found
@@ -146,6 +143,9 @@ bool orchestrator::describeObject() {
                 terminated = true;
         } while (terminated == false);
     }
+    
+    if (globals::veryverbose)
+        theObject.printPicklistCounters();
     
     // initialize record types
     if (!theObject.initializeRecordTypes()) {

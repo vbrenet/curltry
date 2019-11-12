@@ -59,6 +59,7 @@ public:
 
     void addPicklistDescriptor (std::string picklistName, std::string value, std::string label);
     void outputPicklistCounters(const std::string &dirfile) const;
+    void printPicklistCounters() const;
 
 };
 

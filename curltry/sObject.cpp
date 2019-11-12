@@ -533,7 +533,9 @@ return result;
 //
 //
 void sObject::initRecordTypeMatrixCounters() {
-    
+    if (globals::veryverbose)
+        std::cout << "initRecordTypeMatrixCounters" << std::endl;
+
     for (auto it = recordTypes.begin(); it != recordTypes.end(); ++it) {
         for (auto itattr = attributeList.begin(); itattr != attributeList.end(); ++itattr) {
             if (itattr->isExcluded())
@@ -541,7 +543,6 @@ void sObject::initRecordTypeMatrixCounters() {
             std::pair<std::string,std::string> key {it->first,itattr->getName()};
             recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
             if (globals::veryverbose) {
-                std::cout << "initRecordTypeMatrixCounters: inserted value" << std::endl;
                 std::cout << key.first << ":" << key.second << std::endl;
             }
         }
@@ -613,8 +614,13 @@ void sObject::initializeMatrixCountersFromFile(const std::string &inputfile) {
 //
 //
 void sObject::addPicklistDescriptor (std::string picklistName, std::string value, std::string label) {
-    picklistDescriptors.insert(std::make_pair(picklistName, std::map<std::string,std::string>{std::make_pair(value,label)}));
-    picklistCounters.insert(std::make_pair(picklistName, std::map<std::string,long>{std::make_pair(value,0L)}));
+    if (globals::veryverbose) {
+        std::cout << "addPicklistDescriptor: " << picklistName << "," << value << "," << label << std::endl;
+    }
+
+    picklistDescriptors[picklistName][value] = label;
+
+    picklistCounters[picklistName][value] = 0L;
 }
 //
 //
@@ -634,3 +640,14 @@ void sObject::outputPicklistCounters(const std::string &dirfile) const {
         }
     }
 }
+//
+//
+void sObject::printPicklistCounters() const {
+    std::cout << "**printPicklistCounters**" << std::endl;
+    for (auto it = picklistCounters.begin(); it != picklistCounters.end(); ++it) {
+        for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
+            std::cout << it->first << ":" << it2->first << "," << it2->second << std::endl;
+        }
+    }
+}
+
