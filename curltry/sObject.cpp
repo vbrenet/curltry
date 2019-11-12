@@ -643,8 +643,8 @@ void sObject::outputPicklistCounters()  {
             
             double percentUsage = ((total == 0) ? 0 : (((double)it2->second / total)*100));
             
-            ofs << getDateString() << "," << getName() << "," << it->first << "," << label << "," << it2->first << "," << it2->second << "," ;
-            ofs << std::setprecision (1) << std::fixed << percentUsage << std::endl;
+            ofs << getDateString() << "," << getName() << "," << it->first << ",\"" << label << "\"," << it2->first << "," << it2->second << "," ;
+            ofs << std::setprecision (2) << std::fixed << percentUsage << std::endl;
         }
     }
 }
