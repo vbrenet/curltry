@@ -29,8 +29,14 @@ std::string sObject::makeAllAttributeQuery() {
     bool isRecordTypeIdFound {false};
     
     for (auto it = attributeList.begin(); it != attributeList.end(); it++) {
-        if (!it->isExcluded())
-            actualList.push_back(it->getName());
+        if (!it->isExcluded()) {
+            if (globals::picklistOnly) {
+                if (it->isPicklist())
+                    actualList.push_back(it->getName());
+            }
+            else
+                actualList.push_back(it->getName());
+        }
         else
             std::cout << "excluded : " << it->getName() << std::endl;
         if (it->getName().compare("RecordTypeId") ==0)

@@ -28,7 +28,7 @@
 #include "utils.hpp"
 #include "globals.hpp"
 
-const std::string curltryVersion = "curltry v1.2.5";
+const std::string curltryVersion = "curltry v1.2.7";
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -170,7 +170,7 @@ void terminate() {
 //
 //
 void exitWithSyntaxError() {
-    std::cerr << "Syntax : curltry -o <object name> [-help] [-version] [-sz <chunksize>] [-j <jobid>] [-picklists] [-r] [-v] [-vv] workingDirectory" << std::endl;
+    std::cerr << "Syntax : curltry -o <object name> [-help] [-version] [-sz <chunksize>] [-j <jobid>] [-picklists] [-picklistsonly] [-r] [-v] [-vv] workingDirectory" << std::endl;
     exit(-1);
 }
 //
@@ -182,7 +182,7 @@ void exitWithVersion() {
 //
 //
 void exitWithHelp() {
-    std::cout << "SYNTAX : curltry -o <object name> [-sz <chunksize>] [-j <jobid>] [-picklists] [-r] [-v] [-vv] workingDirectory" << std::endl;
+    std::cout << "SYNTAX : curltry -o <object name> [-sz <chunksize>] [-j <jobid>] [-picklists] [-picklistsonly] [-r] [-v] [-vv] workingDirectory" << std::endl;
     std::cout << "curltry -help" << std::endl;
     std::cout << "curltry -version" << std::endl << std::endl;
     std::cout << "OPTIONS:" << std::endl;
@@ -190,6 +190,7 @@ void exitWithHelp() {
     std::cout << "-sz <chunksize> : use the pkchunking option and specify the chunsize (max : 250000)" << std::endl;
     std::cout << "-j <jobid> : get results from a bulk job already run, e.g. -j 7503N00000009gn" << std::endl;
     std::cout << "-picklists : produce a file picklists<object> containing picklists stats" << std::endl;
+    std::cout << "-picklistsonly : only produce a file picklists<object> containing picklists stats" << std::endl;
     std::cout << "-r : restart from the last curltry run session - this option requires the -j option" << std::endl;
     std::cout << "-v : verbose mode" << std::endl;
     std::cout << "-vv : very verbose mode (trace level)" << std::endl;
@@ -215,6 +216,7 @@ int main(int argc, const char * argv[]) {
             {"-help",{false,false}},
             {"-version",{false,false}},
             {"-picklists",{false,false}},
+            {"-picklistsonly",{false,false}},
             {"-j",{false,true}}
         }
     };
@@ -278,6 +280,11 @@ int main(int argc, const char * argv[]) {
         else if (curr.getName().compare("-picklists") == 0) {
             globals::picklistAnalysis = true;
         }
+        else if (curr.getName().compare("-picklistsonly") == 0) {
+            globals::picklistAnalysis = true;
+            globals::picklistOnly = true;
+        }
+
 
 
      }  // end for parameters

@@ -222,10 +222,15 @@ bool orchestrator::execute(int chunksize) {
                 long nbrec = theObject.computeCsvRecords(result);
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
-                theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
-                theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
-                if (globals::picklistAnalysis)
+                if (globals::picklistOnly) {
                     theObject.outputPicklistCounters();
+                }
+                else {
+                    theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
+                    theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
+                    if (globals::picklistAnalysis)
+                        theObject.outputPicklistCounters();
+                }
                 
                 if (!restartManager::isAlreadyRead(resultid))
                     restartManager::saveBatchId(resultid);
@@ -240,10 +245,15 @@ bool orchestrator::execute(int chunksize) {
     if (config::getFormat() == config::dataformat::XML)
         theObject.outputAttributeCounters(globals::workingDirectory + "/result");
     else {
-        theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
-        theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
-        if (globals::picklistAnalysis)
+        if (globals::picklistOnly) {
             theObject.outputPicklistCounters();
+        }
+        else {
+            theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
+            theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
+            if (globals::picklistAnalysis)
+                theObject.outputPicklistCounters();
+        }
     }
 
     if (globals::verbose)
@@ -285,10 +295,15 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
                 long nbrec = theObject.computeCsvRecords(result);
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
-                theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
-                theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
-                if (globals::picklistAnalysis)
+                if (globals::picklistOnly) {
                     theObject.outputPicklistCounters();
+                }
+                else {
+                    theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
+                    theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
+                    if (globals::picklistAnalysis)
+                        theObject.outputPicklistCounters();
+                }
 
                 if (!restartManager::isAlreadyRead(resultid))
                     restartManager::saveBatchId(resultid);
@@ -300,10 +315,15 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
     if (config::getFormat() == config::dataformat::XML)
         theObject.outputAttributeCounters(globals::workingDirectory + "/result");
     else {
-        theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
-        theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
-        if (globals::picklistAnalysis)
+        if (globals::picklistOnly) {
             theObject.outputPicklistCounters();
+        }
+        else {
+            theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
+            theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
+            if (globals::picklistAnalysis)
+                theObject.outputPicklistCounters();
+        }
     }
     
     if (globals::verbose)

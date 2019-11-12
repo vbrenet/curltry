@@ -18,6 +18,8 @@ public:
     static bool verbose;
     static bool veryverbose;
     static bool picklistAnalysis;
+    static bool picklistOnly;
+
 };
 
 #endif /* globals_hpp */
