@@ -625,17 +625,26 @@ void sObject::addPicklistDescriptor (std::string picklistName, std::string value
 //
 //
 void sObject::outputPicklistCounters()  {
-    std::ofstream ofs { getName() + "picklists.csv"};
+    std::ofstream ofs { "picklists" + getName() + ".csv"};
     
     // header
-    ofs << "Date,sObject,PicklistName,PicklistLabel,PicklistValue,Usage" << std::endl;
+    ofs << "Date,sObject,PicklistName,PicklistLabel,PicklistValue,Usage,PercentUsage" << std::endl;
 
     for (auto it = picklistCounters.begin(); it != picklistCounters.end(); ++it) {
+        // first compute total valued fields
+        double total {0};
+        for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+            total += it2->second;
+
+        // then output counters
         for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
             
             std::string label = picklistDescriptors[it->first][it2->first] ;
-                        
-            ofs << getDateString() << "," << getName() << "," << it->first << "," << label << "," << it2->first << "," << it2->second << std::endl;
+            
+            double percentUsage = ((total == 0) ? 0 : (((double)it2->second / total)*100));
+            
+            ofs << getDateString() << "," << getName() << "," << it->first << "," << label << "," << it2->first << "," << it2->second << "," ;
+            ofs << std::setprecision (1) << std::fixed << percentUsage << std::endl;
         }
     }
 }

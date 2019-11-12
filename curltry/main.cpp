@@ -30,7 +30,7 @@
 #include "utils.hpp"
 #include "globals.hpp"
 
-const std::string curltryVersion = "curltry v1.2.0";
+const std::string curltryVersion = "curltry v1.2.1";
 //std::string workingDirectory;
 //bool verbose {false};
 //bool veryverbose {false};
@@ -175,7 +175,7 @@ void terminate() {
 //
 //
 void exitWithSyntaxError() {
-    std::cerr << "Syntax : curltry -o <object name> [-help] [-version] [-sz <chunksize>] [-j <jobid>] [-r] [-v] [-vv] workingDirectory" << std::endl;
+    std::cerr << "Syntax : curltry -o <object name> [-help] [-version] [-sz <chunksize>] [-j <jobid>] [-picklists] [-r] [-v] [-vv] workingDirectory" << std::endl;
     exit(-1);
 }
 //
@@ -194,6 +194,7 @@ void exitWithHelp() {
     std::cout << "-o <object name> : specify the sObject to analyze, e.g. -o Opportunity" << std::endl;
     std::cout << "-sz <chunksize> : use the pkchunking option and specify the chunsize (max : 250000)" << std::endl;
     std::cout << "-j <jobid> : get results from a bulk job already run, e.g. -j 7503N00000009gn" << std::endl;
+    std::cout << "-picklists : produce a file picklists<object> containing picklists stats" << std::endl;
     std::cout << "-r : restart from the last curltry run session - this option requires the -j option" << std::endl;
     std::cout << "-v : verbose mode" << std::endl;
     std::cout << "-vv : very verbose mode (trace level)" << std::endl;
