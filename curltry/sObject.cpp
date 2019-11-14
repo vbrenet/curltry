@@ -116,7 +116,7 @@ void sObject::computerecords(const std::string &xmlresult) {
 }
 //
 //
-void sObject::printAttributeCounters() {
+void sObject::printAttributeCounters() const {
     for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++)
         std::cout << it->first << " : " << it->second << std::endl;
 }
@@ -526,7 +526,7 @@ bool sObject::initializeRecordTypes() {
 }
 //
 //
-std::string sObject::getnamebyid(const std::string id) {
+std::string sObject::getnamebyid(const std::string id) const {
 std::string result;
 auto it = recordTypes.find(id);
 if (it == recordTypes.end())

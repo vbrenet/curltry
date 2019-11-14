@@ -14,7 +14,6 @@
 #include <vector>
 #include <fstream>
 #include <map>
-#include <tuple>
 
 #include "sAttribute.hpp"
 
@@ -37,7 +36,7 @@ private:
     void processMatrixLine(const std::string &inputline);
     void initializeCounter(const std::string& attribute, const std::string& countervalue);
     void parseRecordTypeBuffer(const std::string&);
-    std::string getnamebyid(const std::string id);
+    std::string getnamebyid(const std::string id) const;
     static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
     bool isAttributeCustom(const std::string) const;
     bool isAttributePicklist(const std::string name) const;
@@ -50,7 +49,7 @@ public:
     void print() const;
     void computerecords(const std::string &xmlresult);
     long computeCsvRecords(const std::string &);
-    void printAttributeCounters();
+    void printAttributeCounters() const;
     void initializeAttributeCounters(const std::string &inputfile);
     bool initializeRecordTypes();
     void initializeMatrixCountersFromFile(const std::string &inputfile);
