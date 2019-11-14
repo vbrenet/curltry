@@ -28,7 +28,7 @@
 #include "utils.hpp"
 #include "globals.hpp"
 
-const std::string curltryVersion = "curltry v1.2.7";
+const std::string curltryVersion = "curltry v1.2.8";
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {

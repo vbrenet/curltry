@@ -508,7 +508,7 @@ bool bulkQuery::getBatchResultIdNew(const std::string& batchid, std::map<std::st
 bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& resultid, std::string& result) {
     CURL *curl;
     CURLcode res;
-    std::string readBuffer;
+    //std::string readBuffer;
     
     curl = curl_easy_init();
     
@@ -517,7 +517,7 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
         curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result/"+resultid).c_str());
         
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &result);
         curl_easy_setopt(curl, CURLOPT_BUFFERSIZE, CURL_MAX_READ_SIZE);
         curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "gzip");
         // set header
@@ -545,7 +545,7 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
         return false;
     }
 
-    result = readBuffer;
+    //result = readBuffer;
     
     return true;
     
@@ -568,6 +568,7 @@ bool bulkQuery::getResult(std::string& result, bool& allResultsRead, std::string
                     if (it2->second == false) {
                         allResultsRead = false;
                         if (!restartManager::isRestartMode() || !restartManager::isAlreadyRead(it2->first)) {
+                            result.clear();
                             if (!getBatchResult(it->first, it2->first, result))
                                 return false;
                         }
