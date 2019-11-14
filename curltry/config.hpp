@@ -47,7 +47,7 @@ private:
     static void processLine(const std::string&);
 public:
     
-    static void getConfig(const std::string filename);
+    static bool getConfig(const std::string filename);
     static void getAttributeList(const std::string dirname, const std::string object, std::vector<std::string>&);
     //
     //  config accessors

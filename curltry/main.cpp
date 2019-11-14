@@ -287,7 +287,10 @@ int main(int argc, const char * argv[]) {
     
     textGenerator::init();
         
-    config::getConfig(globals::workingDirectory + "/config");
+    if (!config::getConfig(globals::workingDirectory + "/config")) {
+        std::cerr << "config file not found or empty" << std::endl;
+        exitWithSyntaxError();
+    }
 
     restartManager::init();
     

@@ -162,13 +162,18 @@ void config::processLine(const std::string& line) {
     }
 }
 //
-void config::getConfig(const std::string filename) {
+bool config::getConfig(const std::string filename) {
     std::ifstream configFile {filename};
     std::string currentLine;
     
+    int nbline {0};
+    
     while (getline(configFile,currentLine)) {
+        nbline++;
         processLine(currentLine);
     }
+    
+    return (nbline > 0);
 }
 //
 //
