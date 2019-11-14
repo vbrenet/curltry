@@ -7,6 +7,7 @@
 //
 #include <iostream>
 #include <fstream>
+#include <algorithm>    // for g++ compatibility
 #include "restartManager.hpp"
 #include "globals.hpp"
 

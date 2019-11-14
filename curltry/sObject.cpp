@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iomanip>  // for g++ compatibility
 #include "sObject.hpp"
 #include "config.hpp"
 #include <curl/curl.h>
