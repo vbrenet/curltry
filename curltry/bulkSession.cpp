@@ -10,9 +10,10 @@
 #include <iostream>
 #include <sstream>
 #include "globals.hpp"
+#include "utils.hpp"
 
 extern size_t WriteCallback(void *, size_t , size_t , void *);
-extern std::string extractXmlToken(const std::string& inputbuffer, const std::string& token);
+
 std::string bulkSession::sessionId;
 std::string bulkSession::serverUrl;
 std::string bulkSession::injectUrl;
@@ -63,7 +64,8 @@ bool bulkSession::openBulkSession(bool isSandbox, const std::string username, co
     std::stringstream ssurl;
     ssurl << "https://" << ((isSandbox) ? "test." : "login.") << "salesforce.com/services/Soap/u/" << apiversion;
     
-    std::cout << "session open url: " << ssurl.str() << std::endl;
+    if (globals::verbose)
+        std::cout << "session open url: " << ssurl.str() << std::endl;
     
     std::stringstream ssbody;
     ssbody << "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"

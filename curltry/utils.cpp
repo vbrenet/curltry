@@ -159,3 +159,25 @@ std::string removeCommas (const std::string& input) {
 bool isStringNumeric (const std::string input) {
     return (input.find_first_not_of( "0123456789" ) == std::string::npos);
 }
+//
+std::string extractXmlToken(const std::string& inputbuffer, size_t pos, const std::string& token) {
+    std::string endtoken = token;
+    endtoken.insert(1,1,'/');
+    
+    size_t beginpos = inputbuffer.find(token, pos);
+    size_t endpos = inputbuffer.find(endtoken, pos);
+    
+    return inputbuffer.substr(beginpos+token.size(),endpos-beginpos-token.size());
+}
+//
+//
+std::string extractXmlToken(const std::string& inputbuffer, const std::string& token) {
+    std::string endtoken = token;
+    endtoken.insert(1,1,'/');
+    
+    size_t beginpos = inputbuffer.find(token);
+    size_t endpos = inputbuffer.find(endtoken);
+    
+    return inputbuffer.substr(beginpos+token.size(),endpos-beginpos-token.size());
+}
+//
