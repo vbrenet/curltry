@@ -198,3 +198,42 @@ void config::getAttributeList(const std::string dirname, const std::string objec
     }
 
 }
+//
+//
+bool config::checkConfig() {
+
+    bool status {true};
+    
+    if (clientid == "") {
+        std::cerr << "config file: clientid parameter is mandatory" << std::endl;
+        status = false;
+     }
+    if (clientsecret == "") {
+        std::cerr << "config file: clientsecret parameter is mandatory" << std::endl;
+        status = false;
+     }
+    if (domain == "") {
+        if (isSandbox()) {
+            std::cout << "domain not specified, assuming 'test.salesforce.com'" << std::endl;
+            domain = "test.salesforce.com";
+        }
+        else {
+            std::cout << "domain not specified, assuming 'login.salesforce.com'" << std::endl;
+            domain = "login.salesforce.com";
+        }
+    }
+    if (username == "") {
+        std::cerr << "config file: username parameter is mandatory" << std::endl;
+        status = false;
+     }
+    if (password == "") {
+        std::cerr << "config file: password parameter is mandatory" << std::endl;
+        status = false;
+     }
+    if (apiversion == "") {
+        std::cerr << "config file: apiversion parameter is mandatory" << std::endl;
+        status = false;
+     }
+
+    return status;
+}

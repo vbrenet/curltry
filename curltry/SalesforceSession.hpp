@@ -21,6 +21,7 @@ private:
     static std::string domain;
     
     static std::string extractToken(const std::string buffer);
+    static std::string extractDomain(const std::string buffer);
 
 public:
     static bool openSession(const std::string , const std::string , const std::string , const std::string , const std::string, const std::string securitytoken);

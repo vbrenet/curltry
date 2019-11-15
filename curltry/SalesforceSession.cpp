@@ -28,6 +28,18 @@ std::string SalesforceSession::extractToken(const std::string buffer) {
     return buffer.substr(beginindex,endindex-beginindex);
 }
 //
+//  extract domain to be used to authenticate further calls
+//
+std::string SalesforceSession::extractDomain(const std::string buffer) {
+    //"instance_url":"https://covea--DEMANALY01.my.salesforce.com"
+    
+    size_t beginindex = buffer.find("instance_url") + 15;
+    beginindex = buffer.find("//",beginindex);
+    size_t endindex = buffer.find('"', beginindex);
+    
+    return buffer.substr(beginindex+2,endindex-beginindex-2);
+}
+//
 //  open connected app session
 //
 bool SalesforceSession::openSession(const std::string thedomain, const std::string client_id, const std::string client_secret, const std::string username, const std::string password, const std::string securitytoken) {
@@ -65,10 +77,21 @@ bool SalesforceSession::openSession(const std::string thedomain, const std::stri
     curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
     if (http_code != 200) {
         std::cerr << "openSession : http error: " << http_code << std::endl;
+        std::cerr << "openSession : response: " << readBuffer << std::endl;
         return false;
     }
     
-   connectedAppToken = SalesforceSession::extractToken(readBuffer);
+    if (globals::veryverbose) {
+        std::cout << "openSession response : " << readBuffer << std::endl;
+    }
+    
+    connectedAppToken = SalesforceSession::extractToken(readBuffer);
+    
+    if (domain == "test.salesforce.com" || domain == "login.salesforce.com") {
+        domain = extractDomain(readBuffer);
+        if (globals::veryverbose)
+            std::cout << "openSession, extracted domain : " << domain << std::endl;
+    }
     
     return true;
 }

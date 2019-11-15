@@ -66,5 +66,6 @@ public:
 
     //
     static void printMap();
+    static bool checkConfig();
 };
 #endif /* config_hpp */

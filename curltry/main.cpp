@@ -28,7 +28,7 @@
 #include "utils.hpp"
 #include "globals.hpp"
 
-const std::string curltryVersion = "curltry v1.2.8";
+const std::string curltryVersion = "curltry v1.2.9";
 
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -292,6 +292,9 @@ int main(int argc, const char * argv[]) {
         exitWithSyntaxError();
     }
 
+    if (!config::checkConfig())
+        exit(-1);
+    
     restartManager::init();
     
     if (injection) {
