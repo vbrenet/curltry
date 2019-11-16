@@ -173,6 +173,9 @@ bool orchestrator::getObjectInfo() {
     // if restart mode, initialize counters from csvResult file
     if (restartManager::isRestartMode()) {
         theObject.initializeAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
+        if (globals::picklistAnalysis) {
+            theObject.initializePicklistCountersFromFile(globals::workingDirectory + "/picklists" + theObject.getName() + ".csv");
+        }
     }
     
     //

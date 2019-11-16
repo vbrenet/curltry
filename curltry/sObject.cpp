@@ -620,6 +620,68 @@ void sObject::initializeMatrixCountersFromFile(const std::string &inputfile) {
 }
 //
 //
+//
+void sObject::processPicklistLine(const std::string &inputline) {
+/*
+ 15/11/2019,Account,AccountSource,"Partner Referral",Partner Referral,64,34.59
+ 15/11/2019,Account,AccountSource,"Phone Inquiry",Phone Inquiry,56,30.27
+ 15/11/2019,Account,AccountSource,"Purchased List",Purchased List,65,35.14
+ 15/11/2019,Account,AccountSource,"Web",Web,0,0.00
+ */
+    std::string picklistName, picklistValue, counterValue;
+    
+    size_t firstcomma = inputline.find_first_of(',');
+    size_t secondcomma = inputline.find_first_of(',',firstcomma+1);
+    size_t thirdcomma = inputline.find_first_of(',',secondcomma+1);
+    if (firstcomma == std::string::npos ||
+        secondcomma == std::string::npos ||
+        thirdcomma == std::string::npos) {
+        std::cerr << "sObject::processPicklistLine parsing error" << std::endl;
+        return;
+    }
+
+    picklistName = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
+    
+    size_t lastcomma = inputline.find_last_of(',');
+    size_t lastcommaminus1 = inputline.rfind(',',lastcomma-1);
+    size_t lastcommaminus2 = inputline.rfind(',',lastcommaminus1-1);
+
+    if (lastcomma == std::string::npos ||
+        lastcommaminus1 == std::string::npos ||
+        lastcommaminus2 == std::string::npos) {
+        std::cerr << "sObject::processPicklistLine parsing error" << std::endl;
+        return;
+    }
+    
+    picklistValue = inputline.substr(lastcommaminus2+1,lastcommaminus1-lastcommaminus2-1);
+    counterValue = inputline.substr(lastcommaminus1+1,lastcomma-lastcommaminus1-1);
+    
+    if (globals::veryverbose) {
+        std::cout << "sObject::processPicklistLine: picklistName: "<< picklistName << " picklistValue: " << picklistValue << " counterValue: " << counterValue << std::endl;
+    }
+
+    picklistCounters[picklistName][picklistValue] = std::stol(counterValue);
+}
+//
+//
+void sObject::initializePicklistCountersFromFile(const std::string &inputfile) {
+    std::ifstream picklistFile {inputfile};
+    
+    std::string currentLine;
+    
+    int lineCounter = 0;
+    
+    while (getline(picklistFile,currentLine)) {
+        // skip header
+        if (++lineCounter == 1) continue;
+        
+        processPicklistLine(currentLine);
+    }
+    
+    picklistFile.close();
+}
+//
+//
 void sObject::addPicklistDescriptor (std::string picklistName, std::string value, std::string label) {
     if (globals::veryverbose) {
         std::cout << "addPicklistDescriptor: " << picklistName << "," << value << "," << label << std::endl;
