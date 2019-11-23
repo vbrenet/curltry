@@ -17,5 +17,6 @@ std::string removeCommas (const std::string& input);
 bool isStringNumeric (const std::string input);
 std::string extractXmlToken(const std::string& inputbuffer, size_t pos, const std::string& token);
 std::string extractXmlToken(const std::string& inputbuffer, const std::string& token);
+size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
 
 #endif /* utils_hpp */

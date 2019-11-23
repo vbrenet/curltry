@@ -14,6 +14,7 @@
 #include "bulkQuery.hpp"
 #include "bulkSession.hpp"
 #include "restartManager.hpp"
+#include "utils.hpp"
 //
 bool bulkQuery::firstTime = true;
 bool bulkQuery::pkchunking = true;
@@ -26,15 +27,9 @@ std::map<std::string,batchInfo> bulkQuery::batches {};
 config::dataformat bulkQuery::format;   // xml or csv
 //
 //
-extern size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
-extern std::string extractXmlToken(const std::string& inputbuffer, const std::string& token);
-extern std::string extractXmlToken(const std::string& inputbuffer, size_t pos, const std::string& token);
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 //  jobStatusInfo::print
 //      print a jobStatusInfo instance content on the standard output
 //
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void jobStatusInfo::print() const {
     std::cout << "***jobStatusInfo:" << std::endl;
     std::cout << "status: " <<  status <<std::endl;

@@ -12,11 +12,10 @@
 #include "SalesforceSession.hpp"
 #include "config.hpp"
 #include "globals.hpp"
+#include "utils.hpp"
 
 std::string SalesforceSession::connectedAppToken;
 std::string SalesforceSession::domain;
-
-extern size_t WriteCallback(void *, size_t , size_t , void *);
 
 //
 //  extract token to be used to authenticate further calls

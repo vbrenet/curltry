@@ -468,7 +468,6 @@ void sObject::parseRecordTypeBuffer(const std::string&buffer) {
     }
 }
 //
-//
 size_t sObject::WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
    ((std::string*)userp)->append((char*)contents, size * nmemb);
@@ -736,4 +735,47 @@ void sObject::printPicklistDescriptors() const {
         }
     }
 }
+
+//
+//
+bool sObject::getDescribeAttributesBuffer(std::string& buffer){
+    CURL *curl;
+    CURLcode res;
+    std::string readBuffer;
+
+    readBuffer.clear();
+    curl = curl_easy_init();
+    
+    if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, ("https://" + SalesforceSession::getDomain() + "/services/data/v" + config::getApiVersion() + "/sobjects/" + getName() + "/describe").c_str());
+        
+        if (globals::veryverbose)
+            std::cout << "getDescribeAttributesBuffer: " << "https://" <<  SalesforceSession::getDomain() << "/services/data/v" + config::getApiVersion() + "/sobjects/" << getName() << "/describe" << std::endl;
+        
+        struct curl_slist *chunk = NULL;
+        
+        chunk = curl_slist_append(chunk, ("Authorization: Bearer " + SalesforceSession::getConnectedAppToken()).c_str());
+        res = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
+        if(res != CURLE_OK)
+            fprintf(stderr, "curl_easy_setopt() failed: %s\n",
+                    curl_easy_strerror(res));
+        
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        res = curl_easy_perform(curl);
+        if(res != CURLE_OK)
+            fprintf(stderr, "curl_easy_perform() failed: %s\n",
+                    curl_easy_strerror(res));
+        
+        curl_easy_cleanup(curl);
+        
+        buffer = readBuffer;
+    }
+    else
+        return false;
+    
+    return true;
+}
+//
 

@@ -28,55 +28,7 @@
 #include "utils.hpp"
 #include "globals.hpp"
 
-const std::string curltryVersion = "curltry v1.2.10";
-
-size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
-{
-   ((std::string*)userp)->append((char*)contents, size * nmemb);
-    return size * nmemb;
-}
-//
-//
-bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer){
-    CURL *curl;
-    CURLcode res;
-    std::string readBuffer;
-
-    readBuffer.clear();
-    curl = curl_easy_init();
-    
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, ("https://" + SalesforceSession::getDomain() + "/services/data/v" + config::getApiVersion() + "/sobjects/" + objName + "/describe").c_str());
-        
-        if (globals::veryverbose)
-            std::cout << "getDescribeAttributesBuffer: " << "https://" <<  SalesforceSession::getDomain() << "/services/data/v" + config::getApiVersion() + "/sobjects/" << objName << "/describe" << std::endl;
-        
-        struct curl_slist *chunk = NULL;
-        
-        chunk = curl_slist_append(chunk, ("Authorization: Bearer " + SalesforceSession::getConnectedAppToken()).c_str());
-        res = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
-        if(res != CURLE_OK)
-            fprintf(stderr, "curl_easy_setopt() failed: %s\n",
-                    curl_easy_strerror(res));
-        
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-        res = curl_easy_perform(curl);
-        if(res != CURLE_OK)
-            fprintf(stderr, "curl_easy_perform() failed: %s\n",
-                    curl_easy_strerror(res));
-        
-        curl_easy_cleanup(curl);
-        
-        buffer = readBuffer;
-    }
-    else
-        return false;
-    
-    return true;
-}
-//
+const std::string curltryVersion = "curltry v1.2.11";
 //
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {

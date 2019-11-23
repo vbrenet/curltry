@@ -12,8 +12,6 @@
 #include "globals.hpp"
 #include "utils.hpp"
 
-extern size_t WriteCallback(void *, size_t , size_t , void *);
-
 std::string bulkSession::sessionId;
 std::string bulkSession::serverUrl;
 std::string bulkSession::injectUrl;

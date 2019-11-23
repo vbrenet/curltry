@@ -15,9 +15,6 @@
 #include "globals.hpp"
 
 //
-extern bool getDescribeAttributesBuffer(const std::string objName, std::string& buffer);
-
-//
 //
 bool orchestrator::describeObject() {
     std::string rawAttributeList;
@@ -36,7 +33,7 @@ bool orchestrator::describeObject() {
     }
     
     // launch describe request (produce a buffer)
-    if (!getDescribeAttributesBuffer(theObject.getName(), rawAttributeList))
+    if (!theObject.getDescribeAttributesBuffer(rawAttributeList))
         return false;
     
     

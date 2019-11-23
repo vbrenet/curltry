@@ -44,6 +44,7 @@ private:
 
 public:
     sObject (const std::string objname)  : name {objname} {}
+    bool getDescribeAttributesBuffer(std::string& buffer);
     const std::string& getName() const {return name;} ;
     void addAttribute(sAttribute a) {attributeList.push_back({a});}
     std::string makeAllAttributeQuery();
