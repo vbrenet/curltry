@@ -139,14 +139,14 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
     // header
-    ofs << "date,sobject,fieldName,fieldUsage,percentUsage,usageBucket,fromPackage" << std::endl;
+    ofs << "date,sobject,fieldName,fieldType,fieldUsage,percentUsage,usageBucket,fromPackage" << std::endl;
     
     std::string dateString = getDateString();
     
     for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++) {
         
         ofs << dateString << "," << getName() << ",";
-        ofs << it->first << "," << it->second << ",";
+        ofs << it->first << "," << getAttributeType(it->first) << "," << it->second << ",";
         double percentUsage = ((nbRecords == 0) ? 0 : (((double)it->second / nbRecords)*100));
         ofs << std::setprecision (1) << std::fixed << percentUsage ;
         
@@ -167,6 +167,16 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
     ofs.close();
 }
 //
+std::string sObject::getAttributeType(const std::string name) const {
+    
+    for (auto it = attributeList.begin(); it != attributeList.end(); ++it) {
+        if (it->getName().compare(name) == 0) {
+            return it->getType();
+        }
+    }
+
+    return "";
+}
 //
 bool sObject::isAttributeCustom(const std::string name) const {
     

@@ -48,6 +48,7 @@ bool orchestrator::describeObject() {
         size_t offset = beginFields;
         do {
             picklist = false;
+            std::string attributeType;
             size_t beginName = rawAttributeList.find("\"name\":",offset);
             if (beginName != std::string::npos) {
                 bool excluded {false};
@@ -59,7 +60,7 @@ bool orchestrator::describeObject() {
                     if (beginType != std::string::npos) {
                         size_t endType = rawAttributeList.find(",\"unique\":",beginType);
                         if (endType != std::string::npos) {
-                            std::string attributeType = rawAttributeList.substr(beginType+7+1,endType-beginType-7-2);
+                            attributeType = rawAttributeList.substr(beginType+7+1,endType-beginType-7-2);
                             if ((attributeType.compare("address") == 0) || (attributeType.compare("location") ==0))
                                 excluded = true;
                             if (attributeType.compare("picklist") == 0)
@@ -89,7 +90,7 @@ bool orchestrator::describeObject() {
                     } // end begincustom found
                     
                     std::string currentAttributeName = rawAttributeList.substr(beginName+7+1,endName-beginName-7-2);
-                    theObject.addAttribute({currentAttributeName,excluded, isCustom, picklist});
+                    theObject.addAttribute({currentAttributeName,excluded, isCustom, picklist, attributeType});
                     
                     if (picklist && globals::picklistAnalysis) {
                         /* example:

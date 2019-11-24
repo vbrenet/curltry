@@ -43,7 +43,7 @@ private:
     static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
     bool isAttributeCustom(const std::string) const;
     bool isAttributePicklist(const std::string name) const;
-
+    std::string getAttributeType(const std::string name) const;
 public:
     sObject (const std::string objname)  : name {objname} {}
     bool getDescribeAttributesBuffer(std::string& buffer);
