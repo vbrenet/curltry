@@ -25,7 +25,10 @@ void sObject::print() const {
 //
 //
 std::string sObject::makeAllAttributeQuery() {
-    std::string query {};
+    
+    if (queryStringConstructed)
+        return query;
+    
     std::vector<std::string> actualList {};
     bool isRecordTypeIdFound {false};
     
@@ -79,6 +82,8 @@ std::string sObject::makeAllAttributeQuery() {
     }
     
     query += " from " + getName();
+    
+    queryStringConstructed = true;
     
     return query;
 }

@@ -19,6 +19,8 @@
 
 class sObject{
 private:
+    bool queryStringConstructed {false};
+    std::string query;
     std::string name;
     std::vector<sAttribute> attributeList {};
     std::map<std::string,long> attributeCounters {};
