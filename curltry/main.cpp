@@ -28,7 +28,7 @@
 #include "utils.hpp"
 #include "globals.hpp"
 
-const std::string curltryVersion = "curltry v2.0.1";
+const std::string curltryVersion = "curltry v2.0.2";
 //
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {

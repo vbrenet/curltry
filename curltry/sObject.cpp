@@ -100,27 +100,6 @@ void sObject::computeAttributes(const std::string &record, int recnumber) {
     }
 }
 //
-void sObject::computerecords(const std::string &xmlresult) {
-    size_t cursor = 0;
-    int nbrec {0};
-    bool terminated {false};
-    
-    while (!terminated) {
-        size_t nextRecord = xmlresult.find("<records xsi:type=\"sObject\">", cursor);
-        terminated = (nextRecord == std::string::npos);
-        if (!terminated) {
-            nbrec++;
-            size_t endOfRecord = xmlresult.find("</records>", nextRecord);
-            std::string currentRecord = xmlresult.substr(nextRecord, endOfRecord-nextRecord);
-            computeAttributes(currentRecord, nbrec);
-            //std::cout << "record " << nbrec << " : " << currentRecord << std::endl;
-            cursor = nextRecord + 30;
-        }
-    }
-
-    //std::cout << "Total number of records: " << nbrec << std::endl;
-}
-//
 //
 void sObject::printAttributeCounters() const {
     for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++)

@@ -71,10 +71,9 @@ size_t bulkQuery::read_callback(void *dest, size_t size, size_t nmemb, void *use
 //      theformat : xml or csv
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool bulkQuery::createJob(const std::string objectName, int chunksize, config::dataformat theformat) {
+bool bulkQuery::createJob(const std::string objectName, int chunksize) {
     
     pkchunking = (chunksize > 0);
-    format = theformat;
     
     std::stringstream ssbody;
     ssbody <<   "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"
@@ -82,7 +81,7 @@ bool bulkQuery::createJob(const std::string objectName, int chunksize, config::d
     <<          "<operation>query</operation>\n"
     <<          "<object>" << objectName << "</object>\n"
     <<          "<concurrencyMode>Parallel</concurrencyMode>\n"
-    <<          "<contentType>" << (theformat == config::dataformat::XML ? "XML" : "CSV")  << "</contentType>\n"
+    <<          "<contentType>" << "CSV" << "</contentType>\n"
     <<          "</jobInfo>\n";
     
     body = ssbody.str();

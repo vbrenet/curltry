@@ -36,10 +36,8 @@ private:
     static bool isASandbox;
     static bool useFileForAttributeList;
 
-    static dataformat theformat;
     static std::map<std::string,std::vector<std::string>> excludedAttributesByObj;
 //
-    static void computeDataFormat(const std::string&);
     static void getIsSandbox(const std::string&);
     static void getUseFileForAttributeList(const std::string&);
     static void updateExcludedAttributes(const std::string&);
@@ -62,7 +60,6 @@ public:
     static std::string& getApiVersion() {return apiversion;};
     static bool isSandbox() {return isASandbox;};
     static bool useFileForAttrList() {return useFileForAttributeList;}
-    static dataformat getFormat() {return theformat;};
 
     //
     static void printMap();

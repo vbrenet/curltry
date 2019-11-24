@@ -51,7 +51,6 @@ public:
     void addAttribute(sAttribute a) {attributeList.push_back({a});}
     std::string makeAllAttributeQuery();
     void print() const;
-    void computerecords(const std::string &xmlresult);
     long computeCsvRecords(const std::string &);
     void printAttributeCounters() const;
     void initializeAttributeCounters(const std::string &inputfile);

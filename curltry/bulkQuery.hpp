@@ -72,7 +72,7 @@ private:
     static void extractBatchResults (const std::string& input, std::map<std::string,bool>& results);
 
 public:
-    static bool createJob(const std::string objectName, int chunksize, config::dataformat); // first step to use the bulk API
+    static bool createJob(const std::string objectName, int chunksize); // first step to use the bulk API
     static bool addQuery(const std::string& query); // second step : create a query batch
     static bool waitCompletion();                   // third step : wait for completion of batches
     static bool getResult(std::string& result, bool&, std::string& resultid);     // fourth step : get data result

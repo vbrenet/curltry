@@ -194,7 +194,7 @@ bool orchestrator::execute(int chunksize) {
         return false;
     
     // bulkQuery::createJob(const std::string objectName, int chunksize)
-    if (!bulkQuery::createJob(theObject.getName(), chunksize, config::getFormat()))
+    if (!bulkQuery::createJob(theObject.getName(), chunksize))
         return false;
 
     // bulkQuery::addQuery(const std::string& query)
@@ -216,10 +216,6 @@ bool orchestrator::execute(int chunksize) {
             
             // treat result
         if ((moreResult && !allResultsRead)|| (chunksize == 0)) {
-            if (config::getFormat() == config::dataformat::XML) {
-                theObject.computerecords(result);
-                theObject.outputAttributeCounters(globals::workingDirectory + "/result");
-            } else {
                 long nbrec = theObject.computeCsvRecords(result);
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
@@ -235,7 +231,6 @@ bool orchestrator::execute(int chunksize) {
                 
                 if (!restartManager::isAlreadyRead(resultid))
                     restartManager::saveBatchId(resultid);
-            }
         }
     } while (moreResult);
 
@@ -243,9 +238,6 @@ bool orchestrator::execute(int chunksize) {
     if (!bulkQuery::closeJob())
         return false;
    
-    if (config::getFormat() == config::dataformat::XML)
-        theObject.outputAttributeCounters(globals::workingDirectory + "/result");
-    else {
         if (globals::picklistOnly) {
             theObject.outputPicklistCounters();
         }
@@ -255,7 +247,6 @@ bool orchestrator::execute(int chunksize) {
             if (globals::picklistAnalysis)
                 theObject.outputPicklistCounters();
         }
-    }
 
     if (globals::verbose)
         theObject.printAttributeCounters();
@@ -288,11 +279,6 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
             
         // treat result
         if (moreResult && !allResultsRead) {
-            if (config::getFormat() == config::dataformat::XML) {
-                theObject.computerecords(result);
-                theObject.outputAttributeCounters(globals::workingDirectory + "/result");
-
-            } else {
                 long nbrec = theObject.computeCsvRecords(result);
                 totalRecords += nbrec;
                 std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
@@ -308,14 +294,9 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
 
                 if (!restartManager::isAlreadyRead(resultid))
                     restartManager::saveBatchId(resultid);
-
-            }
         }
     } while (moreResult);
     
-    if (config::getFormat() == config::dataformat::XML)
-        theObject.outputAttributeCounters(globals::workingDirectory + "/result");
-    else {
         if (globals::picklistOnly) {
             theObject.outputPicklistCounters();
         }
@@ -325,7 +306,6 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
             if (globals::picklistAnalysis)
                 theObject.outputPicklistCounters();
         }
-    }
     
     if (globals::verbose)
         theObject.printAttributeCounters();

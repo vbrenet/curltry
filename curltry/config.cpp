@@ -22,8 +22,6 @@ std::string config::apiversion;
 bool config::isASandbox {false};
 bool config::useFileForAttributeList {false};
 
-config::dataformat config::theformat {dataformat::CSV};
-
 std::map<std::string,std::vector<std::string>> config::excludedAttributesByObj;
 
 const std::vector<config::tokenDesc> config::tokenDescriptions = {
@@ -70,18 +68,6 @@ void config::updateExcludedAttributes(const std::string& line) {
     }
 }
 //
-//
-//
-void config::computeDataFormat(const std::string& line) {
-    size_t firstColon = line.find_first_of(':');
-    if (firstColon != std::string::npos) {
-        std::string value = line.substr(firstColon+1);
-        if (value.compare("xml") == 0)
-            theformat = dataformat::XML;
-        else if (value.compare("csv") == 0)
-            theformat = dataformat::CSV;
-    }
-}
 //
 void config::getIsSandbox(const std::string& line) {
     size_t firstColon = line.find_first_of(':');
@@ -149,9 +135,6 @@ void config::processLine(const std::string& line) {
             break;
         case token::ISPROD:
             getIsSandbox(line);
-            break;
-        case token::DATAFORMAT:
-            computeDataFormat(line);
             break;
         case token::USEFILEFORATTRLIST:
             getUseFileForAttributeList(line);
