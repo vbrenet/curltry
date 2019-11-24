@@ -103,5 +103,6 @@ bool SalesforceSession::openSession(const sessionCredentials &credentials) {
                        credentials.clientSecret,
                        credentials.username,
                        credentials.password,
-                       config::getSecurityToken());
+                       credentials.userSecurityToken
+                       );
 }

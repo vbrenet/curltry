@@ -28,7 +28,7 @@
 #include "utils.hpp"
 #include "globals.hpp"
 
-const std::string curltryVersion = "curltry v1.2.11";
+const std::string curltryVersion = "curltry v1.2.12";
 //
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {
@@ -38,7 +38,9 @@ void runGetResultFromId(const std::string& theObj,  const std::string& theId) {
         config::getClientId(),
         config::getClientSecret(),
         config::getUsername(),
-        config::getPassword()};
+        config::getPassword(),
+        config::getSecurityToken()
+    };
     
     //
     orchestrator theOrchestrator {theObj, credentials};
@@ -61,7 +63,9 @@ void runOrchestration(const std::string& theObj, int chunksize) {
         config::getClientId(),
         config::getClientSecret(),
         config::getUsername(),
-        config::getPassword()};
+        config::getPassword(),
+        config::getSecurityToken()
+    };
 
     //
     orchestrator theOrchestrator {theObj, credentials};
@@ -83,7 +87,9 @@ void runInjection(const std::string& theObj, int nbrec) {
         config::getClientId(),
         config::getClientSecret(),
         config::getUsername(),
-        config::getPassword()};
+        config::getPassword(),
+        config::getSecurityToken()
+    };
     
         {
         injectionOrchestrator theOrchestrator {theObj, credentials};

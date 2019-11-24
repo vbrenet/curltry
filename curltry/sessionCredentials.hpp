@@ -18,8 +18,9 @@ struct sessionCredentials {
     std::string password;
     std::string clientId;
     std::string clientSecret;
+    std::string userSecurityToken;
     
-    sessionCredentials(bool sandbox, const std::string d, const std::string theClientId, const std::string theClientSecret, const std::string u, const std::string p) : isSandbox{sandbox}, domain {d}, username{u}, password{p}, clientId{theClientId}, clientSecret{theClientSecret} {}
+    sessionCredentials(bool sandbox, const std::string d, const std::string theClientId, const std::string theClientSecret, const std::string u, const std::string p, const std::string st) : isSandbox{sandbox}, domain {d}, username{u}, password{p}, userSecurityToken{st}, clientId{theClientId}, clientSecret{theClientSecret} {}
 };
 
 #endif /* sessionCredentials_hpp */
