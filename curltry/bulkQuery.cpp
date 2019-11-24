@@ -15,6 +15,7 @@
 #include "bulkSession.hpp"
 #include "restartManager.hpp"
 #include "utils.hpp"
+#include "globals.hpp"
 //
 bool bulkQuery::firstTime = true;
 bool bulkQuery::pkchunking = true;
@@ -321,7 +322,7 @@ bool bulkQuery::getJobStatus() {
     
     curl = curl_easy_init();
     
-    if(curl) {
+    if (curl) {
         curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId).c_str());
         
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -355,6 +356,11 @@ bool bulkQuery::getJobStatus() {
         return false;
     }
 
+    if (globals::veryverbose) {
+        std::cout << "**Job Status raw buffer**" << std::endl;
+        std::cout << readBuffer << std::endl;
+    }
+        
     extractJobStatusInfo(readBuffer, jobInfo);
     
     return true;
@@ -368,7 +374,7 @@ bool bulkQuery::getBatchesInfo() {
     
     curl = curl_easy_init();
     
-    if(curl) {
+    if (curl) {
         curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch").c_str());
         
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -417,7 +423,7 @@ bool bulkQuery::getBatchResultId(const std::string& batchid, std::string& result
     
     curl = curl_easy_init();
     //https://instance.salesforce.com/services/async/39.0/job/jobId/batch/batchId/result
-    if(curl) {
+    if (curl) {
         std::cout << bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result" << std::endl;
         curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result").c_str());
         
@@ -460,7 +466,7 @@ bool bulkQuery::getBatchResultIdNew(const std::string& batchid, std::map<std::st
     
     curl = curl_easy_init();
     //https://instance.salesforce.com/services/async/39.0/job/jobId/batch/batchId/result
-    if(curl) {
+    if (curl) {
         std::cout << bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result" << std::endl;
         curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result").c_str());
         
@@ -502,7 +508,7 @@ bool bulkQuery::getBatchResult(const std::string& batchid, const std::string& re
     
     curl = curl_easy_init();
     
-    if(curl) {
+    if (curl) {
         std::cout << bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result/"+resultid << std::endl;
         curl_easy_setopt(curl, CURLOPT_URL, (bulkSession::getServerUrl()+"/job/"+jobId+"/batch/"+batchid+"/result/"+resultid).c_str());
         
