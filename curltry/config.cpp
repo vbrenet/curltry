@@ -33,7 +33,6 @@ const std::vector<config::tokenDesc> config::tokenDescriptions = {
     {config::token::SECURITYTOKEN, "_token_:"},
     {config::token::SOBJECT, "_object_:"},
     {config::token::ISPROD, "_isprod_:"},
-    {config::token::DATAFORMAT, "_dataformat_:"},
     {config::token::USEFILEFORATTRLIST, "_usefileforattributelist_:"},
     {config::token::APIVERSION, "_apiversion_:"}
 };

@@ -24,7 +24,6 @@ std::string bulkQuery::mainBatchId;
 jobStatusInfo bulkQuery::jobInfo;
 jobStatusInfo bulkQuery::closedJobInfo;
 std::map<std::string,batchInfo> bulkQuery::batches {};
-config::dataformat bulkQuery::format;   // xml or csv
 //
 //
 //  jobStatusInfo::print
@@ -170,10 +169,7 @@ bool bulkQuery::addQuery(const std::string& query){
         
         // set header
         struct curl_slist *list = NULL;
-        if (format == config::dataformat::XML)
-            list = curl_slist_append(list, "Content-Type: application/xml; charset=UTF-8");
-        else
-            list = curl_slist_append(list, "Content-Type: text/csv; charset=UTF-8");
+        list = curl_slist_append(list, "Content-Type: text/csv; charset=UTF-8");
         list = curl_slist_append(list, ("X-SFDC-Session: " + bulkSession::getSessionId()).c_str());
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
         

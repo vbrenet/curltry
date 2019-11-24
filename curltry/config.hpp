@@ -16,11 +16,9 @@
 
 
 class config {
-public:
-    enum class dataformat  {XML, CSV};
 
 private:
-    enum class token  {DOMAIN, CLIENTID, CLIENTSECRET, USERNAME, PASSWORD, SOBJECT, ISPROD, DATAFORMAT, USEFILEFORATTRLIST, APIVERSION, SECURITYTOKEN, UNKNOWN};
+    enum class token  {DOMAIN, CLIENTID, CLIENTSECRET, USERNAME, PASSWORD, SOBJECT, ISPROD, USEFILEFORATTRLIST, APIVERSION, SECURITYTOKEN, UNKNOWN};
     struct tokenDesc {
         token theToken;
         std::string literal;
