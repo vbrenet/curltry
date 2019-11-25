@@ -14,11 +14,6 @@
 #include "utils.hpp"
 
 //
-void sObject::print() const {
-    for (sAttribute s : attributeList)
-        std::cout << "Attribute: " << s.getName() << std::endl;
-}
-//
 //
 void sObject::printPicklistCounters() const {
     std::cout << "**printPicklistCounters**" << std::endl;
@@ -82,14 +77,14 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
     for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++) {
         
         ofs << dateString << "," << getName() << ",";
-        ofs << it->first << "," << getAttributeType(it->first) << "," << it->second << ",";
+        ofs << it->first << "," << attributeMap[it->first].getType() << "," << it->second << ",";
         double percentUsage = ((nbRecords == 0) ? 0 : (((double)it->second / nbRecords)*100));
         ofs << std::setprecision (1) << std::fixed << percentUsage ;
         
         ofs << "," << getBucket(percentUsage);
         
         std::string fromPackage {};
-        if (isAttributeCustom(it->first))
+        if (attributeMap[it->first].isCustom())
             fromPackage = "Custom";
         else
             fromPackage = "Standard";
@@ -130,7 +125,7 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
         ofs << "," << getBucket(percentUsage);
         
         std::string fromPackage {};
-        if (isAttributeCustom(it->first.second))
+        if (attributeMap[it->first.second].isCustom())
             fromPackage = "Custom";
         else
             fromPackage = "Standard";

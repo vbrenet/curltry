@@ -23,7 +23,9 @@ class sObject{
     std::string query;  // query string
     bool queryStringConstructed {false}; // true if query string constructed
     
-    std::vector<sAttribute> attributeList {};
+    // map of attributes by attribute name
+    std::map<std::string, sAttribute> attributeMap {};
+    //std::vector<sAttribute> attributeList {};
     
     // map of counters, key = attribute name
     std::map<std::string,long> attributeCounters {};
@@ -35,15 +37,14 @@ class sObject{
     std::map<std::string,std::string> recordTypes {};
     
     // map of picklist labels by values (value, label) by attribute name
-    std::map<std::string, std::map<std::string,std::string>> picklistDescriptors;
+    std::map<std::string, std::map<std::string,std::string>> picklistDescriptors {};
     // map of picklist counters by values (value, counter) by attribute name
-    std::map<std::string, std::map<std::string, long>> picklistCounters;
+    std::map<std::string, std::map<std::string, long>> picklistCounters {};
     
     //
     //  private methods
     //
     // object configuration
-    void computeAttributes(const std::string &record, int);
     void parseRecordTypeBuffer(const std::string&);
 
     // initialization of counters
@@ -52,13 +53,13 @@ class sObject{
     void processPicklistLine(const std::string &inputline);
     void processCsvLine(const std::string &inputline);
 
+    // record analysis
+    void incrementCounters(const std::string &recordTypeId, int counter, const std::string &token);
+    
     // utils
     void initializeCounter(const std::string& attribute, const std::string& countervalue);
     std::string getnamebyid(const std::string id) const;
     static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
-    bool isAttributeCustom(const std::string) const;
-    bool isAttributePicklist(const std::string name) const;
-    std::string getAttributeType(const std::string name) const;
     
 public:
     // constructor and accessors
@@ -66,7 +67,7 @@ public:
     const std::string& getName() const {return name;} ;
     
     // object configuration
-    void addAttribute(sAttribute a) {attributeList.push_back({a});}
+    void addAttribute(sAttribute a) {attributeMap.insert(std::pair<std::string,sAttribute>(a.getName(),a));}
     bool getDescribeAttributesBuffer(std::string& buffer);
     std::string makeAllAttributeQuery();
     bool initializeRecordTypes();
@@ -81,7 +82,6 @@ public:
     long computeCsvRecords(const std::string &);
 
     // outputs
-    void print() const;
     void printAttributeCounters() const;
     void printPicklistCounters() const;
     void printPicklistDescriptors() const;

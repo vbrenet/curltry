@@ -27,22 +27,22 @@ std::string sObject::makeAllAttributeQuery() {
     std::vector<std::string> actualList {};
     bool isRecordTypeIdFound {false};
     
-    for (auto it = attributeList.begin(); it != attributeList.end(); it++) {
-        if (!it->isExcluded()) {
+    for (auto it = attributeMap.begin(); it != attributeMap.end(); it++) {
+        if (!it->second.isExcluded()) {
             if (globals::picklistOnly) {
-                if (it->isPicklist())
-                    actualList.push_back(it->getName());
+                if (it->second.isPicklist())
+                    actualList.push_back(it->second.getName());
             }
             else
-                actualList.push_back(it->getName());
+                actualList.push_back(it->second.getName());
         }
         else
-            std::cout << "excluded : " << it->getName() << std::endl;
-        if (it->getName().compare("RecordTypeId") ==0)
+            std::cout << "excluded : " << it->second.getName() << std::endl;
+        if (it->second.getName().compare("RecordTypeId") ==0)
             isRecordTypeIdFound = true;
     }
         
-    std::cout <<  "makeAllAttributeQuery: attributeList.size = " <<attributeList.size()<< std::endl;
+    std::cout <<  "makeAllAttributeQuery: attributeMap.size = " <<attributeMap.size()<< std::endl;
     std::cout <<  "makeAllAttributeQuery: actualList = " << actualList.size() << std::endl;
 
     if (actualList.size() == 0) {
@@ -83,58 +83,23 @@ std::string sObject::makeAllAttributeQuery() {
     return query;
 }
 //
-void sObject::computeAttributes(const std::string &record, int recnumber) {
-    for (sAttribute a : attributeList) {
-        size_t beginAttr = record.find(a.getName());
-        if (beginAttr != std::string::npos) {
-            if (record[beginAttr+a.getName().size()] == '>') {
-                //std::cout << "attribute " << a.getName() << " filled in rec " << recnumber << std::endl;
-                attributeCounters[a.getName()]++;
-            }
-        }
-    }
-}
-//
 //
 void sObject::printAttributeCounters() const {
     for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++)
         std::cout << it->first << " : " << it->second << std::endl;
 }
 //
-std::string sObject::getAttributeType(const std::string name) const {
-    
-    for (auto it = attributeList.begin(); it != attributeList.end(); ++it) {
-        if (it->getName().compare(name) == 0) {
-            return it->getType();
-        }
-    }
-
-    return "";
-}
 //
-bool sObject::isAttributeCustom(const std::string name) const {
-    
-    for (auto it = attributeList.begin(); it != attributeList.end(); ++it) {
-        if (it->getName().compare(name) == 0) {
-            return it->isCustom();
-        }
+void sObject::incrementCounters(const std::string &recordTypeId, int counter, const std::string &token) {
+    attributeCounters[csvAttributeMap[counter]]++;
+    std::pair<std::string,std::string> key {{recordTypeId},{csvAttributeMap[counter]}};
+    recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
+    recordTypeMatrixCounters[key]++;
+    if (globals::picklistAnalysis) {
+        if (attributeMap[csvAttributeMap[counter]].isPicklist())
+            picklistCounters[csvAttributeMap[counter]][token]++;
     }
-
-    return false;
 }
-//
-//
-bool sObject::isAttributePicklist(const std::string name) const {
-    
-    for (auto it = attributeList.begin(); it != attributeList.end(); ++it) {
-        if (it->getName().compare(name) == 0) {
-            return it->isPicklist();
-        }
-    }
-
-    return false;
-}
-
 //
 //
 long sObject::computeCsvRecords(const std::string &csvString) {
@@ -190,14 +155,7 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                         if (counter == recordtypeidnumber)
                             currentRecordTypeId = token;
                         if (token.size() > 0) {
-                            attributeCounters[csvAttributeMap[counter]]++;
-                            std::pair<std::string,std::string> key {{currentRecordTypeId},{csvAttributeMap[counter]}};
-                            recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
-                            recordTypeMatrixCounters[key]++;
-                            if (globals::picklistAnalysis) {
-                                if (isAttributePicklist(csvAttributeMap[counter]))
-                                    picklistCounters[csvAttributeMap[counter]][token]++;
-                            }
+                            incrementCounters(currentRecordTypeId, counter, token);
                         }
                         token.clear();
                     }
@@ -221,14 +179,7 @@ long sObject::computeCsvRecords(const std::string &csvString) {
                         if (counter == recordtypeidnumber)
                             currentRecordTypeId = token;
                         if (token.size() > 0) {
-                            attributeCounters[csvAttributeMap[counter]]++;
-                            std::pair<std::string,std::string> key {{currentRecordTypeId},{csvAttributeMap[counter]}};
-                            recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
-                            recordTypeMatrixCounters[key]++;
-                            if (globals::picklistAnalysis) {
-                                if (isAttributePicklist(csvAttributeMap[counter]))
-                                    picklistCounters[csvAttributeMap[counter]][token]++;
-                            }
+                            incrementCounters(currentRecordTypeId, counter, token);
                         }
                         counter = 0;
                         token.clear();
@@ -453,17 +404,16 @@ void sObject::initRecordTypeMatrixCounters() {
         std::cout << "initRecordTypeMatrixCounters" << std::endl;
 
     for (auto it = recordTypes.begin(); it != recordTypes.end(); ++it) {
-        for (auto itattr = attributeList.begin(); itattr != attributeList.end(); ++itattr) {
-            if (itattr->isExcluded())
+        for (auto itattr = attributeMap.begin(); itattr != attributeMap.end(); ++itattr) {
+            if (itattr->second.isExcluded())
                 continue;
-            std::pair<std::string,std::string> key {it->first,itattr->getName()};
+            std::pair<std::string,std::string> key {it->first,itattr->second.getName()};
             recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
             if (globals::veryverbose) {
                 std::cout << key.first << ":" << key.second << std::endl;
             }
         }
     }
-    
 }
 //
 //

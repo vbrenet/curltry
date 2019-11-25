@@ -24,11 +24,16 @@ private:
     bool custom {false};
     bool picklist {false};
 public:
+    // constructors
+    sAttribute() {};
     sAttribute (const std::string attr, bool excl) : name {attr}, excluded{excl} {}
     sAttribute (const std::string attr, bool excl, bool cust) : name {attr}, excluded{excl}, custom{cust} {}
     sAttribute (const std::string attr, bool excl, bool cust, bool pick) : name {attr}, excluded{excl}, custom{cust}, picklist{pick} {}
     sAttribute (const std::string attr, bool excl, bool cust, bool pick, const std::string t) : name {attr}, excluded{excl}, custom{cust}, picklist{pick}, type{t} {}
 
+    // copy constructor
+    sAttribute(const sAttribute &attr);
+    
     const std::string &getName() const {return name;};
     const std::string &getType() const {return type;};
     const std::string &getDefaultValue() const {return defaultValue;};

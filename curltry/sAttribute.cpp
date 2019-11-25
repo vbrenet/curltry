@@ -7,3 +7,12 @@
 //
 
 #include "sAttribute.hpp"
+
+sAttribute::sAttribute( const sAttribute &attr) {
+    name = attr.name;
+    type = attr.type;
+    defaultValue = attr.defaultValue;
+    excluded = attr.excluded;
+    custom = attr.custom;
+    picklist = attr.picklist;
+}
