@@ -25,7 +25,6 @@ class sObject{
     
     // map of attributes by attribute name
     std::map<std::string, sAttribute> attributeMap {};
-    //std::vector<sAttribute> attributeList {};
     
     // map of counters, key = attribute name
     std::map<std::string,long> attributeCounters {};
