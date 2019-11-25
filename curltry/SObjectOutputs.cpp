@@ -84,15 +84,17 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
         ofs << "," << getBucket(percentUsage);
         
         std::string fromPackage {};
-        if (attributeMap[it->first].isCustom())
-            fromPackage = "Custom";
+        if (attributeMap[it->first].isCustom()) {
+            if (attributeMap[it->first].isPackage())
+                fromPackage = attributeMap[it->first].getPackage();
+            else
+                fromPackage = "Custom";
+        }
         else
             fromPackage = "Standard";
         
         ofs << "," << fromPackage << std::endl;
 
-        
-        
     }
 
     ofs.close();
@@ -125,8 +127,12 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
         ofs << "," << getBucket(percentUsage);
         
         std::string fromPackage {};
-        if (attributeMap[it->first.second].isCustom())
-            fromPackage = "Custom";
+        if (attributeMap[it->first.second].isCustom()) {
+            if (attributeMap[it->first.second].isPackage())
+                fromPackage = attributeMap[it->first.second].getPackage();
+            else
+                fromPackage = "Custom";
+        }
         else
             fromPackage = "Standard";
         
