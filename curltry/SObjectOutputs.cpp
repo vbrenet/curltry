@@ -104,7 +104,7 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
     // header
-    ofs << "Date,sObject,RecordTypeId,RecordType,Field,NbRecords,PercentRecordTypeUsage,UsageBucket,FromPackage" << std::endl;
+    ofs << "Date,sObject,RecordTypeId,RecordType,Field,FieldType,NbRecords,PercentRecordTypeUsage,UsageBucket,FromPackage" << std::endl;
         
     for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
         std::string recordtypeid = it->first.first;
@@ -118,7 +118,8 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
         double percentUsage = ((currNbRec == 0) ? 0 : (((double)it->second / currNbRec)*100));
         
         ofs << analysisDate << "," << getName() << ",";
-        ofs << recordtypeid << "," << removeCommas(recordtypename) << "," << it->first.second << "," << it->second << ",";
+        ofs << recordtypeid << "," << removeCommas(recordtypename) << "," << it->first.second << ",";
+        ofs << attributeMap[it->first.second].getType()  << "," << it->second << ",";
         ofs << std::setprecision (1) << std::fixed << percentUsage;
         ofs << "," << getBucket(percentUsage);
         
