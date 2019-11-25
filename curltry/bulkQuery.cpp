@@ -33,6 +33,7 @@ std::map<std::string,batchInfo> bulkQuery::batches {};
 void jobStatusInfo::print() const {
     std::cout << "***jobStatusInfo:" << std::endl;
     std::cout << "status: " <<  status <<std::endl;
+    std::cout << "createdDate: " <<  createdDate <<std::endl;
     std::cout << "numberBatchesTotal: " <<  numberBatchesTotal <<std::endl;
     std::cout << "numberBatchesQueued: " <<  numberBatchesQueued <<std::endl;
     std::cout << "numberBatchesInProgress: " <<  numberBatchesInProgress <<std::endl;
@@ -219,7 +220,7 @@ bool bulkQuery::addQuery(const std::string& query){
 //  bulkQuery::waitCompletion - wait completion of all batches of the job, AND THEN get batches info, chiefly batch ids
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool bulkQuery::waitCompletion() {
+bool bulkQuery::waitCompletion(std::string& jobDate) {
     
     bool terminated {false};
     
@@ -228,6 +229,8 @@ bool bulkQuery::waitCompletion() {
         getJobStatus();
         
         jobInfo.print();
+        
+        jobDate = jobInfo.createdDate;
         
         int processed = jobInfo.numberBatchesTotal - jobInfo.numberBatchesQueued - jobInfo.numberBatchesInProgress;
         
@@ -301,6 +304,7 @@ void bulkQuery::extractBatchResults (const std::string& input, std::map<std::str
 void bulkQuery::extractJobStatusInfo (const std::string& input, jobStatusInfo& target) {
     target.status = extractXmlToken(input,"<state>");
     target.concurrencyMode = extractXmlToken(input,"<concurrencyMode>");
+    target.createdDate = extractXmlToken(input, "<createdDate>");
     target.numberBatchesQueued = std::stoi(extractXmlToken(input,"<numberBatchesQueued>"));
     target.numberBatchesInProgress = std::stoi(extractXmlToken(input,"<numberBatchesInProgress>"));
     target.numberBatchesCompleted = std::stoi(extractXmlToken(input,"<numberBatchesCompleted>"));

@@ -594,4 +594,21 @@ bool sObject::getDescribeAttributesBuffer(std::string& buffer){
     return true;
 }
 //
-
+//
+void sObject::setAnalysisDate(const std::string jobDate) {
+    //input : 2019-11-25T10:21:32.000Z
+    std::stringstream target;
+    
+    target  << jobDate[8]
+            << jobDate[9]
+            << '/'
+            << jobDate[5]
+            << jobDate[6]
+            << '/'
+            << jobDate[0]
+            << jobDate[1]
+            << jobDate[2]
+            << jobDate[3];
+    
+    analysisDate = target.str();
+}

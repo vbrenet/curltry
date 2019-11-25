@@ -202,9 +202,12 @@ bool orchestrator::execute(int chunksize) {
         return false;
 
     // bulkQuery::waitCompletion()
-    if (!bulkQuery::waitCompletion())
+    std::string jobDate {};
+    if (!bulkQuery::waitCompletion(jobDate))
         return false;
 
+    theObject.setAnalysisDate(jobDate);
+    
     std::string result;
     std::string resultid;
 
@@ -267,8 +270,11 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
     bulkQuery::setJobId(jobid);
     
     // bulkQuery::waitCompletion()
-    if (!bulkQuery::waitCompletion())
+    std::string jobDate {};
+    if (!bulkQuery::waitCompletion(jobDate))
         return false;
+    
+    theObject.setAnalysisDate(jobDate);
 
     std::string result;
     std::string resultid;

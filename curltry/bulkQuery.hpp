@@ -22,6 +22,7 @@
 struct jobStatusInfo {
     std::string status;
     std::string concurrencyMode;
+    std::string createdDate;
     int numberBatchesQueued;
     int numberBatchesInProgress;
     int numberBatchesCompleted;
@@ -73,7 +74,7 @@ private:
 public:
     static bool createJob(const std::string objectName, int chunksize); // first step to use the bulk API
     static bool addQuery(const std::string& query); // second step : create a query batch
-    static bool waitCompletion();                   // third step : wait for completion of batches
+    static bool waitCompletion(std::string& jobDate); // third step : wait for completion of batches
     static bool getResult(std::string& result, bool&, std::string& resultid);     // fourth step : get data result
     static bool closeJob();                         // fifth step : close the job
     static void setJobId(const std::string id) {jobId=id;pkchunking=true;};

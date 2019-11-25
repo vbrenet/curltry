@@ -23,6 +23,8 @@ class sObject{
     std::string query;  // query string
     bool queryStringConstructed {false}; // true if query string constructed
     
+    std::string analysisDate;
+    
     // map of attributes by attribute name
     std::map<std::string, sAttribute> attributeMap {};
     
@@ -70,6 +72,7 @@ public:
     bool getDescribeAttributesBuffer(std::string& buffer);
     std::string makeAllAttributeQuery();
     bool initializeRecordTypes();
+    void setAnalysisDate(const std::string);
 
     // initialization of counters
     void initializeAttributeCountersFromFile(const std::string &inputfile);
