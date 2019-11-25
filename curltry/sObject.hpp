@@ -18,52 +18,76 @@
 #include "sAttribute.hpp"
 
 class sObject{
-private:
-    bool queryStringConstructed {false};
-    std::string query;
-    std::string name;
+    private:
+    std::string name;   // sObject name
+    std::string query;  // query string
+    bool queryStringConstructed {false}; // true if query string constructed
+    
     std::vector<sAttribute> attributeList {};
+    
+    // map of counters, key = attribute name
     std::map<std::string,long> attributeCounters {};
-    std::map<std::pair<std::string,std::string>,long> recordTypeMatrixCounters {};//key: (record type id, attribute name)
+    // map of counters, key = (record type id, attribute name)
+    std::map<std::pair<std::string,std::string>,long> recordTypeMatrixCounters {};
+    // map of attributes in CSV file, key = position number in the CSV line
     std::map<int,std::string> csvAttributeMap {};
-    std::map<std::string,std::string> recordTypes {}; // key : id, value : name
+    // map of record type names by ids
+    std::map<std::string,std::string> recordTypes {};
     
-    std::map<std::string, std::map<std::string,std::string>> picklistDescriptors;   // value: map of picklist value, picklist label
-    std::map<std::string, std::map<std::string, long>> picklistCounters;  // key : picklist att. name, value : map of {value, counter}
+    // map of picklist labels by values (value, label) by attribute name
+    std::map<std::string, std::map<std::string,std::string>> picklistDescriptors;
+    // map of picklist counters by values (value, counter) by attribute name
+    std::map<std::string, std::map<std::string, long>> picklistCounters;
     
+    //
+    //  private methods
+    //
+    // object configuration
     void computeAttributes(const std::string &record, int);
+    void parseRecordTypeBuffer(const std::string&);
 
+    // initialization of counters
     void initRecordTypeMatrixCounters();
-    void processCsvLine(const std::string &inputline);
     void processMatrixLine(const std::string &inputline);
     void processPicklistLine(const std::string &inputline);
+    void processCsvLine(const std::string &inputline);
+
+    // utils
     void initializeCounter(const std::string& attribute, const std::string& countervalue);
-    void parseRecordTypeBuffer(const std::string&);
     std::string getnamebyid(const std::string id) const;
     static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp);
     bool isAttributeCustom(const std::string) const;
     bool isAttributePicklist(const std::string name) const;
     std::string getAttributeType(const std::string name) const;
+    
 public:
+    // constructor and accessors
     sObject (const std::string objname)  : name {objname} {}
-    bool getDescribeAttributesBuffer(std::string& buffer);
     const std::string& getName() const {return name;} ;
+    
+    // object configuration
     void addAttribute(sAttribute a) {attributeList.push_back({a});}
+    bool getDescribeAttributesBuffer(std::string& buffer);
     std::string makeAllAttributeQuery();
-    void print() const;
-    long computeCsvRecords(const std::string &);
-    void printAttributeCounters() const;
-    void initializeAttributeCounters(const std::string &inputfile);
     bool initializeRecordTypes();
+
+    // initialization of counters
+    void initializeAttributeCountersFromFile(const std::string &inputfile);
     void initializeMatrixCountersFromFile(const std::string &inputfile);
     void initializePicklistCountersFromFile(const std::string &inputfile);
-    void outputAttributeCounters(const std::string &);
-    void outputMatrixCounters(const std::string &outputfile);
-
     void addPicklistDescriptor (std::string picklistName, std::string value, std::string label);
-    void outputPicklistCounters() ;
+
+    // record analysis
+    long computeCsvRecords(const std::string &);
+
+    // outputs
+    void print() const;
+    void printAttributeCounters() const;
     void printPicklistCounters() const;
     void printPicklistDescriptors() const;
+    void outputAttributeCounters(const std::string &);
+    void outputMatrixCounters(const std::string &outputfile);
+    void outputPicklistCounters() ;
 
 };
 
