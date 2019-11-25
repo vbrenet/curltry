@@ -27,8 +27,9 @@
 #include "restartManager.hpp"
 #include "utils.hpp"
 #include "globals.hpp"
+#include "buckets.hpp"
 
-const std::string curltryVersion = "curltry v2.0.6";
+const std::string curltryVersion = "curltry v2.0.7";
 //
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {
@@ -252,6 +253,8 @@ int main(int argc, const char * argv[]) {
 
     if (!config::checkConfig())
         exit(-1);
+    
+    buckets::initBucketsFromFile(globals::workingDirectory + "/buckets");
     
     restartManager::init();
     

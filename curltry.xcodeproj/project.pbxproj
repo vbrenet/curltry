@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6F0764AC2164A46400C26AFB /* SalesforceSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F0764AA2164A46400C26AFB /* SalesforceSession.cpp */; };
 		6F143685238BB68000414A66 /* SObjectOutputs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F143684238BB68000414A66 /* SObjectOutputs.cpp */; };
+		6F143688238C28F100414A66 /* buckets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F143686238C28F100414A66 /* buckets.cpp */; };
 		6F1EC64823794E4E00B6CBB8 /* globals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F1EC64623794E4E00B6CBB8 /* globals.cpp */; };
 		6F246B9823703A5E0044A2F4 /* restartManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F246B9623703A5E0044A2F4 /* restartManager.cpp */; };
 		6F31AE71216242680008332E /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F31AE70216242680008332E /* libcurl.tbd */; };
@@ -54,6 +55,8 @@
 		6F0764AA2164A46400C26AFB /* SalesforceSession.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SalesforceSession.cpp; sourceTree = "<group>"; };
 		6F0764AB2164A46400C26AFB /* SalesforceSession.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SalesforceSession.hpp; sourceTree = "<group>"; };
 		6F143684238BB68000414A66 /* SObjectOutputs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SObjectOutputs.cpp; sourceTree = "<group>"; };
+		6F143686238C28F100414A66 /* buckets.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = buckets.cpp; sourceTree = "<group>"; };
+		6F143687238C28F100414A66 /* buckets.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = buckets.hpp; sourceTree = "<group>"; };
 		6F1EC64623794E4E00B6CBB8 /* globals.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = globals.cpp; sourceTree = "<group>"; };
 		6F1EC64723794E4E00B6CBB8 /* globals.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = globals.hpp; sourceTree = "<group>"; };
 		6F246B9623703A5E0044A2F4 /* restartManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = restartManager.cpp; sourceTree = "<group>"; };
@@ -154,6 +157,8 @@
 				6F1EC64723794E4E00B6CBB8 /* globals.hpp */,
 				6F4EC95B2375652F00CCA515 /* utils.cpp */,
 				6F4EC95C2375652F00CCA515 /* utils.hpp */,
+				6F143686238C28F100414A66 /* buckets.cpp */,
+				6F143687238C28F100414A66 /* buckets.hpp */,
 				6F246B9623703A5E0044A2F4 /* restartManager.cpp */,
 				6F246B9723703A5E0044A2F4 /* restartManager.hpp */,
 				6FC5AE5D21EF2EFE003A632F /* ActualParameters.cpp */,
@@ -263,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F143688238C28F100414A66 /* buckets.cpp in Sources */,
 				6FD1CAA521639E1D004D2DF5 /* sObject.cpp in Sources */,
 				6F246B9823703A5E0044A2F4 /* restartManager.cpp in Sources */,
 				6F5F36A1219FF1D700F02B20 /* genericAttribute.cpp in Sources */,
