@@ -12,6 +12,7 @@
 #include <iomanip>  // for g++ compatibility
 #include "sObject.hpp"
 #include "utils.hpp"
+#include "buckets.hpp"
 
 //
 //
@@ -79,7 +80,7 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
         double percentUsage = ((nbRecords == 0) ? 0 : (((double)it->second / nbRecords)*100));
         ofs << std::setprecision (1) << std::fixed << percentUsage ;
         
-        ofs << "," << getBucket(percentUsage);
+        ofs << "," << buckets::getBucket(percentUsage);
         
         std::string fromPackage {};
         if (attributeMap[it->first].isCustom()) {
@@ -121,7 +122,7 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
         ofs << recordtypeid << "," << removeCommas(recordtypename) << "," << it->first.second << ",";
         ofs << attributeMap[it->first.second].getType()  << "," << it->second << ",";
         ofs << std::setprecision (1) << std::fixed << percentUsage;
-        ofs << "," << getBucket(percentUsage);
+        ofs << "," << buckets::getBucket(percentUsage);
         
         std::string fromPackage {};
         if (attributeMap[it->first.second].isCustom()) {

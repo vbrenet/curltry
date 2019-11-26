@@ -119,11 +119,6 @@ static const std::string buckets[] =
 "All"   //100
 };
 
-std::string getBucket(double d) {
-    if (d < 0 || d > 100)
-        return ("undefined");
-    return (buckets[(int)d]);
-}
 //
 // produce current date in the format JJ/MM/AAAA
 //
