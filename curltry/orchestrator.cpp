@@ -76,8 +76,9 @@ bool orchestrator::describeObject() {
                         }
                     }
                     
-                    // get the custom attribute
+                    // get the custom and defaultValue attributes
                     bool isCustom {false};
+                    std::string defaultValue {};
                     size_t begincustom = rawAttributeList.rfind("\"custom\"", endName);
                     if (begincustom != std::string::npos) {
                         size_t endcustom = rawAttributeList.find("\"defaultValue\"", begincustom);
@@ -86,11 +87,13 @@ bool orchestrator::describeObject() {
                             if (begintrue != std::string::npos && begintrue < endcustom) {
                                 isCustom = true;
                             }
+                            size_t comma = rawAttributeList.find_first_of(',',endcustom);
+                            defaultValue = rawAttributeList.substr(endcustom+15,comma-endcustom-15);
                         }
                     } // end begincustom found
                     
                     std::string currentAttributeName = rawAttributeList.substr(beginName+7+1,endName-beginName-7-2);
-                    theObject.addAttribute({currentAttributeName,excluded, isCustom, picklist, attributeType});
+                    theObject.addAttribute({currentAttributeName,excluded, isCustom, picklist, attributeType, defaultValue});
                     
                     if (picklist && globals::picklistAnalysis) {
                         /* example:

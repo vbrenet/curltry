@@ -35,6 +35,7 @@ public:
     sAttribute (const std::string attr, bool excl, bool cust) : name {attr}, excluded{excl}, custom{cust} {setPackageName();}
     sAttribute (const std::string attr, bool excl, bool cust, bool pick) : name {attr}, excluded{excl}, custom{cust}, picklist{pick} {setPackageName();}
     sAttribute (const std::string attr, bool excl, bool cust, bool pick, const std::string t) : name {attr}, excluded{excl}, custom{cust}, picklist{pick}, type{t} {setPackageName();}
+    sAttribute (const std::string attr, bool excl, bool cust, bool pick, const std::string t, const std::string df) : name {attr}, excluded{excl}, custom{cust}, picklist{pick}, type{t}, defaultValue{df} {setPackageName();}
 
     // copy constructor
     sAttribute(const sAttribute &attr);

@@ -71,12 +71,12 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
     // header
-    ofs << "date,sobject,fieldName,fieldType,fieldUsage,percentUsage,usageBucket,fromPackage" << std::endl;
+    ofs << "date,sobject,fieldName,fieldType,defaultValue,fieldUsage,percentUsage,usageBucket,fromPackage" << std::endl;
         
     for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++) {
         
         ofs << analysisDate << "," << getName() << ",";
-        ofs << it->first << "," << attributeMap[it->first].getType() << "," << it->second << ",";
+        ofs << it->first << "," << attributeMap[it->first].getType() << "," << attributeMap[it->first].getDefaultValue() << "," << it->second << ",";
         double percentUsage = ((nbRecords == 0) ? 0 : (((double)it->second / nbRecords)*100));
         ofs << std::setprecision (1) << std::fixed << percentUsage ;
         
