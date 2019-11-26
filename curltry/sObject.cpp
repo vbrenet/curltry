@@ -91,13 +91,18 @@ void sObject::printAttributeCounters() const {
 //
 //
 void sObject::incrementCounters(const std::string &recordTypeId, int counter, const std::string &token) {
+    
     attributeCounters[csvAttributeMap[counter]]++;
+    
     std::pair<std::string,std::string> key {{recordTypeId},{csvAttributeMap[counter]}};
     recordTypeMatrixCounters.insert(std::pair<std::pair<std::string,std::string>,long>({key},{0}));
     recordTypeMatrixCounters[key]++;
+    
     if (globals::picklistAnalysis) {
-        if (attributeMap[csvAttributeMap[counter]].isPicklist())
+        if (attributeMap[csvAttributeMap[counter]].isPicklist()) {
             picklistCounters[csvAttributeMap[counter]][token]++;
+            recordTypePicklistCounters[recordTypeId][csvAttributeMap[counter]][token]++;
+        }
     }
 }
 //

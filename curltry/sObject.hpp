@@ -32,6 +32,7 @@ class sObject{
     std::map<std::string,long> attributeCounters {};
     // map of counters, key = (record type id, attribute name)
     std::map<std::pair<std::string,std::string>,long> recordTypeMatrixCounters {};
+
     // map of attributes in CSV file, key = position number in the CSV line
     std::map<int,std::string> csvAttributeMap {};
     // map of record type names by ids
@@ -41,7 +42,8 @@ class sObject{
     std::map<std::string, std::map<std::string,std::string>> picklistDescriptors {};
     // map of picklist counters by values (value, counter) by attribute name
     std::map<std::string, std::map<std::string, long>> picklistCounters {};
-    
+    // map of picklist counters by recordtypeId, by attributeName, by values
+    std::map<std::string, std::map<std::string, std::map<std::string, long>>> recordTypePicklistCounters {};
     //
     //  private methods
     //
