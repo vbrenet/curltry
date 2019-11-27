@@ -231,8 +231,10 @@ bool orchestrator::execute(int chunksize) {
                 else {
                     theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
                     theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
-                    if (globals::picklistAnalysis)
+                    if (globals::picklistAnalysis) {
                         theObject.outputPicklistCounters();
+                        theObject.outputRecordTypePicklistCounters();
+                    }
                 }
                 
                 if (!restartManager::isAlreadyRead(resultid))
@@ -250,8 +252,10 @@ bool orchestrator::execute(int chunksize) {
         else {
             theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
             theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
-            if (globals::picklistAnalysis)
+            if (globals::picklistAnalysis) {
                 theObject.outputPicklistCounters();
+                theObject.outputRecordTypePicklistCounters();
+            }
         }
 
     if (globals::verbose)
@@ -297,8 +301,10 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
                 else {
                     theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
                     theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
-                    if (globals::picklistAnalysis)
+                    if (globals::picklistAnalysis) {
                         theObject.outputPicklistCounters();
+                        theObject.outputRecordTypePicklistCounters();
+                    }
                 }
 
                 if (!restartManager::isAlreadyRead(resultid))
@@ -312,8 +318,10 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
         else {
             theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
             theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
-            if (globals::picklistAnalysis)
+            if (globals::picklistAnalysis) {
                 theObject.outputPicklistCounters();
+                theObject.outputRecordTypePicklistCounters();
+            }
         }
     
     if (globals::verbose)

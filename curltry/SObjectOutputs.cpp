@@ -92,7 +92,7 @@ void sObject::outputRecordTypePicklistCounters() {
                 ofs << it2->first << ",";           // picklist name
                 ofs << "\"" << picklistDescriptors[it2->first][it3->first] << "\","; // picklist label
                 ofs << "\"" << it3->first << "\","; // picklist value
-                ofs << it3->second;
+                ofs << it3->second << std::endl;
             }
         }
     }
