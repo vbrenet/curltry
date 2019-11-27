@@ -132,9 +132,11 @@ std::string buckets::getBucket(double d) {
 //
 void buckets::processBucketLine(const std::string &line) {
     // 0:"00"
-    // 1:"01-10"
-    // 2:"01-10"
-    // etc.
+    // 1-20:"01-20"
+    // 21:"21"
+    // 22-50: "22-50"
+    // etc
+    
     size_t semicolon = line.find_first_of(':');
     if (semicolon != std::string::npos) {
         std::string index = line.substr(0,semicolon);
@@ -149,13 +151,33 @@ void buckets::processBucketLine(const std::string &line) {
             }
         }
         else {
-            std::cerr << "buckets initialization: key not numeric: " << index << std::endl;
+            size_t dash = index.find_first_of('-');
+            if (dash != std::string::npos) {
+                std::string left = index.substr(0,dash);
+                std::string right = index.substr(dash+1);
+                if (isStringNumeric(left) && isStringNumeric(right)) {
+                    int leftbound = std::stoi(left);
+                    int rightbound = std::stoi(right);
+                    if (leftbound >= 0 && leftbound <= 100 && rightbound >= 0 && rightbound <= 100 && leftbound < rightbound) {
+                        std::string value = line.substr(semicolon+1);
+                        for (auto i = leftbound; i <= rightbound; ++i)
+                            bucketMap[i] = value;
+                    }
+                    else
+                        std::cerr << "buckets initialization: invalid line: " << line << std::endl;
+                }
+                else
+                    std::cerr << "buckets initialization: invalid line: " << line << std::endl;
+            }
+            else
+                std::cerr << "buckets initialization: invalid line: " << line << std::endl;
         }
     }
     else {
         std::cerr << "buckets initialization: invalid line: " << line << std::endl;
     }
 }
+
 //
 //
 void buckets::initBucketsFromFile(const std::string &inputfilename) {
