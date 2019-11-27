@@ -61,6 +61,44 @@ void sObject::outputPicklistCounters()  {
 }
 //
 //
+void sObject::outputRecordTypePicklistCounters() {
+    std::ofstream ofs { "picklistsMatrix" + getName() + ".csv"};
+
+    // header
+    ofs << "Date,sObject,RecordTypeId,RecordType,PicklistName,PicklistLabel,PicklistValue,Usage" << std::endl;
+
+    // map of picklist counters by recordtypeId, by attributeName, by values
+    //std::map<std::string, std::map<std::string, std::map<std::string, long>>> recordTypePicklistCounters
+
+    for (auto it = recordTypePicklistCounters.begin(); it != recordTypePicklistCounters.end(); ++it) {
+        // it->first : recordtype id
+        // it->second : map [attributes, map[picklist value, counter]
+        std::string recordtypename;
+        if (it->first.size() == 0)
+            recordtypename = "null";
+        else
+            recordtypename = getnamebyid(it->first);
+
+        for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
+            // it2->first : picklist name
+            // it2->second : map[picklist value, counter]
+            for (auto it3 = it2->second.begin(); it3 != it2->second.end(); ++it3) {
+                // it3->first : picklist value
+                // it3->second : counter
+                ofs << analysisDate << ",";
+                ofs << getName() << ",";
+                ofs << it->first << ",";
+                ofs << recordtypename << ",";
+                ofs << it2->first << ",";           // picklist name
+                ofs << "\"" << picklistDescriptors[it2->first][it3->first] << "\","; // picklist label
+                ofs << "\"" << it3->first << "\","; // picklist value
+                ofs << it3->second;
+            }
+        }
+    }
+}
+//
+//
 void sObject::outputAttributeCounters(const std::string &outputfile) {
     
     double nbRecords {0};

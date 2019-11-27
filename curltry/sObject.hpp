@@ -52,6 +52,7 @@ class sObject{
 
     // initialization of counters
     void initRecordTypeMatrixCounters();
+    void initRecordTypePicklistMatrixCounters();
     void processMatrixLine(const std::string &inputline);
     void processPicklistLine(const std::string &inputline);
     void processCsvLine(const std::string &inputline);
@@ -92,7 +93,7 @@ public:
     void outputAttributeCounters(const std::string &);
     void outputMatrixCounters(const std::string &outputfile);
     void outputPicklistCounters() ;
-
+    void outputRecordTypePicklistCounters() ;
 };
 
 #endif /* sObject_hpp */

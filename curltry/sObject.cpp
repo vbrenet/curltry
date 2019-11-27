@@ -385,8 +385,11 @@ bool sObject::initializeRecordTypes() {
     
     if (restartManager::isRestartMode())
         initializeMatrixCountersFromFile(globals::workingDirectory + "/matrix" + getName() + ".csv");
-    else
+    else {
         initRecordTypeMatrixCounters();
+        if (globals::picklistAnalysis)
+            initRecordTypePicklistMatrixCounters();
+    }
     
     return true;
 }
@@ -402,6 +405,29 @@ else
 return result;
 }
 //
+//
+//
+//
+void sObject::initRecordTypePicklistMatrixCounters() {
+    // map of picklist counters by recordtypeId, by attributeName, by values
+    //std::map<std::string, std::map<std::string, std::map<std::string, long>>> recordTypePicklistCounters
+    
+    // map of picklist labels by values (value, label) by attribute name
+    //std::map<std::string, std::map<std::string,std::string>> picklistDescriptors {};
+
+
+    for (auto it = recordTypes.begin(); it != recordTypes.end(); ++it) {
+        for (auto itattr = attributeMap.begin(); itattr != attributeMap.end(); ++itattr) {
+            if (itattr->second.isExcluded() || !itattr->second.isPicklist())
+                continue;
+            
+            auto itdescriptor = picklistDescriptors.find(itattr->first);
+            for (auto it2 = itdescriptor->second.begin(); it2 != itdescriptor->second.end(); ++it2) {
+                recordTypePicklistCounters[it->first][itattr->first][it2->first] = 0;
+            }
+        }
+    }
+}
 //
 //
 void sObject::initRecordTypeMatrixCounters() {
