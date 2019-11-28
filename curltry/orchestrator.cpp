@@ -231,7 +231,7 @@ bool orchestrator::execute(int chunksize) {
             std::cout << "Nb records: " << nbrec;
             std::cout << " Total processed: " << totalRecords;
             if (!restartManager::isRestartMode())
-                std::cout << " % progress: " << std::setprecision (1) << std::fixed << percentProgress;
+                std::cout << " progress: " << std::setprecision (1) << std::fixed << percentProgress << "%";
             std::cout << std::endl;
             
             if (globals::picklistOnly) {
@@ -308,7 +308,7 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
                 std::cout << "Nb records: " << nbrec;
                 std::cout << " Total processed: " << totalRecords;
                 if (!restartManager::isRestartMode())
-                    std::cout << " % progress: " << std::setprecision (1) << std::fixed << percentProgress;
+                    std::cout << " progress: " << std::setprecision (1) << std::fixed << percentProgress << "%";
                 std::cout << std::endl;
 
                 if (globals::picklistOnly) {

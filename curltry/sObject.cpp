@@ -630,7 +630,7 @@ void sObject::processMatrixPicklistLine(const std::string &inputline) {
     }
     
     picklistValue = inputline.substr(lastcommaminus1+1,lastcomma-lastcommaminus1-1);
-    counterValue = inputline.substr(lastcomma);
+    counterValue = inputline.substr(lastcomma+1);
     
     if (isStringNumeric(counterValue))
         recordTypePicklistCounters[recordTypeId][attributeName][picklistValue] = std::stol(counterValue);
