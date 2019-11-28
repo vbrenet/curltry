@@ -58,6 +58,8 @@ void sObject::outputPicklistCounters()  {
             ofs << std::setprecision (2) << std::fixed << percentUsage << std::endl;
         }
     }
+    
+    ofs.close();
 }
 //
 //
@@ -65,7 +67,7 @@ void sObject::outputRecordTypePicklistCounters() {
     std::ofstream ofs { "picklistsMatrix" + getName() + ".csv"};
 
     // header
-    ofs << "Date,sObject,RecordTypeId,RecordType,PicklistName,PicklistLabel,PicklistValue,Usage" << std::endl;
+    ofs << "Date,sObject,RecordTypeId,RecordType,PicklistName,DefaultValue,PicklistLabel,PicklistValue,Usage" << std::endl;
 
     // map of picklist counters by recordtypeId, by attributeName, by values
     //std::map<std::string, std::map<std::string, std::map<std::string, long>>> recordTypePicklistCounters
@@ -88,14 +90,17 @@ void sObject::outputRecordTypePicklistCounters() {
                 ofs << analysisDate << ",";
                 ofs << getName() << ",";
                 ofs << it->first << ",";
-                ofs << recordtypename << ",";
+                ofs << "\"" << recordtypename << "\",";
                 ofs << it2->first << ",";           // picklist name
+                ofs << attributeMap[it2->first].getDefaultValue() << ","; //  default value
                 ofs << "\"" << picklistDescriptors[it2->first][it3->first] << "\","; // picklist label
                 ofs << "\"" << it3->first << "\","; // picklist value
                 ofs << it3->second << std::endl;
             }
         }
     }
+    
+    ofs.close();
 }
 //
 //
@@ -110,16 +115,9 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
     // header
-    ofs << "Date,sObject,FieldName,FieldType,DefaultValue,FieldUsage,PercentUsage,UsageBucket,FromPackage" << std::endl;
+    ofs << "Date,sObject,FieldName,FromPackage,FieldType,DefaultValue,FieldUsage,PercentUsage,UsageBucket" << std::endl;
         
     for (auto it=attributeCounters.begin(); it != attributeCounters.end(); it++) {
-        
-        ofs << analysisDate << "," << getName() << ",";
-        ofs << it->first << "," << attributeMap[it->first].getType() << "," << attributeMap[it->first].getDefaultValue() << "," << it->second << ",";
-        double percentUsage = ((nbRecords == 0) ? 0 : (((double)it->second / nbRecords)*100));
-        ofs << std::setprecision (1) << std::fixed << percentUsage ;
-        
-        ofs << "," << buckets::getBucket(percentUsage);
         
         std::string fromPackage {};
         if (attributeMap[it->first].isCustom()) {
@@ -131,7 +129,17 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
         else
             fromPackage = "Standard";
         
-        ofs << "," << fromPackage << std::endl;
+        ofs << analysisDate << ","; // date
+        ofs << getName() << ",";    // object name
+        ofs << it->first << ",";    // field name
+        ofs << fromPackage << ",";  // field origine
+        ofs << attributeMap[it->first].getType() << ",";            // field type
+        ofs << attributeMap[it->first].getDefaultValue() << ",";    // default value
+        ofs << it->second << ",";   // field usage
+        
+        double percentUsage = ((nbRecords == 0) ? 0 : (((double)it->second / nbRecords)*100));
+        ofs << std::setprecision (1) << std::fixed << percentUsage << ","; // percent usage
+        ofs  << buckets::getBucket(percentUsage) << std::endl;;    // usage bucket
 
     }
 
@@ -158,7 +166,7 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
         double percentUsage = ((currNbRec == 0) ? 0 : (((double)it->second / currNbRec)*100));
         
         ofs << analysisDate << "," << getName() << ",";
-        ofs << recordtypeid << "," << removeCommas(recordtypename) << "," << it->first.second << ",";
+        ofs << recordtypeid << ",\"" << recordtypename << "\"," << it->first.second << ",";
         ofs << attributeMap[it->first.second].getType() << "," << attributeMap[it->first.second].getDefaultValue() << "," << it->second << ",";
         ofs << std::setprecision (1) << std::fixed << percentUsage;
         ofs << "," << buckets::getBucket(percentUsage);
@@ -178,4 +186,3 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
     
     ofs.close();
 }
-

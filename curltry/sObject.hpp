@@ -55,7 +55,7 @@ class sObject{
     void initRecordTypePicklistMatrixCounters();
     void processMatrixLine(const std::string &inputline);
     void processPicklistLine(const std::string &inputline);
-    void processCsvLine(const std::string &inputline);
+    void processAttributeCountersLine(const std::string &inputline);
 
     // record analysis
     void incrementCounters(const std::string &recordTypeId, int counter, const std::string &token);

@@ -238,27 +238,35 @@ void sObject::initializeCounter(const std::string& attribute, const std::string&
 }
 //
 //
-void sObject::processCsvLine(const std::string &inputline) {
-    // example:
-    //date,sobject,fieldName,fieldUsage,percentUsage,usageBucket,fromPackage
-    //08/11/2019,Lead,Aconvertir__c,331,100.0,All,Custom
-    //08/11/2019,Lead,AdressePostaleComplementDestinataire__c,0,0.0,00,Custom
+void sObject::processAttributeCountersLine(const std::string &inputline) {
+
+    //"Date,sObject,FieldName,FromPackage,FieldType,DefaultValue,FieldUsage,PercentUsage,UsageBucket"
 
     size_t firstcomma = inputline.find_first_of(',');
     size_t secondcomma = inputline.find_first_of(',',firstcomma+1);
     size_t thirdcomma = inputline.find_first_of(',',secondcomma+1);
-    size_t fourthcomma = inputline.find_first_of(',',thirdcomma+1);
 
     if (firstcomma == std::string::npos ||
         secondcomma == std::string::npos ||
-        thirdcomma == std::string::npos ||
-        fourthcomma == std::string::npos) {
+        thirdcomma == std::string::npos) {
         std::cerr << "sObject::processCsvLine parsing error" << std::endl;
         return;
     }
 
     std::string attributeName = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
-    std::string counterValue = inputline.substr(thirdcomma+1,fourthcomma-thirdcomma-1);
+    
+    size_t lastcomma = inputline.find_last_of(',');
+    size_t lastcommaminus1 = inputline.rfind(',',lastcomma-1);
+    size_t lastcommaminus2 = inputline.rfind(',',lastcommaminus1-1);
+
+    if (lastcomma == std::string::npos ||
+        lastcommaminus1 == std::string::npos ||
+        lastcommaminus2 == std::string::npos) {
+        std::cerr << "sObject::processCsvLine parsing error" << std::endl;
+        return;
+    }
+
+    std::string counterValue = inputline.substr(lastcommaminus2+1,lastcommaminus1-lastcommaminus2-1);
 
     initializeCounter(attributeName,counterValue);
     
@@ -280,7 +288,7 @@ void sObject::initializeAttributeCountersFromFile(const std::string &inputfile) 
         // skip header
         if (++lineCounter == 1) continue;
         
-        processCsvLine(currentLine);
+        processAttributeCountersLine(currentLine);
     }
     
     csvResult.close();
