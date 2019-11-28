@@ -230,7 +230,9 @@ bool orchestrator::execute(int chunksize) {
             double percentProgress = ((double)totalRecords/(double)totalRecordProcessedByBatches)*100;
             std::cout << "Nb records: " << nbrec;
             std::cout << " Total processed: " << totalRecords;
-            std::cout << " % progress: " << std::setprecision (2) << std::fixed << percentProgress << std::endl;
+            if (!restartManager::isRestartMode())
+                std::cout << " % progress: " << std::setprecision (1) << std::fixed << percentProgress;
+            std::cout << std::endl;
             
             if (globals::picklistOnly) {
                 theObject.outputPicklistCounters();
@@ -302,7 +304,13 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
         if (moreResult && !allResultsRead) {
                 long nbrec = theObject.computeCsvRecords(result);
                 totalRecords += nbrec;
-                std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
+                double percentProgress = ((double)totalRecords/(double)totalRecordProcessedByBatches)*100;
+                std::cout << "Nb records: " << nbrec;
+                std::cout << " Total processed: " << totalRecords;
+                if (!restartManager::isRestartMode())
+                    std::cout << " % progress: " << std::setprecision (1) << std::fixed << percentProgress;
+                std::cout << std::endl;
+
                 if (globals::picklistOnly) {
                     theObject.outputPicklistCounters();
                 }
