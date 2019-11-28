@@ -53,9 +53,14 @@ void sObject::outputPicklistCounters()  {
             
             double percentUsage = ((total == 0) ? 0 : (((double)it2->second / total)*100));
             
-            ofs << analysisDate << "," << getName() << ",";
-            ofs << it->first << "," << attributeMap[it->first].getDefaultValue() << ",\"" << label << "\",\"" << it2->first << "\"," << it2->second << "," ;
-            ofs << std::setprecision (2) << std::fixed << percentUsage << std::endl;
+            ofs << analysisDate << ","; // date
+            ofs << getName() << ",";    // object name
+            ofs << it->first << ",";    // picklist name
+            ofs << attributeMap[it->first].getDefaultValue() << ",";    // default value
+            ofs << "\"" << label << "\",";  // picklist label
+            ofs << "\"" << it2->first << "\","; // picklist value
+            ofs << it2->second << "," ;     // usage
+            ofs << std::setprecision (2) << std::fixed << percentUsage << std::endl;    // percent usage
         }
     }
     

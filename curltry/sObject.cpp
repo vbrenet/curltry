@@ -529,11 +529,8 @@ void sObject::initializeMatrixCountersFromFile(const std::string &inputfile) {
 //
 void sObject::processPicklistLine(const std::string &inputline) {
 /*
- 15/11/2019,Account,AccountSource,"Partner Referral",Partner Referral,64,34.59
- 15/11/2019,Account,AccountSource,"Phone Inquiry",Phone Inquiry,56,30.27
- 15/11/2019,Account,AccountSource,"Purchased List",Purchased List,65,35.14
- 15/11/2019,Account,AccountSource,"Web",Web,0,0.00
- */
+Date,sObject,PicklistName,DefaultValue,PicklistLabel,PicklistValue,Usage,PercentUsage
+*/
     std::string picklistName, picklistValue, counterValue;
     
     size_t firstcomma = inputline.find_first_of(',');
