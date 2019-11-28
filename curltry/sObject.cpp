@@ -563,7 +563,10 @@ Date,sObject,PicklistName,DefaultValue,PicklistLabel,PicklistValue,Usage,Percent
         std::cout << "sObject::processPicklistLine: picklistName: "<< picklistName << " picklistValue: " << picklistValue << " counterValue: " << counterValue << std::endl;
     }
 
-    picklistCounters[picklistName][picklistValue] = std::stol(counterValue);
+    if (isStringNumeric(counterValue))
+        picklistCounters[picklistName][picklistValue] = std::stol(counterValue);
+    else
+        std::cerr << "sObject::processPicklistLine parsing error" << std::endl;
 }
 //
 //
@@ -583,6 +586,76 @@ void sObject::initializePicklistCountersFromFile(const std::string &inputfile) {
     
     picklistFile.close();
 }
+//
+//
+void sObject::processMatrixPicklistLine(const std::string &inputline) {
+    //input line :
+    //Date,sObject,RecordTypeId,RecordType,PicklistName,DefaultValue,PicklistLabel,PicklistValue,Usage
+    //
+    // map of picklist counters by recordtypeId, by attributeName, by values
+    //std::map<std::string, std::map<std::string, std::map<std::string, long>>> recordTypePicklistCounters
+    
+    /* get recordtypeId, PicklistName, PicklistValue, Usage*/
+    std::string recordTypeId, attributeName, picklistValue, counterValue;
+    
+    size_t firstcomma = inputline.find_first_of(',');
+    size_t secondcomma = inputline.find_first_of(',',firstcomma+1);
+    size_t thirdcomma = inputline.find_first_of(',',secondcomma+1);
+    size_t fourthcomma = inputline.find_first_of(',',thirdcomma+1);
+    size_t fifthcomma = inputline.find_first_of(',',fourthcomma+1);
+
+    if (firstcomma == std::string::npos ||
+        secondcomma == std::string::npos ||
+        thirdcomma == std::string::npos ||
+        fourthcomma == std::string::npos ||
+        fifthcomma == std::string::npos) {
+        std::cerr << "sObject::processMatrixPicklistLine parsing error" << std::endl;
+        return;
+    }
+        
+    if ((thirdcomma-secondcomma) == 1)
+        recordTypeId = "";
+    else
+        recordTypeId = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
+
+    attributeName = inputline.substr(fourthcomma+1,fifthcomma-fourthcomma-1);
+
+    size_t lastcomma = inputline.find_last_of(',');
+    size_t lastcommaminus1 = inputline.rfind(',',lastcomma-1);
+
+    if (lastcomma == std::string::npos ||
+        lastcommaminus1 == std::string::npos) {
+        std::cerr << "sObject::processMatrixPicklistLine parsing error" << std::endl;
+        return;
+    }
+    
+    picklistValue = inputline.substr(lastcommaminus1+1,lastcomma-lastcommaminus1-1);
+    counterValue = inputline.substr(lastcomma);
+    
+    if (isStringNumeric(counterValue))
+        recordTypePicklistCounters[recordTypeId][attributeName][picklistValue] = std::stol(counterValue);
+    else
+        std::cerr << "sObject::processMatrixPicklistLine parsing error" << std::endl;
+}
+//
+//
+void sObject::initializeMatrixPicklistCountersFromFile(const std::string &inputfile) {
+    std::ifstream matrixPicklistFile {inputfile};
+    
+    std::string currentLine;
+    
+    int lineCounter = 0;
+    
+    while (getline(matrixPicklistFile,currentLine)) {
+        // skip header
+        if (++lineCounter == 1) continue;
+        
+        processMatrixPicklistLine(currentLine);
+    }
+    
+    matrixPicklistFile.close();
+}
+//
 //
 //
 void sObject::addPicklistDescriptor (std::string picklistName, std::string value, std::string label) {

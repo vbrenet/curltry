@@ -95,7 +95,7 @@ void sObject::outputRecordTypePicklistCounters() {
                 ofs << analysisDate << ",";
                 ofs << getName() << ",";
                 ofs << it->first << ",";
-                ofs << "\"" << recordtypename << "\",";
+                ofs << "\"" << removeCommas(recordtypename) << "\",";
                 ofs << it2->first << ",";           // picklist name
                 ofs << attributeMap[it2->first].getDefaultValue() << ","; //  default value
                 ofs << "\"" << picklistDescriptors[it2->first][it3->first] << "\","; // picklist label

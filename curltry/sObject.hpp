@@ -56,6 +56,7 @@ class sObject{
     void processAttributeCountersLine(const std::string &inputline);
     void processMatrixLine(const std::string &inputline);
     void processPicklistLine(const std::string &inputline);
+    void processMatrixPicklistLine(const std::string &inputline);
 
     // record analysis
     void incrementCounters(const std::string &recordTypeId, int counter, const std::string &token);
@@ -81,6 +82,8 @@ public:
     void initializeAttributeCountersFromFile(const std::string &inputfile);
     void initializeMatrixCountersFromFile(const std::string &inputfile);
     void initializePicklistCountersFromFile(const std::string &inputfile);
+    void initializeMatrixPicklistCountersFromFile(const std::string &inputfile);
+
     void addPicklistDescriptor (std::string picklistName, std::string value, std::string label);
 
     // record analysis

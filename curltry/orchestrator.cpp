@@ -176,6 +176,7 @@ bool orchestrator::getObjectInfo() {
         theObject.initializeAttributeCountersFromFile(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
         if (globals::picklistAnalysis) {
             theObject.initializePicklistCountersFromFile(globals::workingDirectory + "/picklists" + theObject.getName() + ".csv");
+            theObject.initializeMatrixPicklistCountersFromFile(globals::workingDirectory + "/picklistsMatrix" + theObject.getName() + ".csv");
         }
     }
     
