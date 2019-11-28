@@ -192,6 +192,7 @@ bool orchestrator::getObjectInfo() {
 //
 bool orchestrator::execute(int chunksize) {
     long totalRecords {0};
+    long totalRecordProcessedByBatches {0};
 
     // open bulk session bulkSession::openBulkSession
     if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password, config::getApiVersion(), credentials.userSecurityToken))
@@ -207,7 +208,7 @@ bool orchestrator::execute(int chunksize) {
 
     // bulkQuery::waitCompletion()
     std::string jobDate {};
-    if (!bulkQuery::waitCompletion(jobDate))
+    if (!bulkQuery::waitCompletion(jobDate, totalRecordProcessedByBatches))
         return false;
 
     theObject.setAnalysisDate(jobDate);
@@ -223,23 +224,28 @@ bool orchestrator::execute(int chunksize) {
             
             // treat result
         if ((moreResult && !allResultsRead)|| (chunksize == 0)) {
-                long nbrec = theObject.computeCsvRecords(result);
-                totalRecords += nbrec;
-                std::cout << "Nb records: " << nbrec << " Total: " << totalRecords << std::endl;
-                if (globals::picklistOnly) {
+            
+            long nbrec = theObject.computeCsvRecords(result);
+            totalRecords += nbrec;
+            double percentProgress = ((double)totalRecords/(double)totalRecordProcessedByBatches)*100;
+            std::cout << "Nb records: " << nbrec;
+            std::cout << " Total processed: " << totalRecords;
+            std::cout << " % progress: " << std::setprecision (2) << std::fixed << percentProgress << std::endl;
+            
+            if (globals::picklistOnly) {
+                theObject.outputPicklistCounters();
+            }
+            else {
+                theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
+                theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
+                if (globals::picklistAnalysis) {
                     theObject.outputPicklistCounters();
+                    theObject.outputRecordTypePicklistCounters();
                 }
-                else {
-                    theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
-                    theObject.outputMatrixCounters(globals::workingDirectory + "/matrix" + theObject.getName() + ".csv");
-                    if (globals::picklistAnalysis) {
-                        theObject.outputPicklistCounters();
-                        theObject.outputRecordTypePicklistCounters();
-                    }
-                }
+            }
                 
-                if (!restartManager::isAlreadyRead(resultid))
-                    restartManager::saveBatchId(resultid);
+            if (!restartManager::isAlreadyRead(resultid))
+                restartManager::saveBatchId(resultid);
         }
     } while (moreResult);
 
@@ -270,6 +276,7 @@ bool orchestrator::execute(int chunksize) {
 bool orchestrator::getResultFromJobId(const std::string& jobid) {
     
     long totalRecords {0};
+    long totalRecordProcessedByBatches {0};
     
     // open bulk session bulkSession::openBulkSession
     if (!bulkSession::openBulkSession(credentials.isSandbox, credentials.username, credentials.password, config::getApiVersion(), credentials.userSecurityToken))
@@ -277,9 +284,9 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
     
     bulkQuery::setJobId(jobid);
     
-    // bulkQuery::waitCompletion()
     std::string jobDate {};
-    if (!bulkQuery::waitCompletion(jobDate))
+    
+    if (!bulkQuery::waitCompletion(jobDate, totalRecordProcessedByBatches))
         return false;
     
     theObject.setAnalysisDate(jobDate);

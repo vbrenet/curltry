@@ -220,7 +220,7 @@ bool bulkQuery::addQuery(const std::string& query){
 //  bulkQuery::waitCompletion - wait completion of all batches of the job, AND THEN get batches info, chiefly batch ids
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool bulkQuery::waitCompletion(std::string& jobDate) {
+bool bulkQuery::waitCompletion(std::string& jobDate, long& totalNbRecordProcessed) {
     
     bool terminated {false};
     
@@ -231,6 +231,7 @@ bool bulkQuery::waitCompletion(std::string& jobDate) {
         jobInfo.print();
         
         jobDate = jobInfo.createdDate;
+        totalNbRecordProcessed = jobInfo.numberRecordsProcessed;
         
         int processed = jobInfo.numberBatchesTotal - jobInfo.numberBatchesQueued - jobInfo.numberBatchesInProgress;
         
