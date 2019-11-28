@@ -152,7 +152,7 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
     std::ofstream ofs {outputfile};
     
     // header
-    ofs << "Date,sObject,RecordTypeId,RecordType,FieldName,FieldType,DefaultValue,FieldUsage,PercentRecordTypeUsage,UsageBucket,FromPackage" << std::endl;
+    ofs << "Date,sObject,RecordTypeId,RecordType,FieldName,FromPackage,FieldType,DefaultValue,FieldUsage,PercentRecordTypeUsage,UsageBucket" << std::endl;
         
     for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
         std::string recordtypeid = it->first.first;
@@ -162,15 +162,6 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
         else
             recordtypename = getnamebyid(recordtypeid);
 
-        double currNbRec = recordTypeMatrixCounters[std::pair<std::string,std::string>(recordtypeid,"Id")];
-        double percentUsage = ((currNbRec == 0) ? 0 : (((double)it->second / currNbRec)*100));
-        
-        ofs << analysisDate << "," << getName() << ",";
-        ofs << recordtypeid << ",\"" << recordtypename << "\"," << it->first.second << ",";
-        ofs << attributeMap[it->first.second].getType() << "," << attributeMap[it->first.second].getDefaultValue() << "," << it->second << ",";
-        ofs << std::setprecision (1) << std::fixed << percentUsage;
-        ofs << "," << buckets::getBucket(percentUsage);
-        
         std::string fromPackage {};
         if (attributeMap[it->first.second].isCustom()) {
             if (attributeMap[it->first.second].isPackage())
@@ -181,7 +172,20 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
         else
             fromPackage = "Standard";
         
-        ofs << "," << fromPackage << std::endl;
+        double currNbRec = recordTypeMatrixCounters[std::pair<std::string,std::string>(recordtypeid,"Id")];
+        double percentUsage = ((currNbRec == 0) ? 0 : (((double)it->second / currNbRec)*100));
+        
+        ofs << analysisDate << ",";     // date
+        ofs << getName() << ",";        // sobject name
+        ofs << recordtypeid << ",";     // record type id
+        ofs << "\"" << removeCommas(recordtypename) << "\","; // record type name
+        ofs << it->first.second << ","; // field name
+        ofs << fromPackage << ",";    // field origine
+        ofs << attributeMap[it->first.second].getType() << ","; // field type
+        ofs << attributeMap[it->first.second].getDefaultValue() << ","; // field default value
+        ofs << it->second << ",";   // usage
+        ofs << std::setprecision (1) << std::fixed << percentUsage << ",";
+        ofs << buckets::getBucket(percentUsage) << std::endl; // percent usage
     }
     
     ofs.close();

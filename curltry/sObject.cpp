@@ -457,10 +457,8 @@ void sObject::initRecordTypeMatrixCounters() {
 //
 //
 void sObject::processMatrixLine(const std::string &inputline) {
-  /* example:
-   Date,sObject,RecordTypeId,RecordType,Field,NbRecords,PercentRecordTypeUsage,UsageBucket,FromPackage
-   08/11/2019,Lead,,null,Aconvertir__c,17,100.0,All,Custom
-   08/11/2019,Lead,,null,AdressePostaleComplementDestinataire__c,0,0.0,00,Custom
+  /*
+Date,sObject,RecordTypeId,RecordType,FieldName,FromPackage,FieldType,DefaultValue,FieldUsage,PercentRecordTypeUsage,UsageBucket
    */
 
     std::string recordTypeId, attributeName, counterValue;
@@ -470,14 +468,12 @@ void sObject::processMatrixLine(const std::string &inputline) {
     size_t thirdcomma = inputline.find_first_of(',',secondcomma+1);
     size_t fourthcomma = inputline.find_first_of(',',thirdcomma+1);
     size_t fifthcomma = inputline.find_first_of(',',fourthcomma+1);
-    size_t sixthcomma = inputline.find_first_of(',',fifthcomma+1);
 
     if (firstcomma == std::string::npos ||
         secondcomma == std::string::npos ||
         thirdcomma == std::string::npos ||
         fourthcomma == std::string::npos ||
-        fifthcomma == std::string::npos ||
-        sixthcomma == std::string::npos) {
+        fifthcomma == std::string::npos) {
         std::cerr << "sObject::processMatrixLine parsing error" << std::endl;
         return;
     }
@@ -488,7 +484,19 @@ void sObject::processMatrixLine(const std::string &inputline) {
             recordTypeId = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
 
         attributeName = inputline.substr(fourthcomma+1,fifthcomma-fourthcomma-1);
-        counterValue = inputline.substr(fifthcomma+1,sixthcomma-fifthcomma-1);
+    
+    size_t lastcomma = inputline.find_last_of(',');
+    size_t lastcommaminus1 = inputline.rfind(',',lastcomma-1);
+    size_t lastcommaminus2 = inputline.rfind(',',lastcommaminus1-1);
+
+    if (lastcomma == std::string::npos ||
+        lastcommaminus1 == std::string::npos ||
+        lastcommaminus2 == std::string::npos) {
+        std::cerr << "sObject::processMatrixLine parsing error" << std::endl;
+        return;
+    }
+    
+    counterValue = inputline.substr(lastcommaminus2+1,lastcommaminus1-lastcommaminus2-1);
     
     if (globals::veryverbose) {
         std::cout << "recordTypeId: "<< recordTypeId << " attributeName: " << attributeName << " counterValue: " << counterValue << std::endl;
