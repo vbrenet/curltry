@@ -556,7 +556,7 @@ Date,sObject,PicklistName,DefaultValue,PicklistLabel,PicklistValue,Usage,Percent
         return;
     }
     
-    picklistValue = inputline.substr(lastcommaminus2+1+1,lastcommaminus1-lastcommaminus2-1-1); // +1 -1 to strip enclosing ""
+    picklistValue = inputline.substr(lastcommaminus2+1+1,lastcommaminus1-lastcommaminus2-1-2); // +1 -2 to strip enclosing ""
     counterValue = inputline.substr(lastcommaminus1+1,lastcomma-lastcommaminus1-1);
     
     if (globals::veryverbose) {
@@ -629,7 +629,7 @@ void sObject::processMatrixPicklistLine(const std::string &inputline) {
         return;
     }
     
-    picklistValue = inputline.substr(lastcommaminus1+1+1,lastcomma-lastcommaminus1-1-1);//+1 and -1 to strip enclosing ""
+    picklistValue = inputline.substr(lastcommaminus1+1+1,lastcomma-lastcommaminus1-1-2);//+1 and -2 to strip enclosing ""
     counterValue = inputline.substr(lastcomma+1);
     
     if (globals::veryverbose) {
