@@ -556,7 +556,7 @@ Date,sObject,PicklistName,DefaultValue,PicklistLabel,PicklistValue,Usage,Percent
         return;
     }
     
-    picklistValue = inputline.substr(lastcommaminus2+1,lastcommaminus1-lastcommaminus2-1);
+    picklistValue = inputline.substr(lastcommaminus2+1+1,lastcommaminus1-lastcommaminus2-1-1); // +1 -1 to strip enclosing ""
     counterValue = inputline.substr(lastcommaminus1+1,lastcomma-lastcommaminus1-1);
     
     if (globals::veryverbose) {
@@ -629,8 +629,14 @@ void sObject::processMatrixPicklistLine(const std::string &inputline) {
         return;
     }
     
-    picklistValue = inputline.substr(lastcommaminus1+1,lastcomma-lastcommaminus1-1);
+    picklistValue = inputline.substr(lastcommaminus1+1+1,lastcomma-lastcommaminus1-1-1);//+1 and -1 to strip enclosing ""
     counterValue = inputline.substr(lastcomma+1);
+    
+    if (globals::veryverbose) {
+        std::cout << "processMatrixPicklistLine : " << inputline << std::endl;
+        std::cout << "recordTypeId: " <<recordTypeId << " attributeName: " << attributeName;
+        std::cout << " picklistValue: " << picklistValue << " counterValue: " << counterValue << std::endl;
+    }
     
     if (isStringNumeric(counterValue))
         recordTypePicklistCounters[recordTypeId][attributeName][picklistValue] = std::stol(counterValue);

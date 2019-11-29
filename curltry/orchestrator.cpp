@@ -171,7 +171,7 @@ bool orchestrator::getObjectInfo() {
     //theObject.print();
     std::string thequery = theObject.makeAllAttributeQuery();
     
-    // if restart mode, initialize counters from csvResult file
+    // if restart mode, initialize counters from csvResult files
     if (restartManager::isRestartMode()) {
         theObject.initializeAttributeCountersFromFile(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
         if (globals::picklistAnalysis) {
@@ -231,7 +231,7 @@ bool orchestrator::execute(int chunksize) {
             std::cout << "Nb records: " << nbrec;
             std::cout << " Total processed: " << totalRecords;
             if (!restartManager::isRestartMode())
-                std::cout << " progress: " << std::setprecision (1) << std::fixed << percentProgress << "%";
+                std::cout << " Progress: " << std::setprecision (1) << std::fixed << percentProgress << "%";
             std::cout << std::endl;
             
             if (globals::picklistOnly) {
@@ -308,7 +308,7 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
                 std::cout << "Nb records: " << nbrec;
                 std::cout << " Total processed: " << totalRecords;
                 if (!restartManager::isRestartMode())
-                    std::cout << " progress: " << std::setprecision (1) << std::fixed << percentProgress << "%";
+                    std::cout << " Progress: " << std::setprecision (1) << std::fixed << percentProgress << "%";
                 std::cout << std::endl;
 
                 if (globals::picklistOnly) {
