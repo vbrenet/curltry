@@ -9,6 +9,11 @@
 #include <string>
 #include <ctime>
 #include "utils.hpp"
+#include "config.hpp"
+#include <curl/curl.h>
+#include "SalesforceSession.hpp"
+#include "globals.hpp"
+
 
 /*
  =IF(NUMBERVALUE(E12;".")=100;"All";IF(NUMBERVALUE(E12;".")>90;"91-99";IF(NUMBERVALUE(E12;".")>80;"81-90";IF(NUMBERVALUE(E12;".")>70;"71-80";IF(NUMBERVALUE(E12;".")>60;"61-70";IF(NUMBERVALUE(E12;".")>50;"51-60";IF(NUMBERVALUE(E12;".")>40;"41-50";IF(NUMBERVALUE(E12;".")>30;"31-40";IF(NUMBERVALUE(E12;".")>20;"21-30";IF(NUMBERVALUE(E12;".")>10;"11-20";IF(NUMBERVALUE(E12;".")>5;"06-10";IF(NUMBERVALUE(E12;".")>0;"01-05";"00"))))))))))))
@@ -176,8 +181,49 @@ std::string extractXmlToken(const std::string& inputbuffer, const std::string& t
     return inputbuffer.substr(beginpos+token.size(),endpos-beginpos-token.size());
 }
 //
+//
+//
 size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
    ((std::string*)userp)->append((char*)contents, size * nmemb);
     return size * nmemb;
+}
+//
+//
+//
+bool restQuery(const std::string& query, std::string& readBuffer) {
+    CURL *curl;
+    CURLcode res;
+
+    readBuffer.clear();
+    
+    curl = curl_easy_init();
+
+    if(curl) {
+        
+        curl_easy_setopt(curl, CURLOPT_URL, ("https://" + SalesforceSession::getDomain() + "/services/data/v" + config::getApiVersion() + "/query/" + query).c_str());
+        
+        struct curl_slist *chunk = NULL;
+        
+        chunk = curl_slist_append(chunk, ("Authorization: Bearer " + SalesforceSession::getConnectedAppToken()).c_str());
+        res = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
+        if(res != CURLE_OK)
+            fprintf(stderr, "curl_easy_setopt() failed: %s\n",
+                    curl_easy_strerror(res));
+        
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        res = curl_easy_perform(curl);
+        if(res != CURLE_OK)
+            fprintf(stderr, "curl_easy_perform() failed: %s\n",
+                    curl_easy_strerror(res));
+        
+        curl_easy_cleanup(curl);
+        
+    }
+    else
+        return false;
+
+    return (res != CURLE_OK);
 }
