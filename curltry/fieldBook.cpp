@@ -5,6 +5,7 @@
 //  Created by Vincent Brenet on 30/11/2019.
 //  Copyright © 2019 Vincent Brenet. All rights reserved.
 //
+#include <fstream>
 
 #include "fieldBook.hpp"
 #include "utils.hpp"
@@ -30,44 +31,46 @@ void fieldBook::parseSingleFieldDefinition(const std::string &buffer, size_t tok
      {"attributes":{"type":"FieldDefinition","url":"/services/data/v47.0/sobjects/FieldDefinition/Lead.Id"},"BusinessOwnerId":null,"BusinessStatus":null,"ComplianceGroup":null,"DataType":"Lookup()","Description":null,"ExtraTypeInfo":null,"IsAiPredictionField":false,"IsApiFilterable":true,"IsApiGroupable":true,"IsApiSortable":true,"IsCalculated":false,"IsCompactLayoutable":false,"IsCompound":false,"IsFieldHistoryTracked":false,"IsHighScaleNumber":false,"IsHtmlFormatted":false,"IsIndexed":true,"IsListFilterable":true,"IsListSortable":true,"IsListVisible":true,"IsNameField":false,"Label":"Lead ID","LastModifiedById":null,"LastModifiedDate":null,"Length":18,"MasterLabel":"Lead ID","NamespacePrefix":null,"Precision":0,"QualifiedApiName":"Id","Scale":0,"SecurityClassification":null}
      */
     
-    fieldDefinition theField {entityName};
+    std::string QualifiedApiName = getValue("QualifiedApiName", buffer, token, ',');
+    fieldDefinitionMap.insert((std::pair<std::string,fieldDefinition>){QualifiedApiName,{entityName}});
+    auto it = fieldDefinitionMap.find(QualifiedApiName);
     
-    theField.BusinessOwnerId = getValue("BusinessOwnerId", buffer, token, ',');
-    theField.BusinessStatus = getValue("BusinessStatus", buffer, token, ',');
-    theField.ComplianceGroup = getValue("ComplianceGroup", buffer, token, ',');
-    theField.DataType = getValue("DataType", buffer, token, ',');
-    theField.Description = getValue("Description", buffer, token, ',');
-    theField.ExtraTypeInfo = getValue("ExtraTypeInfo", buffer, token, ',');
-    theField.IsAiPredictionField = getBooleanValue(getValue("IsAiPredictionField", buffer, token, ','));
-    theField.IsApiFilterable = getBooleanValue(getValue("IsApiFilterable", buffer, token, ','));
-    theField.IsApiGroupable = getBooleanValue(getValue("IsApiGroupable", buffer, token, ','));
-    theField.IsApiSortable = getBooleanValue(getValue("IsApiSortable", buffer, token, ','));
-    theField.IsCalculated = getBooleanValue(getValue("IsCalculated", buffer, token, ','));
-    theField.IsCompactLayoutable = getBooleanValue(getValue("IsCompactLayoutable", buffer, token, ','));
-    theField.IsCompound = getBooleanValue(getValue("IsCompound", buffer, token, ','));
-    theField.IsFieldHistoryTracked = getBooleanValue(getValue("IsFieldHistoryTracked", buffer, token, ','));
-    theField.IsHighScaleNumber = getBooleanValue(getValue("IsHighScaleNumber", buffer, token, ','));
-    theField.IsHtmlFormatted = getBooleanValue(getValue("IsHtmlFormatted", buffer, token, ','));
-    theField.IsIndexed = getBooleanValue(getValue("IsIndexed", buffer, token, ','));
-    theField.IsListFilterable = getBooleanValue(getValue("IsListFilterable", buffer, token, ','));
-    theField.IsListSortable = getBooleanValue(getValue("IsListSortable", buffer, token, ','));
-    theField.IsListVisible = getBooleanValue(getValue("IsListVisible", buffer, token, ','));
-    theField.IsNameField = getBooleanValue(getValue("IsNameField", buffer, token, ','));
-    theField.IsNameField = getBooleanValue(getValue("IsNameField", buffer, token, ','));
-    theField.Label = getValue("Label", buffer, token, ',');
-    theField.LastModifiedById = getValue("LastModifiedById", buffer, token, ',');
-    theField.LastModifiedDate = getValue("LastModifiedDate", buffer, token, ',');
-    std::string length = getValue("Length", buffer, token, ',');
-    if (isStringNumeric(length))
-        theField.Length = std::stol(length);
-    theField.MasterLabel = getValue("MasterLabel", buffer, token, ',');
-    theField.NamespacePrefix = getValue("NamespacePrefix", buffer, token, ',');
-    theField.Precision = getValue("Precision", buffer, token, ',');
-    theField.QualifiedApiName = getValue("QualifiedApiName", buffer, token, ',');
-    theField.Scale = getValue("Scale", buffer, token, ',');
-    theField.SecurityClassification = getValue("SecurityClassification", buffer, token, '}');
-    
-    // put the created field in the field map
+    if (it != fieldDefinitionMap.end()) {
+        it->second.QualifiedApiName = QualifiedApiName;
+        it->second.BusinessOwnerId = getValue("BusinessOwnerId", buffer, token, ',');
+        it->second.BusinessStatus = getValue("BusinessStatus", buffer, token, ',');
+        it->second.ComplianceGroup = getValue("ComplianceGroup", buffer, token, ',');
+        it->second.DataType = getValue("DataType", buffer, token, ',');
+        it->second.Description = getValue("Description", buffer, token, ',');
+        it->second.ExtraTypeInfo = getValue("ExtraTypeInfo", buffer, token, ',');
+        it->second.IsAiPredictionField = getBooleanValue(getValue("IsAiPredictionField", buffer, token, ','));
+        it->second.IsApiFilterable = getBooleanValue(getValue("IsApiFilterable", buffer, token, ','));
+        it->second.IsApiGroupable = getBooleanValue(getValue("IsApiGroupable", buffer, token, ','));
+        it->second.IsApiSortable = getBooleanValue(getValue("IsApiSortable", buffer, token, ','));
+        it->second.IsCalculated = getBooleanValue(getValue("IsCalculated", buffer, token, ','));
+        it->second.IsCompactLayoutable = getBooleanValue(getValue("IsCompactLayoutable", buffer, token, ','));
+        it->second.IsCompound = getBooleanValue(getValue("IsCompound", buffer, token, ','));
+        it->second.IsFieldHistoryTracked = getBooleanValue(getValue("IsFieldHistoryTracked", buffer, token, ','));
+        it->second.IsHighScaleNumber = getBooleanValue(getValue("IsHighScaleNumber", buffer, token, ','));
+        it->second.IsHtmlFormatted = getBooleanValue(getValue("IsHtmlFormatted", buffer, token, ','));
+        it->second.IsIndexed = getBooleanValue(getValue("IsIndexed", buffer, token, ','));
+        it->second.IsListFilterable = getBooleanValue(getValue("IsListFilterable", buffer, token, ','));
+        it->second.IsListSortable = getBooleanValue(getValue("IsListSortable", buffer, token, ','));
+        it->second.IsListVisible = getBooleanValue(getValue("IsListVisible", buffer, token, ','));
+        it->second.IsNameField = getBooleanValue(getValue("IsNameField", buffer, token, ','));
+        it->second.IsNameField = getBooleanValue(getValue("IsNameField", buffer, token, ','));
+        it->second.Label = getValue("Label", buffer, token, ',');
+        it->second.LastModifiedById = getValue("LastModifiedById", buffer, token, ',');
+        it->second.LastModifiedDate = getValue("LastModifiedDate", buffer, token, ',');
+        std::string length = getValue("Length", buffer, token, ',');
+        if (isStringNumeric(length))
+            it->second.Length = std::stol(length);
+        it->second.MasterLabel = getValue("MasterLabel", buffer, token, ',');
+        it->second.NamespacePrefix = getValue("NamespacePrefix", buffer, token, ',');
+        it->second.Precision = getValue("Precision", buffer, token, ',');
+        it->second.Scale = getValue("Scale", buffer, token, ',');
+        it->second.SecurityClassification = getValue("SecurityClassification", buffer, token, '}');
+    }
 }
 
 //
@@ -173,4 +176,72 @@ bool fieldBook::setFieldBook(const std::string objectName) {
 //
 void fieldBook::outputFieldBook() const {
     
+    std::ofstream ofs { "fields" + entityName + ".csv"};
+    // output header
+    ofs << "Date,";
+    ofs << "sObject,";
+    ofs << "fieldAPIName,";
+    ofs << "BusinessOwnerId,";
+    ofs << "ComplianceGroup,";
+    ofs << "DataType,";
+    ofs << "Description,";
+    ofs << "ExtraTypeInfo,";
+    ofs << "IsAiPredictionField,";
+    ofs << "IsApiFilterable,";
+    ofs << "IsApiGroupable,";
+    ofs << "IsApiSortable,";
+    ofs << "IsCalculated,";
+    ofs << "IsCompactLayoutable,";
+    ofs << "IsCompound,";
+    ofs << "IsFieldHistoryTracked,";
+    ofs << "IsHighScaleNumber,";
+    ofs << "IsHtmlFormatted,";
+    ofs << "IsIndexed,";
+    ofs << "IsListFilterable,";
+    ofs << "IsListSortable,";
+    ofs << "IsListVisible,";
+    ofs << "IsNameField,";
+    ofs << "Label,";
+    ofs << "Length,";
+    ofs << "MasterLabel,";
+    ofs << "NamespacePrefix,";
+    ofs << "Precision,";
+    ofs << "Scale,";
+    ofs << "SecurityClassification" << std::endl;
+
+    // output lines
+    
+    for (auto it = fieldDefinitionMap.begin(); it != fieldDefinitionMap.end(); ++it) {
+        ofs << getDateString() << ",";
+        ofs << entityName << ",";
+        ofs << it->second.QualifiedApiName << ",";
+        ofs << it->second.BusinessOwnerId << ",";
+        ofs << it->second.BusinessStatus << ",";
+        ofs << it->second.ComplianceGroup << ",";
+        ofs << it->second.DataType << ",";
+        ofs << it->second.Description << ",";
+        ofs << it->second.ExtraTypeInfo << ",";
+        ofs << it->second.IsAiPredictionField << ",";
+        ofs << it->second.IsApiFilterable << ",";
+        ofs << it->second.IsApiGroupable << ",";
+        ofs << it->second.IsApiSortable << ",";
+        ofs << it->second.IsCalculated << ",";
+        ofs << it->second.IsCompactLayoutable << ",";
+        ofs << it->second.IsCompound << ",";
+        ofs << it->second.IsFieldHistoryTracked << ",";
+        ofs << it->second.IsHighScaleNumber << ",";
+        ofs << it->second.IsHtmlFormatted << ",";
+        ofs << it->second.IsIndexed << ",";
+        ofs << it->second.IsListFilterable << ",";
+        ofs << it->second.IsListSortable << ",";
+        ofs << it->second.IsListVisible << ",";
+        ofs << it->second.IsNameField << ",";
+        ofs << it->second.Label << ",";
+        ofs << it->second.Length << ",";
+        ofs << it->second.MasterLabel << ",";
+        ofs << it->second.NamespacePrefix << ",";
+        ofs << it->second.Precision << ",";
+        ofs << it->second.Scale << ",";
+        ofs << it->second.SecurityClassification << std::endl;
+    }
 }
