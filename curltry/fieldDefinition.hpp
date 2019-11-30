@@ -13,6 +13,7 @@
 #include <string>
 
 class fieldDefinition {
+    friend class fieldBook;
 private:
     std::string EntityName; // field's sObject name
     std::string BusinessOwnerId;
@@ -48,8 +49,7 @@ private:
     std::string SecurityClassification;
 
 public:
-    fieldDefinition() {};
-    fieldDefinition(const std::string& restbuffer);
+    fieldDefinition(std::string name) : EntityName{name} {};
 };
 
 #endif /* fieldDefinition_hpp */

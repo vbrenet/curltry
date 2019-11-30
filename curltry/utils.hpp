@@ -13,6 +13,8 @@
 
 std::string getDateString();
 std::string removeCommas (const std::string& input);
+void removeDoubleQuote (std::string& input);
+bool getBooleanValue (const std::string&);
 bool isStringNumeric (const std::string input);
 std::string extractXmlToken(const std::string& inputbuffer, size_t pos, const std::string& token);
 std::string extractXmlToken(const std::string& inputbuffer, const std::string& token);

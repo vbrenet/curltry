@@ -142,7 +142,22 @@ std::string getDateString() {
     return ret;
     
 }
+//
+bool getBooleanValue (const std::string& input) {
+    if (input.compare("true") == 0)
+        return true;
+    else
+        return false;
+}
+//
+void removeDoubleQuote  (std::string& input) {
+    std::size_t found;
+    
+    while ((found = input.find("\"")) != std::string::npos) {
+        input.erase(found, 1);
+    }
 
+}
 //
 std::string removeCommas (const std::string& input) {
     std::string result {input};
