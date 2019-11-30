@@ -244,4 +244,6 @@ void fieldBook::outputFieldBook() const {
         ofs << it->second.Scale << ",";
         ofs << it->second.SecurityClassification << std::endl;
     }
+    
+    ofs.close();
 }

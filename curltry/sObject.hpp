@@ -77,6 +77,7 @@ public:
     
     // object configuration
     bool getFieldBook() {return objectFieldBook.setFieldBook(name);};
+    void outputFieldBook() {objectFieldBook.outputFieldBook();};
     void addAttribute(sAttribute a) {attributeMap.insert(std::pair<std::string,sAttribute>(a.getName(),a));}
     bool getDescribeAttributesBuffer(std::string& buffer);
     std::string makeAllAttributeQuery();

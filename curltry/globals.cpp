@@ -13,3 +13,4 @@ bool globals::verbose {false};
 bool globals::veryverbose {false};
 bool globals::picklistAnalysis {false};
 bool globals::picklistOnly {false};
+bool globals::bookOnly {false};

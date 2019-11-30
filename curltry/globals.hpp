@@ -19,6 +19,7 @@ public:
     static bool veryverbose;
     static bool picklistAnalysis;
     static bool picklistOnly;
+    static bool bookOnly;
 
 };
 

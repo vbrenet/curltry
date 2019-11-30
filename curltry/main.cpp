@@ -29,7 +29,7 @@
 #include "globals.hpp"
 #include "buckets.hpp"
 
-const std::string curltryVersion = "curltry v2.1.6";
+const std::string curltryVersion = "curltry v2.2.0";
 //
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {
@@ -154,6 +154,7 @@ int main(int argc, const char * argv[]) {
             {"-version",{false,false}},
             {"-picklists",{false,false}},
             {"-picklistsonly",{false,false}},
+            {"-bookonly",{false,false}},
             {"-j",{false,true}}
         }
     };
@@ -221,8 +222,9 @@ int main(int argc, const char * argv[]) {
             globals::picklistAnalysis = true;
             globals::picklistOnly = true;
         }
-
-
+        else if (curr.getName().compare("-bookonly") == 0) {
+            globals::bookOnly = true;
+        }
 
      }  // end for parameters
 

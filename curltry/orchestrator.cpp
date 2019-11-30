@@ -167,6 +167,12 @@ bool orchestrator::getObjectInfo() {
     // get object field book
     theObject.getFieldBook();
     
+    // output field book
+    theObject.outputFieldBook();
+    
+    if (globals::bookOnly)
+        exit(0);
+    
     // describe object (get all attributes)
     if (!describeObject())
         return false;
