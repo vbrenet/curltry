@@ -225,5 +225,5 @@ bool restQuery(const std::string& query, std::string& readBuffer) {
     else
         return false;
 
-    return (res != CURLE_OK);
+    return (res == CURLE_OK);
 }

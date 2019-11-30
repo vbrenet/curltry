@@ -16,6 +16,7 @@
 #include <map>
 
 #include "sAttribute.hpp"
+#include "fieldBook.hpp"
 
 class sObject{
     private:
@@ -24,6 +25,9 @@ class sObject{
     bool queryStringConstructed {false}; // true if query string constructed
     
     std::string analysisDate;
+    
+    // field book
+    fieldBook objectFieldBook;
     
     // map of attributes by attribute name
     std::map<std::string, sAttribute> attributeMap {};
@@ -72,6 +76,7 @@ public:
     const std::string& getName() const {return name;} ;
     
     // object configuration
+    bool getFieldBook() {return objectFieldBook.setFieldBook(name);};
     void addAttribute(sAttribute a) {attributeMap.insert(std::pair<std::string,sAttribute>(a.getName(),a));}
     bool getDescribeAttributesBuffer(std::string& buffer);
     std::string makeAllAttributeQuery();

@@ -18,8 +18,13 @@ class fieldBook {
 private:
     std::string entityName;
     std::map<std::string, fieldDefinition> fieldDefinitionMap;
+    
+    std::string getDurableId (const std::string &buffer) const;
+    void makeFieldDefinitionQuery(const std::string durableId, std::string & fieldDefinitionQuery) const;
+    void parseFieldDefinitionBuffer(const std::string &buffer);
 public:
-    fieldBook(const std::string objectName);
+    fieldBook() {};
+    bool setFieldBook(const std::string objectName);
     void outputFieldBook() const;
 };
 

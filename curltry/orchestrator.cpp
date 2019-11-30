@@ -164,6 +164,9 @@ bool orchestrator::getObjectInfo() {
     if (!SalesforceSession::openSession(credentials))
         return false ;
 
+    // get object field book
+    theObject.getFieldBook();
+    
     // describe object (get all attributes)
     if (!describeObject())
         return false;
