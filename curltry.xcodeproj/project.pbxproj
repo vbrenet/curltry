@@ -25,6 +25,8 @@
 		6F6BCE4E21A436DD004D065A /* idAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F6BCE4C21A436DD004D065A /* idAttribute.cpp */; };
 		6F709E5C216F935000D9668A /* sessionCredentials.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F709E5A216F935000D9668A /* sessionCredentials.cpp */; };
 		6F7C006C219F250800DA5B99 /* corpNameGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F7C006A219F250800DA5B99 /* corpNameGenerator.cpp */; };
+		6F96D01F23924C1900FD4E19 /* fieldDefinition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F96D01D23924C1900FD4E19 /* fieldDefinition.cpp */; };
+		6F96D02223924F9F00FD4E19 /* fieldBook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F96D02023924F9F00FD4E19 /* fieldBook.cpp */; };
 		6FA46F53216B451B0071654E /* bulkSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FA46F51216B451B0071654E /* bulkSession.cpp */; };
 		6FC3633621A2CA0000A4B244 /* bulkInject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FC3633421A2CA0000A4B244 /* bulkInject.cpp */; };
 		6FC5AE6321EF2EFE003A632F /* ActualParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FC5AE5D21EF2EFE003A632F /* ActualParameters.cpp */; };
@@ -86,6 +88,10 @@
 		6F709E5B216F935000D9668A /* sessionCredentials.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = sessionCredentials.hpp; sourceTree = "<group>"; };
 		6F7C006A219F250800DA5B99 /* corpNameGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = corpNameGenerator.cpp; sourceTree = "<group>"; };
 		6F7C006B219F250800DA5B99 /* corpNameGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = corpNameGenerator.hpp; sourceTree = "<group>"; };
+		6F96D01D23924C1900FD4E19 /* fieldDefinition.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fieldDefinition.cpp; sourceTree = "<group>"; };
+		6F96D01E23924C1900FD4E19 /* fieldDefinition.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fieldDefinition.hpp; sourceTree = "<group>"; };
+		6F96D02023924F9F00FD4E19 /* fieldBook.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fieldBook.cpp; sourceTree = "<group>"; };
+		6F96D02123924F9F00FD4E19 /* fieldBook.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fieldBook.hpp; sourceTree = "<group>"; };
 		6FA46F51216B451B0071654E /* bulkSession.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bulkSession.cpp; sourceTree = "<group>"; };
 		6FA46F52216B451B0071654E /* bulkSession.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = bulkSession.hpp; sourceTree = "<group>"; };
 		6FC3633421A2CA0000A4B244 /* bulkInject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bulkInject.cpp; sourceTree = "<group>"; };
@@ -157,6 +163,10 @@
 				6F1EC64723794E4E00B6CBB8 /* globals.hpp */,
 				6F4EC95B2375652F00CCA515 /* utils.cpp */,
 				6F4EC95C2375652F00CCA515 /* utils.hpp */,
+				6F96D01D23924C1900FD4E19 /* fieldDefinition.cpp */,
+				6F96D01E23924C1900FD4E19 /* fieldDefinition.hpp */,
+				6F96D02023924F9F00FD4E19 /* fieldBook.cpp */,
+				6F96D02123924F9F00FD4E19 /* fieldBook.hpp */,
 				6F143686238C28F100414A66 /* buckets.cpp */,
 				6F143687238C28F100414A66 /* buckets.hpp */,
 				6F246B9623703A5E0044A2F4 /* restartManager.cpp */,
@@ -279,6 +289,7 @@
 				6F709E5C216F935000D9668A /* sessionCredentials.cpp in Sources */,
 				6F0764AC2164A46400C26AFB /* SalesforceSession.cpp in Sources */,
 				6F5F36AD21A05D2900F02B20 /* textGenerator.cpp in Sources */,
+				6F96D02223924F9F00FD4E19 /* fieldBook.cpp in Sources */,
 				6F5F36A4219FF47100F02B20 /* nameAttribute.cpp in Sources */,
 				6FD1CAA821639EFE004D2DF5 /* sAttribute.cpp in Sources */,
 				6F5F36A7219FF63500F02B20 /* integerAttribute.cpp in Sources */,
@@ -287,6 +298,7 @@
 				6F5F36B021A05F7E00F02B20 /* textAttribute.cpp in Sources */,
 				6FD68FF3216F2BC200838E74 /* bulkQuery.cpp in Sources */,
 				6F6BCE4E21A436DD004D065A /* idAttribute.cpp in Sources */,
+				6F96D01F23924C1900FD4E19 /* fieldDefinition.cpp in Sources */,
 				6FD68FF6216F2EE600838E74 /* orchestrator.cpp in Sources */,
 				6FD739B821ECBBDA004F1401 /* checkboxAttribute.cpp in Sources */,
 				6FC5AE6321EF2EFE003A632F /* ActualParameters.cpp in Sources */,
