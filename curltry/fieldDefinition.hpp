@@ -20,7 +20,6 @@ private:
     std::string BusinessStatus;
     std::string ComplianceGroup;
     std::string DataType;
-    std::string Description;
     std::string ExtraTypeInfo;
     bool IsAiPredictionField;
     bool IsApiFilterable;

@@ -41,7 +41,6 @@ void fieldBook::parseSingleFieldDefinition(const std::string &buffer, size_t tok
         it->second.BusinessStatus = getValue("BusinessStatus", buffer, token, ',');
         it->second.ComplianceGroup = getValue("ComplianceGroup", buffer, token, ',');
         it->second.DataType = getValue("DataType", buffer, token, ',');
-        it->second.Description = getValue("Description", buffer, token, ',');
         it->second.ExtraTypeInfo = getValue("ExtraTypeInfo", buffer, token, ',');
         it->second.IsAiPredictionField = getBooleanValue(getValue("IsAiPredictionField", buffer, token, ','));
         it->second.IsApiFilterable = getBooleanValue(getValue("IsApiFilterable", buffer, token, ','));
@@ -102,7 +101,6 @@ void fieldBook::makeFieldDefinitionQuery(const std::string durableId, std::strin
     query += "+BusinessStatus+,";
     query += "+ComplianceGroup+,";
     query += "+DataType+,";
-    query += "+Description+,";
     query += "+ExtraTypeInfo+,";
     query += "+IsAiPredictionField+,";
     query += "+IsApiFilterable+,";
@@ -184,7 +182,6 @@ void fieldBook::outputFieldBook() const {
     ofs << "BusinessOwnerId,";
     ofs << "ComplianceGroup,";
     ofs << "DataType,";
-    ofs << "Description,";
     ofs << "ExtraTypeInfo,";
     ofs << "IsAiPredictionField,";
     ofs << "IsApiFilterable,";
@@ -219,7 +216,6 @@ void fieldBook::outputFieldBook() const {
         ofs << it->second.BusinessStatus << ",";
         ofs << it->second.ComplianceGroup << ",";
         ofs << it->second.DataType << ",";
-        ofs << it->second.Description << ",";
         ofs << it->second.ExtraTypeInfo << ",";
         ofs << it->second.IsAiPredictionField << ",";
         ofs << it->second.IsApiFilterable << ",";
