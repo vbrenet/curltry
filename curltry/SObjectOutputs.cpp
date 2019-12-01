@@ -13,6 +13,7 @@
 #include "sObject.hpp"
 #include "utils.hpp"
 #include "buckets.hpp"
+#include "config.hpp"
 
 //
 //
@@ -79,12 +80,18 @@ void sObject::outputRecordTypePicklistCounters() {
 
     for (auto it = recordTypePicklistCounters.begin(); it != recordTypePicklistCounters.end(); ++it) {
         // it->first : recordtype id
-        // it->second : map [attributes, map[picklist value, counter]
+        // it->second : map [attributes, map[picklist value, counter]]
         std::string recordtypename;
-        if (it->first.size() == 0)
+        std::string recordtypeid;
+        if (it->first.size() == 0) {
             recordtypename = "null";
+            recordtypeid = "null";
+        }
         else
+        {
             recordtypename = getnamebyid(it->first);
+            recordtypeid = it->first;
+        }
 
         for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
             // it2->first : picklist name
@@ -94,7 +101,7 @@ void sObject::outputRecordTypePicklistCounters() {
                 // it3->second : counter
                 ofs << analysisDate << ",";
                 ofs << getName() << ",";
-                ofs << it->first << ",";
+                ofs << recordtypeid << ",";
                 ofs << "\"" << removeCommas(recordtypename) << "\",";
                 ofs << it2->first << ",";           // picklist name
                 ofs << attributeMap[it2->first].getDefaultValue() << ","; //  default value
@@ -129,7 +136,7 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
             if (attributeMap[it->first].isPackage())
                 fromPackage = attributeMap[it->first].getPackage();
             else
-                fromPackage = "Custom";
+                fromPackage = config::getCustomer();
         }
         else
             fromPackage = "Standard";
@@ -162,8 +169,9 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
     for (auto it=recordTypeMatrixCounters.begin(); it != recordTypeMatrixCounters.end(); it++) {
         std::string recordtypeid = it->first.first;
         std::string recordtypename;
-        if (recordtypeid.size() == 0)
+        if (recordtypeid.size() == 0) {
             recordtypename = "null";
+        }
         else
             recordtypename = getnamebyid(recordtypeid);
 
@@ -172,13 +180,17 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
             if (attributeMap[it->first.second].isPackage())
                 fromPackage = attributeMap[it->first.second].getPackage();
             else
-                fromPackage = "Custom";
+                fromPackage = config::getCustomer();
         }
         else
             fromPackage = "Standard";
         
         double currNbRec = recordTypeMatrixCounters[std::pair<std::string,std::string>(recordtypeid,"Id")];
         double percentUsage = ((currNbRec == 0) ? 0 : (((double)it->second / currNbRec)*100));
+        
+        if (recordtypeid.size() == 0) {
+            recordtypeid = "null";
+        }
         
         ofs << analysisDate << ",";     // date
         ofs << getName() << ",";        // sobject name

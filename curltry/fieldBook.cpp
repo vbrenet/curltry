@@ -17,7 +17,7 @@ std::string fieldBook::getValue(const std::string attributeName, const std::stri
     std::string value {};
     size_t begin = buffer.find(attributeName, token);
     
-    if (begin != std::string::npos) {     
+    if (begin != std::string::npos) {
         size_t semicolon = buffer.find_first_of(':',begin);
         size_t end = buffer.find(endDelimeter,semicolon);
         value = buffer.substr(semicolon+1,end-semicolon-1);
@@ -213,8 +213,9 @@ void fieldBook::outputFieldBook() const {
     ofs << "Scale,";
     ofs << "SecurityClassification" << std::endl;
 
-    // output lines
+    ofs << std::boolalpha;
     
+    // output lines
     for (auto it = fieldDefinitionMap.begin(); it != fieldDefinitionMap.end(); ++it) {
         ofs << getDateString() << ",";
         ofs << entityName << ",";

@@ -116,17 +116,24 @@ const std::string buckets::theBuckets[] =
 "91-99",//97
 "91-99",//98
 "91-99",//99
-"All"   //100
+"All",  //100
+"Zero"  //101
 };
 
 //
 std::string buckets::getBucket(double d) {
     if (d < 0 || d > 100)
         return ("undefined");
-    if (!mapEnabled)
+    if (!mapEnabled) {
+        if (d == 0)
+            return theBuckets[101];
         return (theBuckets[(int)d]);
-    else
+    }
+    else {
+        if (d == 0)
+            return theBuckets[101];
         return bucketMap[(int)d];
+    }
 }
 //
 //
@@ -143,7 +150,10 @@ void buckets::processBucketLine(const std::string &line) {
         if (isStringNumeric(index)) {
             int key = std::stoi(index);
             std::string value = line.substr(semicolon+1);
-            if (key >=0 && key <= 100) {
+            if (key == 0) {
+                bucketMap[101] = value;
+            }
+            else if (key > 0 && key <= 100) {
                 bucketMap[key] = value;
             }
             else {

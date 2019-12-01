@@ -18,6 +18,7 @@ std::string config::username;
 std::string config::password;
 std::string config::securitytoken {};
 std::string config::apiversion;
+std::string config::customer {"Custom"};
 
 bool config::isASandbox {false};
 bool config::useFileForAttributeList {false};
@@ -33,6 +34,7 @@ const std::vector<config::tokenDesc> config::tokenDescriptions = {
     {config::token::SECURITYTOKEN, "_token_:"},
     {config::token::SOBJECT, "_object_:"},
     {config::token::ISPROD, "_isprod_:"},
+    {config::token::CUSTOMER, "_customer_:"},
     {config::token::USEFILEFORATTRLIST, "_usefileforattributelist_:"},
     {config::token::APIVERSION, "_apiversion_:"}
 };
@@ -128,6 +130,9 @@ void config::processLine(const std::string& line) {
             break;
         case token::SECURITYTOKEN:
             securitytoken = value;
+            break;
+        case token::CUSTOMER:
+            customer = value;
             break;
         case token::SOBJECT:
             updateExcludedAttributes(line);
