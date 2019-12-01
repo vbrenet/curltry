@@ -29,7 +29,7 @@
 #include "globals.hpp"
 #include "buckets.hpp"
 
-const std::string curltryVersion = "curltry v2.2.2";
+const std::string curltryVersion = "curltry v2.2.4";
 //
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {

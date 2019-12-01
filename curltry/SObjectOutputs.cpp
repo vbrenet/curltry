@@ -39,9 +39,20 @@ void sObject::outputPicklistCounters()  {
     std::ofstream ofs { "picklists" + getName() + ".csv"};
     
     // header
-    ofs << "Date,sObject,PicklistName,DefaultValue,PicklistLabel,PicklistValue,Usage,PercentUsage" << std::endl;
+    ofs << "Date,sObject,PicklistName,FromPackage,DefaultValue,PicklistLabel,PicklistValue,Usage,PercentUsage" << std::endl;
 
     for (auto it = picklistCounters.begin(); it != picklistCounters.end(); ++it) {
+        
+        std::string fromPackage {};
+        if (attributeMap[it->first].isCustom()) {
+            if (attributeMap[it->first].isPackage())
+                fromPackage = attributeMap[it->first].getPackage();
+            else
+                fromPackage = config::getCustomer();
+        }
+        else
+            fromPackage = "Standard";
+        
         // first compute total valued fields
         double total {0};
         for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
@@ -57,6 +68,7 @@ void sObject::outputPicklistCounters()  {
             ofs << analysisDate << ","; // date
             ofs << getName() << ",";    // object name
             ofs << it->first << ",";    // picklist name
+            ofs << fromPackage << ",";  // origin
             ofs << attributeMap[it->first].getDefaultValue() << ",";    // default value
             ofs << "\"" << label << "\",";  // picklist label
             ofs << "\"" << it2->first << "\","; // picklist value
@@ -73,7 +85,7 @@ void sObject::outputRecordTypePicklistCounters() {
     std::ofstream ofs { "picklistsMatrix" + getName() + ".csv"};
 
     // header
-    ofs << "Date,sObject,RecordTypeId,RecordType,PicklistName,DefaultValue,PicklistLabel,PicklistValue,Usage" << std::endl;
+    ofs << "Date,sObject,RecordTypeId,RecordType,PicklistName,FromPackage,DefaultValue,PicklistLabel,PicklistValue,Usage" << std::endl;
 
     // map of picklist counters by recordtypeId, by attributeName, by values
     //std::map<std::string, std::map<std::string, std::map<std::string, long>>> recordTypePicklistCounters
@@ -96,6 +108,16 @@ void sObject::outputRecordTypePicklistCounters() {
         for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
             // it2->first : picklist name
             // it2->second : map[picklist value, counter]
+            std::string fromPackage {};
+            if (attributeMap[it2->first].isCustom()) {
+                if (attributeMap[it2->first].isPackage())
+                    fromPackage = attributeMap[it2->first].getPackage();
+                else
+                    fromPackage = config::getCustomer();
+            }
+            else
+                fromPackage = "Standard";
+
             for (auto it3 = it2->second.begin(); it3 != it2->second.end(); ++it3) {
                 // it3->first : picklist value
                 // it3->second : counter
@@ -104,6 +126,7 @@ void sObject::outputRecordTypePicklistCounters() {
                 ofs << recordtypeid << ",";
                 ofs << "\"" << removeCommas(recordtypename) << "\",";
                 ofs << it2->first << ",";           // picklist name
+                ofs << fromPackage << ",";          // origin
                 ofs << attributeMap[it2->first].getDefaultValue() << ","; //  default value
                 ofs << "\"" << picklistDescriptors[it2->first][it3->first] << "\","; // picklist label
                 ofs << "\"" << it3->first << "\","; // picklist value

@@ -349,40 +349,9 @@ size_t sObject::WriteCallback(void *contents, size_t size, size_t nmemb, void *u
 }
 //
 bool sObject::initializeRecordTypes() {
-    CURL *curl;
-    CURLcode res;
     std::string readBuffer;
 
-    readBuffer.clear();
-    curl = curl_easy_init();
-    // /services/data/v47.0/query/?q=SELECT+ID+,+Name+FROM+RECORDTYPE+where+sobjecttype+=+'opportunity'
-    if(curl) {
-        std::string query = "?q=SELECT+ID+,+Name+FROM+RECORDTYPE+where+sobjecttype+=+'" + getName() + "'";
-        
-        curl_easy_setopt(curl, CURLOPT_URL, ("https://" + SalesforceSession::getDomain() + "/services/data/v" + config::getApiVersion() + "/query/" + query).c_str());
-        
-        struct curl_slist *chunk = NULL;
-        
-        chunk = curl_slist_append(chunk, ("Authorization: Bearer " + SalesforceSession::getConnectedAppToken()).c_str());
-        res = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
-        if(res != CURLE_OK)
-            fprintf(stderr, "curl_easy_setopt() failed: %s\n",
-                    curl_easy_strerror(res));
-        
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-        res = curl_easy_perform(curl);
-        if(res != CURLE_OK)
-            fprintf(stderr, "curl_easy_perform() failed: %s\n",
-                    curl_easy_strerror(res));
-        
-        curl_easy_cleanup(curl);
-        
-        //buffer = readBuffer;
-    }
-    else
-        return false;
+    restQuery("?q=SELECT+ID+,+Name+FROM+RECORDTYPE+where+sobjecttype+=+'" + getName() + "'", readBuffer);
 
     if (globals::verbose) {
         std::cout << "record types query: " << std::endl;
@@ -478,12 +447,11 @@ Date,sObject,RecordTypeId,RecordType,FieldName,FromPackage,FieldType,DefaultValu
         return;
     }
         
-        if ((thirdcomma-secondcomma) == 1)
-            recordTypeId = "";
-        else
-            recordTypeId = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
+    recordTypeId = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
+    if (recordTypeId.compare("null") == 0)
+        recordTypeId = "";
 
-        attributeName = inputline.substr(fourthcomma+1,fifthcomma-fourthcomma-1);
+    attributeName = inputline.substr(fourthcomma+1,fifthcomma-fourthcomma-1);
     
     size_t lastcomma = inputline.find_last_of(',');
     size_t lastcommaminus1 = inputline.rfind(',',lastcomma-1);
@@ -529,7 +497,7 @@ void sObject::initializeMatrixCountersFromFile(const std::string &inputfile) {
 //
 void sObject::processPicklistLine(const std::string &inputline) {
 /*
-Date,sObject,PicklistName,DefaultValue,PicklistLabel,PicklistValue,Usage,PercentUsage
+Date,sObject,PicklistName,Package,DefaultValue,PicklistLabel,PicklistValue,Usage,PercentUsage
 */
     std::string picklistName, picklistValue, counterValue;
     
@@ -590,7 +558,7 @@ void sObject::initializePicklistCountersFromFile(const std::string &inputfile) {
 //
 void sObject::processMatrixPicklistLine(const std::string &inputline) {
     //input line :
-    //Date,sObject,RecordTypeId,RecordType,PicklistName,DefaultValue,PicklistLabel,PicklistValue,Usage
+    //Date,sObject,RecordTypeId,RecordType,PicklistName,Package,DefaultValue,PicklistLabel,PicklistValue,Usage
     //
     // map of picklist counters by recordtypeId, by attributeName, by values
     //std::map<std::string, std::map<std::string, std::map<std::string, long>>> recordTypePicklistCounters
@@ -613,11 +581,10 @@ void sObject::processMatrixPicklistLine(const std::string &inputline) {
         return;
     }
         
-    if ((thirdcomma-secondcomma) == 1)
+    recordTypeId = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
+    if (recordTypeId.compare("null") == 0)
         recordTypeId = "";
-    else
-        recordTypeId = inputline.substr(secondcomma+1,thirdcomma-secondcomma-1);
-
+    
     attributeName = inputline.substr(fourthcomma+1,fifthcomma-fourthcomma-1);
 
     size_t lastcomma = inputline.find_last_of(',');
