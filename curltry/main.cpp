@@ -29,7 +29,7 @@
 #include "globals.hpp"
 #include "buckets.hpp"
 
-const std::string curltryVersion = "curltry v2.2.0";
+const std::string curltryVersion = "curltry v2.2.1";
 //
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {
@@ -107,7 +107,7 @@ void terminate() {
 //
 //
 void exitWithSyntaxError() {
-    std::cerr << "Syntax : curltry -o <object name> [-help] [-version] [-sz <chunksize>] [-j <jobid>] [-picklists] [-picklistsonly] [-r] [-v] [-vv] workingDirectory" << std::endl;
+    std::cerr << "Syntax : curltry -o <object name> [-help] [-version] [-sz <chunksize>] [-j <jobid>] [-bookonly] [-picklists] [-picklistsonly] [-r] [-v] [-vv] workingDirectory" << std::endl;
     exit(-1);
 }
 //
@@ -119,13 +119,14 @@ void exitWithVersion() {
 //
 //
 void exitWithHelp() {
-    std::cout << "SYNTAX : curltry -o <object name> [-sz <chunksize>] [-j <jobid>] [-picklists] [-picklistsonly] [-r] [-v] [-vv] workingDirectory" << std::endl;
+    std::cout << "SYNTAX : curltry -o <object name> [-sz <chunksize>] [-j <jobid>] [-bookonly] [-picklists] [-picklistsonly] [-r] [-v] [-vv] workingDirectory" << std::endl;
     std::cout << "curltry -help" << std::endl;
     std::cout << "curltry -version" << std::endl << std::endl;
     std::cout << "OPTIONS:" << std::endl;
     std::cout << "-o <object name> : specify the sObject to analyze, e.g. -o Opportunity" << std::endl;
     std::cout << "-sz <chunksize> : use the pkchunking option and specify the chunsize (max : 250000)" << std::endl;
     std::cout << "-j <jobid> : get results from a bulk job already run, e.g. -j 7503N00000009gn" << std::endl;
+    std::cout << "-bookonly : produce only the field book of the sObject to analyze" << std::endl;
     std::cout << "-picklists : produce a file picklists<object> containing picklists stats" << std::endl;
     std::cout << "-picklistsonly : only produce a file picklists<object> containing picklists stats" << std::endl;
     std::cout << "-r : restart from the last curltry run session - this option requires the -j option" << std::endl;
@@ -239,7 +240,7 @@ int main(int argc, const char * argv[]) {
         exitWithSyntaxError();
     }
     
-    if (!chunksizeProvided)
+    if (!chunksizeProvided && !globals::bookOnly)
         std::cout << "chunksize defaulted to " << chunksize << std::endl;
     
     globals::workingDirectory = values[0];

@@ -23,7 +23,7 @@ private:
     void makeFieldDefinitionQuery(const std::string durableId, std::string & fieldDefinitionQuery) const;
     void parseFieldDefinitionBuffer(const std::string &buffer);
     void parseSingleFieldDefinition(const std::string &buffer, size_t token);
-    std::string getValue(const std::string attributeName, const std::string &buffer, size_t token, const char end);
+    std::string getValue(const std::string attributeName, const std::string &buffer, size_t token, const  std::string end);
 
 public:
     fieldBook() {};
