@@ -242,7 +242,7 @@ void fieldBook::outputFieldBook() const {
         ofs << "\"" << it->second.IsNameField << "\"" << ",";
         ofs << "\"" << it->second.Label << "\"" << ",";
         ofs << "\"" << it->second.LastModifiedById << "\"" << ",";
-        ofs << "\"" << it->second.LastModifiedDate << "\"" << ",";
+        ofs << "\"" << it->second.LastModifiedDate.substr(0,10) << "\"" << ",";
         ofs << "\"" << it->second.Length << "\"" << ",";
         ofs << "\"" << it->second.MasterLabel << "\"" << ",";
         ofs << "\"" << it->second.NamespacePrefix << "\"" << ",";
