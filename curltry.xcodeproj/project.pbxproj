@@ -22,6 +22,7 @@
 		6F5F36AD21A05D2900F02B20 /* textGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5F36AB21A05D2900F02B20 /* textGenerator.cpp */; };
 		6F5F36B021A05F7E00F02B20 /* textAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5F36AE21A05F7E00F02B20 /* textAttribute.cpp */; };
 		6F5F36B321A061EC00F02B20 /* recordGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5F36B121A061EC00F02B20 /* recordGenerator.cpp */; };
+		6F6811DA239569B1001211C3 /* packages.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F6811D8239569B1001211C3 /* packages.cpp */; };
 		6F6BCE4E21A436DD004D065A /* idAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F6BCE4C21A436DD004D065A /* idAttribute.cpp */; };
 		6F709E5C216F935000D9668A /* sessionCredentials.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F709E5A216F935000D9668A /* sessionCredentials.cpp */; };
 		6F7C006C219F250800DA5B99 /* corpNameGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F7C006A219F250800DA5B99 /* corpNameGenerator.cpp */; };
@@ -82,6 +83,8 @@
 		6F5F36AF21A05F7E00F02B20 /* textAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = textAttribute.hpp; sourceTree = "<group>"; };
 		6F5F36B121A061EC00F02B20 /* recordGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = recordGenerator.cpp; sourceTree = "<group>"; };
 		6F5F36B221A061EC00F02B20 /* recordGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = recordGenerator.hpp; sourceTree = "<group>"; };
+		6F6811D8239569B1001211C3 /* packages.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = packages.cpp; sourceTree = "<group>"; };
+		6F6811D9239569B1001211C3 /* packages.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = packages.hpp; sourceTree = "<group>"; };
 		6F6BCE4C21A436DD004D065A /* idAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = idAttribute.cpp; sourceTree = "<group>"; };
 		6F6BCE4D21A436DD004D065A /* idAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = idAttribute.hpp; sourceTree = "<group>"; };
 		6F709E5A216F935000D9668A /* sessionCredentials.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sessionCredentials.cpp; sourceTree = "<group>"; };
@@ -169,6 +172,8 @@
 				6F96D02123924F9F00FD4E19 /* fieldBook.hpp */,
 				6F143686238C28F100414A66 /* buckets.cpp */,
 				6F143687238C28F100414A66 /* buckets.hpp */,
+				6F6811D8239569B1001211C3 /* packages.cpp */,
+				6F6811D9239569B1001211C3 /* packages.hpp */,
 				6F246B9623703A5E0044A2F4 /* restartManager.cpp */,
 				6F246B9723703A5E0044A2F4 /* restartManager.hpp */,
 				6FC5AE5D21EF2EFE003A632F /* ActualParameters.cpp */,
@@ -306,6 +311,7 @@
 				6FC5AE6421EF2EFE003A632F /* NamedParameter.cpp in Sources */,
 				6F5F36AA219FF76200F02B20 /* picklistAttribute.cpp in Sources */,
 				6FA46F53216B451B0071654E /* bulkSession.cpp in Sources */,
+				6F6811DA239569B1001211C3 /* packages.cpp in Sources */,
 				6F1EC64823794E4E00B6CBB8 /* globals.cpp in Sources */,
 				6FC3633621A2CA0000A4B244 /* bulkInject.cpp in Sources */,
 				6F47C29F21763AFE003A25D5 /* config.cpp in Sources */,
