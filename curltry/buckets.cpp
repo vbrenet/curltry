@@ -131,7 +131,7 @@ std::string buckets::getBucket(double d) {
     }
     else {
         if (d == 0)
-            return theBuckets[101];
+            return bucketMap[101];
         return bucketMap[(int)d];
     }
 }
