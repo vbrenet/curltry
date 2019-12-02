@@ -11,6 +11,7 @@
 #include "globals.hpp"
 #include "utils.hpp"
 #include "fieldDefinition.hpp"
+#include "config.hpp"
 //
 //
 std::string fieldBook::getValue(const std::string attributeName, const std::string &buffer, size_t token, const std::string endDelimeter) {
@@ -217,7 +218,10 @@ void fieldBook::outputFieldBook() const {
     
     // output lines
     for (auto it = fieldDefinitionMap.begin(); it != fieldDefinitionMap.end(); ++it) {
-        ofs << getDateString() << ",";
+        if (config::getDateOutput().compare("") == 0)
+            ofs << getDateString() << ",";
+        else
+            ofs << config::getDateOutput() << ",";
         ofs << entityName << ",";
         ofs << "\"" << it->second.QualifiedApiName << "\"" << ",";
         ofs << "\"" << it->second.BusinessOwnerId << "\"" << ",";
