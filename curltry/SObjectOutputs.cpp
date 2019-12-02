@@ -65,7 +65,7 @@ void sObject::outputPicklistCounters()  {
             
             double percentUsage = ((total == 0) ? 0 : (((double)it2->second / total)*100));
             
-            ofs << analysisDate << ","; // date
+            ofs << getAnalysisDate() << ","; // date
             ofs << getName() << ",";    // object name
             ofs << it->first << ",";    // picklist name
             ofs << fromPackage << ",";  // origin
@@ -121,7 +121,7 @@ void sObject::outputRecordTypePicklistCounters() {
             for (auto it3 = it2->second.begin(); it3 != it2->second.end(); ++it3) {
                 // it3->first : picklist value
                 // it3->second : counter
-                ofs << analysisDate << ",";
+                ofs << getAnalysisDate() << ",";
                 ofs << getName() << ",";
                 ofs << recordtypeid << ",";
                 ofs << "\"" << removeCommas(recordtypename) << "\",";
@@ -164,7 +164,7 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
         else
             fromPackage = "Standard";
         
-        ofs << analysisDate << ","; // date
+        ofs << getAnalysisDate() << ","; // date
         ofs << getName() << ",";    // object name
         ofs << it->first << ",";    // field name
         ofs << fromPackage << ",";  // field origine
@@ -215,7 +215,7 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
             recordtypeid = "null";
         }
         
-        ofs << analysisDate << ",";     // date
+        ofs << getAnalysisDate() << ",";     // date
         ofs << getName() << ",";        // sobject name
         ofs << recordtypeid << ",";     // record type id
         ofs << "\"" << removeCommas(recordtypename) << "\","; // record type name

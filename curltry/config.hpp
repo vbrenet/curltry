@@ -18,7 +18,7 @@
 class config {
 
 private:
-    enum class token  {DOMAIN, CLIENTID, CLIENTSECRET, USERNAME, PASSWORD, SOBJECT, ISPROD, USEFILEFORATTRLIST, APIVERSION, SECURITYTOKEN, CUSTOMER, UNKNOWN};
+    enum class token  {DOMAIN, CLIENTID, CLIENTSECRET, USERNAME, PASSWORD, SOBJECT, ISPROD, USEFILEFORATTRLIST, APIVERSION, SECURITYTOKEN, CUSTOMER, DATEOUTPUT, UNKNOWN};
     struct tokenDesc {
         token theToken;
         std::string literal;
@@ -32,6 +32,7 @@ private:
     static std::string securitytoken;
     static std::string apiversion;
     static std::string customer;
+    static std::string dateoutput;
     static bool isASandbox;
     static bool useFileForAttributeList;
 
@@ -58,6 +59,8 @@ public:
     static std::string& getSecurityToken() {return securitytoken;};
     static std::string& getApiVersion() {return apiversion;};
     static std::string& getCustomer() {return customer;};
+    static std::string& getDateOutput() {return dateoutput;};
+
     static bool isSandbox() {return isASandbox;};
     static bool useFileForAttrList() {return useFileForAttributeList;}
 

@@ -19,6 +19,16 @@
 #include "globals.hpp"
 
 //
+//
+std::string sObject::getAnalysisDate() const {
+    if (config::getDateOutput().compare("") == 0)
+        return analysisDate;
+    else
+        return config::getDateOutput();
+}
+
+//
+//
 std::string sObject::makeAllAttributeQuery() {
     
     if (queryStringConstructed)

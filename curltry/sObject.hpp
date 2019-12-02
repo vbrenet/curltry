@@ -50,6 +50,7 @@ class sObject{
     std::map<std::string, std::map<std::string, std::map<std::string, long>>> recordTypePicklistCounters {};
     //
     //  private methods
+    std::string getAnalysisDate() const;
     //
     // object configuration
     void parseRecordTypeBuffer(const std::string&);
