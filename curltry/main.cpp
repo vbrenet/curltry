@@ -29,7 +29,7 @@
 #include "globals.hpp"
 #include "buckets.hpp"
 
-const std::string curltryVersion = "curltry v2.2.5";
+const std::string curltryVersion = "curltry v2.2.6";
 //
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {
@@ -240,7 +240,7 @@ int main(int argc, const char * argv[]) {
         exitWithSyntaxError();
     }
     
-    if (!chunksizeProvided && !globals::bookOnly)
+    if (!chunksizeProvided && !globals::bookOnly && !getResultFromJobId)
         std::cout << "chunksize defaulted to " << chunksize << std::endl;
     
     globals::workingDirectory = values[0];

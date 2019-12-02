@@ -568,7 +568,7 @@ void sObject::initializePicklistCountersFromFile(const std::string &inputfile) {
 //
 void sObject::processMatrixPicklistLine(const std::string &inputline) {
     //input line :
-    //Date,sObject,RecordTypeId,RecordType,PicklistName,Package,DefaultValue,PicklistLabel,PicklistValue,Usage
+    //Date,sObject,RecordTypeId,RecordType,PicklistName,FromPackage,PercentUsage,UsageBucket,DefaultValue,PicklistLabel,PicklistValue,Usage
     //
     // map of picklist counters by recordtypeId, by attributeName, by values
     //std::map<std::string, std::map<std::string, std::map<std::string, long>>> recordTypePicklistCounters

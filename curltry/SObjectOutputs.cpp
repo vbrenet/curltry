@@ -70,7 +70,7 @@ void sObject::outputPicklistCounters()  {
             ofs << it->first << ",";    // picklist name
             ofs << fromPackage << ",";  // origin
             ofs << attributeMap[it->first].getDefaultValue() << ",";    // default value
-            ofs << buckets::getBucket(percentUsage);    // percent usage bucket
+            ofs << buckets::getBucket(percentUsage) << ",";    // percent usage bucket
             ofs << "\"" << label << "\",";  // picklist label
             ofs << "\"" << it2->first << "\","; // picklist value
             ofs << it2->second << "," ;     // usage
@@ -86,7 +86,7 @@ void sObject::outputRecordTypePicklistCounters() {
     std::ofstream ofs { "picklistsMatrix" + getName() + ".csv"};
 
     // header
-    ofs << "Date,sObject,RecordTypeId,RecordType,PicklistName,FromPackage,DefaultValue,PicklistLabel,PicklistValue,Usage" << std::endl;
+    ofs << "Date,sObject,RecordTypeId,RecordType,PicklistName,FromPackage,PercentUsage,UsageBucket,DefaultValue,PicklistLabel,PicklistValue,Usage" << std::endl;
 
     // map of picklist counters by recordtypeId, by attributeName, by values
     //std::map<std::string, std::map<std::string, std::map<std::string, long>>> recordTypePicklistCounters
@@ -118,16 +118,26 @@ void sObject::outputRecordTypePicklistCounters() {
             }
             else
                 fromPackage = "Standard";
+            
+            // first compute total valued fields
+            double total {0};
+            for (auto it3 = it2->second.begin(); it3 != it2->second.end(); ++it3)
+                total += it3->second;
 
             for (auto it3 = it2->second.begin(); it3 != it2->second.end(); ++it3) {
                 // it3->first : picklist value
                 // it3->second : counter
+                
+                double percentUsage = ((total == 0) ? 0 : (((double)it3->second / total)*100));
+                
                 ofs << getAnalysisDate() << ",";
                 ofs << getName() << ",";
                 ofs << recordtypeid << ",";
                 ofs << "\"" << removeCommas(recordtypename) << "\",";
                 ofs << it2->first << ",";           // picklist name
                 ofs << fromPackage << ",";          // origin
+                ofs << percentUsage << ",";         // percent usage
+                ofs << buckets::getBucket(percentUsage) << ","; // bucket
                 ofs << attributeMap[it2->first].getDefaultValue() << ","; //  default value
                 ofs << "\"" << picklistDescriptors[it2->first][it3->first] << "\","; // picklist label
                 ofs << "\"" << it3->first << "\","; // picklist value
