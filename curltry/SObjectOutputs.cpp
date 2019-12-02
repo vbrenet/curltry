@@ -39,7 +39,7 @@ void sObject::outputPicklistCounters()  {
     std::ofstream ofs { "picklists" + getName() + ".csv"};
     
     // header
-    ofs << "Date,sObject,PicklistName,FromPackage,DefaultValue,PicklistLabel,PicklistValue,Usage,PercentUsage" << std::endl;
+    ofs << "Date,sObject,PicklistName,FromPackage,DefaultValue,UsageBucket,PicklistLabel,PicklistValue,Usage,PercentUsage" << std::endl;
 
     for (auto it = picklistCounters.begin(); it != picklistCounters.end(); ++it) {
         
@@ -70,6 +70,7 @@ void sObject::outputPicklistCounters()  {
             ofs << it->first << ",";    // picklist name
             ofs << fromPackage << ",";  // origin
             ofs << attributeMap[it->first].getDefaultValue() << ",";    // default value
+            ofs << buckets::getBucket(percentUsage);    // percent usage bucket
             ofs << "\"" << label << "\",";  // picklist label
             ofs << "\"" << it2->first << "\","; // picklist value
             ofs << it2->second << "," ;     // usage
@@ -174,7 +175,7 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
         
         double percentUsage = ((nbRecords == 0) ? 0 : (((double)it->second / nbRecords)*100));
         ofs << std::setprecision (1) << std::fixed << percentUsage << ","; // percent usage
-        ofs  << buckets::getBucket(percentUsage) << std::endl;;    // usage bucket
+        ofs  << buckets::getBucket(percentUsage) << std::endl;    // usage bucket
 
     }
 

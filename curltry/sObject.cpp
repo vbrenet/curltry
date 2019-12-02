@@ -507,7 +507,7 @@ void sObject::initializeMatrixCountersFromFile(const std::string &inputfile) {
 //
 void sObject::processPicklistLine(const std::string &inputline) {
 /*
-Date,sObject,PicklistName,Package,DefaultValue,PicklistLabel,PicklistValue,Usage,PercentUsage
+Date,sObject,PicklistName,Package,DefaultValue,UsageBucket,PicklistLabel,PicklistValue,Usage,PercentUsage
 */
     std::string picklistName, picklistValue, counterValue;
     
