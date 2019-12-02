@@ -12,6 +12,7 @@
 #include "utils.hpp"
 #include "fieldDefinition.hpp"
 #include "config.hpp"
+#include "packages.hpp"
 //
 //
 std::string fieldBook::getValue(const std::string attributeName, const std::string &buffer, size_t token, const std::string endDelimeter) {
@@ -210,6 +211,7 @@ void fieldBook::outputFieldBook() const {
     ofs << "Length,";
     ofs << "MasterLabel,";
     ofs << "NamespacePrefix,";
+    ofs << "Package,";
     ofs << "Precision,";
     ofs << "Scale,";
     ofs << "SecurityClassification" << std::endl;
@@ -218,6 +220,15 @@ void fieldBook::outputFieldBook() const {
     
     // output lines
     for (auto it = fieldDefinitionMap.begin(); it != fieldDefinitionMap.end(); ++it) {
+        
+        std::string origin {};
+        if (it->second.LastModifiedById.compare("null") == 0)
+            origin = "Standard";
+        else if (it->second.NamespacePrefix.compare("null") == 0)
+            origin = config::getCustomer();
+        else
+            origin = packages::getPackageName(it->second.NamespacePrefix);
+            
         if (config::getDateOutput().compare("") == 0)
             ofs << getDateString() << ",";
         else
@@ -250,6 +261,7 @@ void fieldBook::outputFieldBook() const {
         ofs << "\"" << it->second.Length << "\"" << ",";
         ofs << "\"" << it->second.MasterLabel << "\"" << ",";
         ofs << "\"" << it->second.NamespacePrefix << "\"" << ",";
+        ofs << "\"" << origin << "\"" << ",";
         ofs << "\"" << it->second.Precision << "\"" << ",";
         ofs << "\"" << it->second.Scale << "\"" << ",";
         ofs << "\"" << it->second.SecurityClassification << "\"" << std::endl;
