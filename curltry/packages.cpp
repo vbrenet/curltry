@@ -39,3 +39,11 @@ void packages::initPackagesFromFile (const std::string &inputfile) {
 
     packagesFile.close();
 }
+//
+std::string packages::getPackageName(const std::string inputvalue) {
+    auto it = packageMap.find(inputvalue);
+    if (it == packageMap.end())
+        return inputvalue;
+    else
+        return it->second;
+}

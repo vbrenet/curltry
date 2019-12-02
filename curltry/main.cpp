@@ -28,8 +28,9 @@
 #include "utils.hpp"
 #include "globals.hpp"
 #include "buckets.hpp"
+#include "packages.hpp"
 
-const std::string curltryVersion = "curltry v2.2.8";
+const std::string curltryVersion = "curltry v2.2.9";
 //
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {
@@ -258,6 +259,8 @@ int main(int argc, const char * argv[]) {
         exit(-1);
     
     buckets::initBucketsFromFile(globals::workingDirectory + "/buckets");
+    
+    packages::initPackagesFromFile(globals::workingDirectory + "/packages");
     
     restartManager::init();
     

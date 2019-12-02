@@ -22,7 +22,7 @@ private:
 
 public:
     static void initPackagesFromFile (const std::string &inputfile);
-    
+    static std::string getPackageName(const std::string );
 };
 
 #endif /* packages_hpp */

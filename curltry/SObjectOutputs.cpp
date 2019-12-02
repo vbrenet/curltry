@@ -14,6 +14,7 @@
 #include "utils.hpp"
 #include "buckets.hpp"
 #include "config.hpp"
+#include "packages.hpp"
 
 //
 //
@@ -46,7 +47,7 @@ void sObject::outputPicklistCounters()  {
         std::string fromPackage {};
         if (attributeMap[it->first].isCustom()) {
             if (attributeMap[it->first].isPackage())
-                fromPackage = attributeMap[it->first].getPackage();
+                fromPackage = packages::getPackageName(attributeMap[it->first].getPackage());
             else
                 fromPackage = config::getCustomer();
         }
@@ -112,7 +113,7 @@ void sObject::outputRecordTypePicklistCounters() {
             std::string fromPackage {};
             if (attributeMap[it2->first].isCustom()) {
                 if (attributeMap[it2->first].isPackage())
-                    fromPackage = attributeMap[it2->first].getPackage();
+                    fromPackage = packages::getPackageName(attributeMap[it2->first].getPackage());
                 else
                     fromPackage = config::getCustomer();
             }
@@ -168,7 +169,7 @@ void sObject::outputAttributeCounters(const std::string &outputfile) {
         std::string fromPackage {};
         if (attributeMap[it->first].isCustom()) {
             if (attributeMap[it->first].isPackage())
-                fromPackage = attributeMap[it->first].getPackage();
+                fromPackage = packages::getPackageName(attributeMap[it->first].getPackage());
             else
                 fromPackage = config::getCustomer();
         }
@@ -212,7 +213,7 @@ void sObject::outputMatrixCounters(const std::string &outputfile) {
         std::string fromPackage {};
         if (attributeMap[it->first.second].isCustom()) {
             if (attributeMap[it->first.second].isPackage())
-                fromPackage = attributeMap[it->first.second].getPackage();
+                fromPackage = packages::getPackageName(attributeMap[it->first.second].getPackage());
             else
                 fromPackage = config::getCustomer();
         }
