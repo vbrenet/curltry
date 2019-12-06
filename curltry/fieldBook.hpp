@@ -17,9 +17,11 @@
 class fieldBook {
 private:
     std::string entityName;
+    std::string orgCreationDate;    // YYYY-MM-DD
     std::map<std::string, fieldDefinition> fieldDefinitionMap;
     
     std::string getDurableId (const std::string &buffer) const;
+    std::string getCreationDate(const std::string &buffer) const;
     void makeFieldDefinitionQuery(const std::string durableId, std::string & fieldDefinitionQuery) const;
     void parseFieldDefinitionBuffer(const std::string &buffer);
     void parseSingleFieldDefinition(const std::string &buffer, size_t token);

@@ -8,6 +8,8 @@
 
 #include <string>
 #include <ctime>
+#include <sstream>
+
 #include "utils.hpp"
 #include "config.hpp"
 #include <curl/curl.h>
@@ -242,3 +244,22 @@ bool restQuery(const std::string& query, std::string& readBuffer) {
 
     return (res == CURLE_OK);
 }
+//
+std::string getFrenchDate(const std::string input) {
+    //input : 2019-11-25T10:21:32.000Z
+    std::stringstream target;
+    
+    target  << input[8]
+            << input[9]
+            << '/'
+            << input[5]
+            << input[6]
+            << '/'
+            << input[0]
+            << input[1]
+            << input[2]
+            << input[3];
+    
+    return target.str();
+}
+

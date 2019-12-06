@@ -136,6 +136,18 @@ void fieldBook::makeFieldDefinitionQuery(const std::string durableId, std::strin
 }
 //
 //
+std::string fieldBook::getCreationDate (const std::string &buffer) const {
+    /* ex:
+"{"totalSize":1,"done":true,"records":[{"attributes":{"type":"Organization","url":"/services/data/v47.0/sobjects/Organization/00D3N0000008b2xUAA"},"CreatedDate":"2016-10-12T16:08:14.000+0000"}]}"
+     "     */
+    std::string createdDate {};
+    size_t begintoken = buffer.find("CreatedDate");
+    if (begintoken != std::string::npos) {
+        createdDate = buffer.substr(begintoken+14,10);
+    }
+    return getFrenchDate(createdDate);
+}
+//
 //
 std::string fieldBook::getDurableId (const std::string &buffer) const {
     /* ex:
@@ -154,11 +166,18 @@ std::string fieldBook::getDurableId (const std::string &buffer) const {
 bool fieldBook::setFieldBook(const std::string objectName) {
     entityName = objectName;
     
+    // query organization info to get the org creation date
+    std::string queryOrg = "?q=SELECT+CreatedDate+FROM+Organization";
+    std::string buffer;
+    bool result = restQuery(queryOrg, buffer);
+    if (result) {
+        orgCreationDate=getCreationDate(buffer);
+    }
+    
     // query entityDefinition table to get the durable id
     // ex : SELECT DurableId FROM EntityDefinition WHERE QualifiedApiName = 'Sinistre__c'
     std::string query = "?q=SELECT+DurableId+FROM+EntityDefinition+where+QualifiedApiName+=+'" + entityName + "'";
-    std::string buffer;
-    bool result = restQuery(query, buffer);
+    result = restQuery(query, buffer);
     
     if (result) {
         std::string durableId = getDurableId(buffer);
@@ -257,7 +276,10 @@ void fieldBook::outputFieldBook() const {
         ofs << "\"" << it->second.IsNameField << "\"" << ",";
         ofs << "\"" << it->second.Label << "\"" << ",";
         ofs << "\"" << it->second.LastModifiedById << "\"" << ",";
-        ofs << "\"" << it->second.LastModifiedDate.substr(0,10) << "\"" << ",";
+        if (it->second.LastModifiedDate.compare("null") == 0)
+            ofs << "\"" << orgCreationDate << "\"" << ",";
+        else
+            ofs << "\"" << it->second.LastModifiedDate.substr(0,10) << "\"" << ",";
         ofs << "\"" << it->second.Length << "\"" << ",";
         ofs << "\"" << it->second.MasterLabel << "\"" << ",";
         ofs << "\"" << it->second.NamespacePrefix << "\"" << ",";
