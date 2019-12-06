@@ -163,8 +163,9 @@ std::string fieldBook::getDurableId (const std::string &buffer) const {
     return durableId;
 }
 //
-bool fieldBook::setFieldBook(const std::string objectName) {
+bool fieldBook::setFieldBook(const std::string objectName, const std::string objectLabel) {
     entityName = objectName;
+    entityLabel = objectLabel;
     
     // query organization info to get the org creation date
     std::string queryOrg = "?q=SELECT+CreatedDate+FROM+Organization";
@@ -203,6 +204,7 @@ void fieldBook::outputFieldBook() const {
     // output header
     ofs << "Date,";
     ofs << "sObject,";
+    ofs << "sObjectLabel,";
     ofs << "fieldAPIName,";
     ofs << "BusinessOwnerId,";
     ofs << "BusinessStatus,";
@@ -253,6 +255,7 @@ void fieldBook::outputFieldBook() const {
         else
             ofs << config::getDateOutput() << ",";
         ofs << entityName << ",";
+        ofs << entityLabel << ",";
         ofs << "\"" << it->second.QualifiedApiName << "\"" << ",";
         ofs << "\"" << it->second.BusinessOwnerId << "\"" << ",";
         ofs << "\"" << it->second.BusinessStatus << "\"" << ",";

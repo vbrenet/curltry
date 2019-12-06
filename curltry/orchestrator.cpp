@@ -36,8 +36,21 @@ bool orchestrator::describeObject() {
     if (!theObject.getDescribeAttributesBuffer(rawAttributeList))
         return false;
     
+    // get object label
+    /* this sequence:
+     "keyPrefix" : "001",
+     "label" : "Account",
+     "labelPlural" : "Accounts",
+     */
+    size_t keyPrefix = rawAttributeList.find("\"keyPrefix\":");
+    size_t labelafter = rawAttributeList.find("\"label\":", keyPrefix);
+    size_t labelPlural = rawAttributeList.find("\"labelPlural\":",keyPrefix);
+    size_t labelbefore = rawAttributeList.rfind("\"label\":", labelPlural);
     
-    //std::cout << "raw describe object:\n" << rawAttributeList << std::endl;
+    if (keyPrefix != std::string::npos && labelafter != std::string::npos && labelPlural != std::string::npos && labelafter == labelbefore) {
+        size_t endlabel = rawAttributeList.find("\",", labelafter);
+        theObject.setLabel(rawAttributeList.substr(labelafter+9,endlabel-labelafter-9));
+    }
     
     // parse each attribute in the buffer
     size_t beginFields = rawAttributeList.find("\"fields\":");
@@ -163,7 +176,11 @@ bool orchestrator::getObjectInfo() {
     // open REST session
     if (!SalesforceSession::openSession(credentials))
         return false ;
-
+    
+    // describe object (get all attributes)
+    if (!describeObject())
+        return false;
+    
     // get object field book
     theObject.getFieldBook();
     
@@ -172,10 +189,6 @@ bool orchestrator::getObjectInfo() {
     
     if (globals::bookOnly)
         exit(0);
-    
-    // describe object (get all attributes)
-    if (!describeObject())
-        return false;
     
     //theObject.print();
     std::string thequery = theObject.makeAllAttributeQuery();

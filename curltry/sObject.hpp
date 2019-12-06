@@ -21,6 +21,7 @@
 class sObject{
     private:
     std::string name;   // sObject name
+    std::string label;  // sObject label
     std::string query;  // query string
     bool queryStringConstructed {false}; // true if query string constructed
     
@@ -75,15 +76,17 @@ public:
     // constructor and accessors
     sObject (const std::string objname)  : name {objname} {}
     const std::string& getName() const {return name;} ;
-    
+    const std::string& getLabel() const {return label;} ;
+
     // object configuration
-    bool getFieldBook() {return objectFieldBook.setFieldBook(name);};
+    bool getFieldBook() {return objectFieldBook.setFieldBook(name, label);};
     void outputFieldBook() {objectFieldBook.outputFieldBook();};
     void addAttribute(sAttribute a) {attributeMap.insert(std::pair<std::string,sAttribute>(a.getName(),a));}
     bool getDescribeAttributesBuffer(std::string& buffer);
     std::string makeAllAttributeQuery();
     bool initializeRecordTypes();
     void setAnalysisDate(const std::string);
+    void setLabel(const std::string l) {label = l;}
 
     // initialization of counters
     void initializeAttributeCountersFromFile(const std::string &inputfile);

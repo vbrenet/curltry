@@ -17,6 +17,8 @@
 class fieldBook {
 private:
     std::string entityName;
+    std::string entityLabel;
+
     std::string orgCreationDate;    // YYYY-MM-DD
     std::map<std::string, fieldDefinition> fieldDefinitionMap;
     
@@ -29,7 +31,7 @@ private:
 
 public:
     fieldBook() {};
-    bool setFieldBook(const std::string objectName);
+    bool setFieldBook(const std::string objectName, const std::string objectLabel);
     void outputFieldBook() const;
 };
 
