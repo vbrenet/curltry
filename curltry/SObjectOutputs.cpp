@@ -15,6 +15,7 @@
 #include "buckets.hpp"
 #include "config.hpp"
 #include "packages.hpp"
+#include "globals.hpp"
 
 //
 //
@@ -37,7 +38,7 @@ void sObject::printPicklistDescriptors() const {
 }
 //
 void sObject::outputPicklistCounters()  {
-    std::ofstream ofs { "picklists" + getName() + ".csv"};
+    std::ofstream ofs {globals::workingDirectory + "/picklists" + getName() + ".csv"};
     
     // header
     ofs << "Date,sObject,PicklistName,FromPackage,DefaultValue,UsageBucket,PicklistLabel,PicklistValue,Usage,PercentUsage" << std::endl;
@@ -84,7 +85,7 @@ void sObject::outputPicklistCounters()  {
 //
 //
 void sObject::outputRecordTypePicklistCounters() {
-    std::ofstream ofs { "picklistsMatrix" + getName() + ".csv"};
+    std::ofstream ofs {globals::workingDirectory + "/picklistsMatrix" + getName() + ".csv"};
 
     // header
     ofs << "Date,sObject,RecordTypeId,RecordType,PicklistName,FromPackage,PercentUsage,UsageBucket,DefaultValue,PicklistLabel,PicklistValue,Usage" << std::endl;

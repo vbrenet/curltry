@@ -145,7 +145,7 @@ std::string fieldBook::getCreationDate (const std::string &buffer) const {
     if (begintoken != std::string::npos) {
         createdDate = buffer.substr(begintoken+14,10);
     }
-    return getFrenchDate(createdDate);
+    return (createdDate);
 }
 //
 //
@@ -199,7 +199,7 @@ bool fieldBook::setFieldBook(const std::string objectName, const std::string obj
 //
 //
 void fieldBook::outputFieldBook() const {
-    std::ofstream ofs { "fieldBook" + entityName + ".csv"};
+    std::ofstream ofs { globals::workingDirectory + "/fieldBook" + entityName + ".csv"};
     
     // output header
     ofs << "Date,";
