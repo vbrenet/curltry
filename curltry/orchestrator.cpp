@@ -6,6 +6,7 @@
 //  Copyright © 2018 Vincent Brenet. All rights reserved.
 //
 #include <iostream>
+#include <iomanip>
 #include "orchestrator.hpp"
 #include "SalesforceSession.hpp"
 #include "bulkSession.hpp"
