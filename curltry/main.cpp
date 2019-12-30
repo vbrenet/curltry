@@ -30,7 +30,7 @@
 #include "buckets.hpp"
 #include "packages.hpp"
 
-const std::string curltryVersion = "curltry v2.2.14";
+const std::string curltryVersion = "2.2.15";
 //
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {
@@ -114,7 +114,7 @@ void exitWithSyntaxError() {
 //
 //
 void exitWithVersion() {
-    std::cout << curltryVersion << std::endl;
+    std::cout << "curltry version " << curltryVersion << std::endl;
     exit(0);
 }
 //
@@ -125,7 +125,7 @@ void exitWithHelp() {
     std::cout << "curltry -version" << std::endl << std::endl;
     std::cout << "OPTIONS:" << std::endl;
     std::cout << "-o <object name> : specify the sObject to analyze, e.g. -o Opportunity" << std::endl;
-    std::cout << "-sz <chunksize> : use the pkchunking option and specify the chunsize (max : 250000)" << std::endl;
+    std::cout << "-sz <chunksize> : specify the chunksize (max : 250000)" << std::endl;
     std::cout << "-j <jobid> : get results from a bulk job already run, e.g. -j 7503N00000009gn" << std::endl;
     std::cout << "-bookonly : produce only the field book of the sObject to analyze" << std::endl;
     std::cout << "-picklists : produce a file picklists<object> containing picklists stats" << std::endl;
@@ -133,7 +133,7 @@ void exitWithHelp() {
     std::cout << "-r : restart from the last curltry run session - this option requires the -j option" << std::endl;
     std::cout << "-v : verbose mode" << std::endl;
     std::cout << "-vv : very verbose mode (trace level)" << std::endl;
-    std::cout << "workingDirectory (mandatory) : working directory which must contain the config file" << std::endl;
+    std::cout << "workingDirectory (mandatory) : working directory which must contain config files" << std::endl;
     exit(0);
     
 }
