@@ -196,7 +196,10 @@ bool fieldBook::setFieldBook(const std::string objectName, const std::string obj
                 std::cout << "field definition query:" << std::endl;
                 std::cout << buffer << std::endl;
             }
-
+        } else
+        {
+            std::cerr << "setFieldBook error" << std::endl;
+            std::cout << buffer << std::endl;
         }
     }
     

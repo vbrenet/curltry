@@ -9,6 +9,7 @@
 #include <string>
 #include <ctime>
 #include <sstream>
+#include <iostream>
 
 #include "utils.hpp"
 #include "config.hpp"
@@ -126,6 +127,15 @@ bool restQuery(const std::string& query, std::string& readBuffer) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
                     curl_easy_strerror(res));
         
+        curl_slist_free_all(chunk); /* free the list  */
+        
+        long http_code = 0;
+        curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
+        if (http_code >= 400) {
+            std::cerr << "restQuery : http error: " << http_code << std::endl;
+            return false;
+        }
+
         curl_easy_cleanup(curl);
         
     }
