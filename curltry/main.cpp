@@ -30,7 +30,7 @@
 #include "buckets.hpp"
 #include "packages.hpp"
 
-const std::string curltryVersion = "2.2.18";
+const std::string curltryVersion = "2.2.19";
 //
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {

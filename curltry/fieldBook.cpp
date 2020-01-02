@@ -46,7 +46,7 @@ void fieldBook::parseSingleFieldDefinition(const std::string &buffer, size_t tok
         it->second.ComplianceGroup = getValue("ComplianceGroup", buffer, token, ",\"");
         it->second.DataType = getValue("DataType", buffer, token, ",\"");
         it->second.ExtraTypeInfo = getValue("ExtraTypeInfo", buffer, token, ",\"");
-        it->second.IsAiPredictionField = getBooleanValue(getValue("IsAiPredictionField", buffer, token, ",\""));
+        //it->second.IsAiPredictionField = getBooleanValue(getValue("IsAiPredictionField", buffer, token, ",\""));
         it->second.IsApiFilterable = getBooleanValue(getValue("IsApiFilterable", buffer, token, ",\""));
         it->second.IsApiGroupable = getBooleanValue(getValue("IsApiGroupable", buffer, token, ",\""));
         it->second.IsApiSortable = getBooleanValue(getValue("IsApiSortable", buffer, token, ",\""));
@@ -105,7 +105,7 @@ void fieldBook::makeFieldDefinitionQuery(const std::string durableId, std::strin
     query += "+ComplianceGroup+,";
     query += "+DataType+,";
     query += "+ExtraTypeInfo+,";
-    query += "+IsAiPredictionField+,";
+    //query += "+IsAiPredictionField+,";
     query += "+IsApiFilterable+,";
     query += "+IsApiGroupable+,";
     query += "+IsApiSortable+,";
@@ -224,7 +224,7 @@ void fieldBook::outputFieldBook() const {
     ofs << "ComplianceGroup,";
     ofs << "DataType,";
     ofs << "ExtraTypeInfo,";
-    ofs << "IsAiPredictionField,";
+    //ofs << "IsAiPredictionField,";
     ofs << "IsApiFilterable,";
     ofs << "IsApiGroupable,";
     ofs << "IsApiSortable,";
@@ -275,7 +275,7 @@ void fieldBook::outputFieldBook() const {
         ofs << "\"" << it->second.ComplianceGroup << "\"" << ",";
         ofs << "\"" << it->second.DataType << "\"" << ",";
         ofs << "\"" << it->second.ExtraTypeInfo << "\"" << ",";
-        ofs << "\"" << it->second.IsAiPredictionField << "\"" << ",";
+        //ofs << "\"" << it->second.IsAiPredictionField << "\"" << ",";
         ofs << "\"" << it->second.IsApiFilterable << "\"" << ",";
         ofs << "\"" << it->second.IsApiGroupable << "\"" << ",";
         ofs << "\"" << it->second.IsApiSortable << "\"" << ",";
