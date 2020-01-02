@@ -180,6 +180,11 @@ bool fieldBook::setFieldBook(const std::string objectName, const std::string obj
     std::string query = "?q=SELECT+DurableId+FROM+EntityDefinition+where+QualifiedApiName+=+'" + entityName + "'";
     result = restQuery(query, buffer);
     
+    if (globals::veryverbose) {
+        std::cout << "entity definition query:" << std::endl;
+        std::cout << buffer << std::endl;
+    }
+    
     if (result) {
         std::string durableId = getDurableId(buffer);
         std::string fieldDefinitionQuery {};
@@ -187,6 +192,11 @@ bool fieldBook::setFieldBook(const std::string objectName, const std::string obj
         result = restQuery(fieldDefinitionQuery, buffer);
         if (result) {
             parseFieldDefinitionBuffer(buffer);
+            if (globals::veryverbose) {
+                std::cout << "field definition query:" << std::endl;
+                std::cout << buffer << std::endl;
+            }
+
         }
     }
     
