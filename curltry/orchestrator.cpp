@@ -259,6 +259,7 @@ bool orchestrator::execute(int chunksize) {
             
             if (globals::picklistOnly) {
                 theObject.outputPicklistCounters();
+                theObject.outputRecordTypePicklistCounters();
             }
             else {
                 theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
@@ -280,6 +281,7 @@ bool orchestrator::execute(int chunksize) {
    
         if (globals::picklistOnly) {
             theObject.outputPicklistCounters();
+            theObject.outputRecordTypePicklistCounters();
         }
         else {
             theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
@@ -336,6 +338,7 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
 
                 if (globals::picklistOnly) {
                     theObject.outputPicklistCounters();
+                    theObject.outputRecordTypePicklistCounters();
                 }
                 else {
                     theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
@@ -353,6 +356,7 @@ bool orchestrator::getResultFromJobId(const std::string& jobid) {
     
         if (globals::picklistOnly) {
             theObject.outputPicklistCounters();
+            theObject.outputRecordTypePicklistCounters();
         }
         else {
             theObject.outputAttributeCounters(globals::workingDirectory + "/result" + theObject.getName() + ".csv");
