@@ -27,7 +27,7 @@ bool config::useFileForAttributeList {false};
 std::map<std::string,std::vector<std::string>> config::excludedAttributesByObj;
 
 const std::vector<config::tokenDesc> config::tokenDescriptions = {
-    {config::token::DOMAIN, "_domain_:"},
+    {config::token::TOKENDOM, "_domain_:"},
     {config::token::CLIENTID, "_clientid_:"},
     {config::token::CLIENTSECRET, "_clientsecret_:"},
     {config::token::USERNAME, "_username_:"},
@@ -112,7 +112,7 @@ void config::processLine(const std::string& line) {
     std::string value;
     token theToken = getTokenValue(line, value);
     switch (theToken) {
-        case token::DOMAIN:
+        case token::TOKENDOM:
             domain = value;
             break;
         case token::CLIENTID:
