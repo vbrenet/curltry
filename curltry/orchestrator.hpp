@@ -22,6 +22,7 @@ private:
     
     bool describeObject();
 public:
+    orchestrator(const std::string sObjectName, const std::string where, const sessionCredentials& c): theObject {sObjectName, where}, credentials{c} {}
     orchestrator(const std::string sObjectName, const sessionCredentials& c): theObject {sObjectName}, credentials{c} {}
     bool getObjectInfo();
     bool execute(int chunksize);

@@ -23,6 +23,7 @@ class sObject{
     std::string name;   // sObject name
     std::string label;  // sObject label
     std::string query;  // query string
+    std::string whereClause;    // where clause (maybe empty)
     bool queryStringConstructed {false}; // true if query string constructed
     
     std::string analysisDate;
@@ -74,7 +75,8 @@ class sObject{
     
 public:
     // constructor and accessors
-    sObject (const std::string objname)  : name {objname} {}
+    sObject (const std::string objname, const std::string where) : name {objname}, whereClause {where} {}
+    sObject (const std::string objname) : name {objname} {}
     const std::string& getName() const {return name;} ;
     const std::string& getLabel() const {return label;} ;
 

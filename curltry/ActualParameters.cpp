@@ -90,6 +90,7 @@ void ActualParameters::set(int argc, const char * argv[], const expectedParamete
     std::string currNamed {};
     
     for (std::string curr : parameters) {
+//      std::cout << curr << std::endl;
         bool isNamed {false};
         if (curr.size() > 0 && curr[0] == '-')
             isNamed = true;

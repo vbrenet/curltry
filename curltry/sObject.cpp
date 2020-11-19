@@ -88,6 +88,11 @@ std::string sObject::makeAllAttributeQuery() {
     
     query += " from " + getName();
     
+    if (whereClause.size() > 0) {
+        query += " where ";
+        query += whereClause;
+    }
+    
     queryStringConstructed = true;
     
     return query;

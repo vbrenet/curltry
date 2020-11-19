@@ -58,7 +58,7 @@ void runGetResultFromId(const std::string& theObj,  const std::string& theId) {
 //
 //
 //
-void runOrchestration(const std::string& theObj, int chunksize) {
+void runOrchestration(const std::string& theObj, const std::string& whereClause, int chunksize) {
     // credentials creation
     sessionCredentials credentials {config::isSandbox(),
         config::getDomain(),
@@ -70,7 +70,7 @@ void runOrchestration(const std::string& theObj, int chunksize) {
     };
 
     //
-    orchestrator theOrchestrator {theObj, credentials};
+    orchestrator theOrchestrator {theObj, whereClause, credentials};
     //
     if (!theOrchestrator.getObjectInfo()) {
        std::cerr << "theOrchestrator.getObjectInfo failure" << std::endl;
@@ -108,7 +108,7 @@ void terminate() {
 //
 //
 void exitWithSyntaxError() {
-    std::cerr << "Syntax : curltry -o <object name> [-help] [-version] [-sz <chunksize>] [-j <jobid>] [-bookonly] [-picklists] [-picklistsonly] [-r] [-v] [-vv] workingDirectory" << std::endl;
+    std::cerr << "Syntax : curltry -o <object name> [-help] [-version] [-where 'where clause'] [-sz <chunksize>] [-j <jobid>] [-bookonly] [-picklists] [-picklistsonly] [-r] [-v] [-vv] workingDirectory" << std::endl;
     exit(-1);
 }
 //
@@ -120,11 +120,12 @@ void exitWithVersion() {
 //
 //
 void exitWithHelp() {
-    std::cout << "SYNTAX : curltry -o <object name> [-sz <chunksize>] [-j <jobid>] [-bookonly] [-picklists] [-picklistsonly] [-r] [-v] [-vv] workingDirectory" << std::endl;
+    std::cout << "SYNTAX : curltry -o <object name> [-where 'where clause'] [-sz <chunksize>] [-j <jobid>] [-bookonly] [-picklists] [-picklistsonly] [-r] [-v] [-vv] workingDirectory" << std::endl;
     std::cout << "curltry -help" << std::endl;
     std::cout << "curltry -version" << std::endl << std::endl;
     std::cout << "OPTIONS:" << std::endl;
     std::cout << "-o <object name> : specify the sObject to analyze, e.g. -o Opportunity" << std::endl;
+    std::cout << "-where 'where clause' : specify a where clause, between simple quotes !!";
     std::cout << "-sz <chunksize> : specify the chunksize (max : 250000)" << std::endl;
     std::cout << "-j <jobid> : get results from a bulk job already run, e.g. -j 7503N00000009gn" << std::endl;
     std::cout << "-bookonly : produce only the field book of the sObject to analyze" << std::endl;
@@ -157,7 +158,8 @@ int main(int argc, const char * argv[]) {
             {"-picklists",{false,false}},
             {"-picklistsonly",{false,false}},
             {"-bookonly",{false,false}},
-            {"-j",{false,true}}
+            {"-j",{false,true}},
+            {"-where",{false,true}}
         }
     };
     
@@ -182,6 +184,7 @@ int main(int argc, const char * argv[]) {
     bool getResultFromJobId {false};
     std::string paramJobId {};
     std::string theObject {};
+    std::string whereClause {};
     int chunksize {10000};
     
     bool chunksizeProvided {false};
@@ -227,6 +230,9 @@ int main(int argc, const char * argv[]) {
         else if (curr.getName().compare("-bookonly") == 0) {
             globals::bookOnly = true;
         }
+        else if (curr.getName().compare("-where") == 0) {
+            whereClause = curr.getValue();
+        }
 
      }  // end for parameters
 
@@ -267,7 +273,7 @@ int main(int argc, const char * argv[]) {
     if (injection) {
         runInjection(theObject,chunksize);
     } else if (!getResultFromJobId ){
-        runOrchestration(theObject,chunksize);
+        runOrchestration(theObject, whereClause, chunksize);
     } else {
         runGetResultFromId(theObject,paramJobId);
     }
