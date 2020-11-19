@@ -64,6 +64,17 @@ std::string removeCommas (const std::string& input) {
 }
 //
 //
+std::string replaceDoubleQuotes (const std::string& input) {
+    std::string result {input};
+    std::size_t found;
+    
+    while ((found = result.find("\"")) != std::string::npos) {
+        result.replace(found, 1, 1, '\'');
+    }
+
+    return result;
+}
+//
 bool isStringNumeric (const std::string input) {
     return (input.find_first_not_of( "0123456789" ) == std::string::npos);
 }

@@ -30,7 +30,7 @@
 #include "buckets.hpp"
 #include "packages.hpp"
 
-const std::string curltryVersion = "2.2.20";
+const std::string curltryVersion = "2.3.0";
 //
 //
 void runGetResultFromId(const std::string& theObj,  const std::string& theId) {
@@ -120,12 +120,14 @@ void exitWithVersion() {
 //
 //
 void exitWithHelp() {
-    std::cout << "SYNTAX : curltry -o <object name> [-where 'where clause'] [-sz <chunksize>] [-j <jobid>] [-bookonly] [-picklists] [-picklistsonly] [-r] [-v] [-vv] workingDirectory" << std::endl;
+    std::cout << "SYNTAX:" << std::endl;
+    std::cout << "curltry -o <object name> [-where 'where clause'] [-sz <chunksize>] [-j <jobid>] [-bookonly] [-picklists] [-picklistsonly] [-r] [-v] [-vv] workingDirectory" << std::endl;
     std::cout << "curltry -help" << std::endl;
     std::cout << "curltry -version" << std::endl << std::endl;
     std::cout << "OPTIONS:" << std::endl;
     std::cout << "-o <object name> : specify the sObject to analyze, e.g. -o Opportunity" << std::endl;
-    std::cout << "-where 'where clause' : specify a where clause, between simple quotes !!";
+    std::cout << "-where 'where clause' : specify a where clause, between simple quotes !! - put your literals between double quotes and your complex clause between parenthesis, e.g.:" << std::endl;
+    std::cout << "-where '(Industry = \"Finance\" OR Industry = \"Consulting\")'" << std::endl;
     std::cout << "-sz <chunksize> : specify the chunksize (max : 250000)" << std::endl;
     std::cout << "-j <jobid> : get results from a bulk job already run, e.g. -j 7503N00000009gn" << std::endl;
     std::cout << "-bookonly : produce only the field book of the sObject to analyze" << std::endl;
@@ -232,6 +234,7 @@ int main(int argc, const char * argv[]) {
         }
         else if (curr.getName().compare("-where") == 0) {
             whereClause = curr.getValue();
+            whereClause = replaceDoubleQuotes(whereClause);
         }
 
      }  // end for parameters
